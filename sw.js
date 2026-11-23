@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nura2-webapk-v16';
+const CACHE_NAME = 'nura2-webapk-v17';
 const CORE_ASSETS = [
   './',
   './index.html',

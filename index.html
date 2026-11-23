@@ -1945,16 +1945,36 @@
       };
     }
 
+    async function detectFileKind(file) {
+      const name = (file?.name || '').toLowerCase();
+      const mime = (file?.type || '').toLowerCase();
+      if (name.endsWith('.json') || mime.includes('json')) return 'json';
+      if (name.endsWith('.pdf') || mime === 'application/pdf') return 'pdf';
+      if (mime.startsWith('image/') || /\.(png|jpe?g|webp|gif|bmp)$/i.test(name)) return 'image';
+      try {
+        const buf = await readFileAsArrayBufferSafe(file);
+        const u8 = new Uint8Array(buf.slice(0, 8));
+        const hdr = String.fromCharCode.apply(null, u8);
+        if (hdr.startsWith('%PDF-')) return 'pdf';
+        if (u8[0] === 0xFF && u8[1] === 0xD8 && u8[2] === 0xFF) return 'image';
+        if (u8[0] === 0x89 && u8[1] === 0x50 && u8[2] === 0x4E && u8[3] === 0x47) return 'image';
+      } catch (e) {}
+      return 'text';
+    }
+
     async function handleUploadedFiles(files) {
       window.__nura2SerialCursor = { next: 1 };
       window.__nura2PendingContinuation = { dataUrl: '', targetKey: null };
       let combinedText = '';
+      const fileKinds = [];
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const name = file.name.toLowerCase();
+        const kind = await detectFileKind(file);
+        fileKinds.push({ file, kind });
         const basePct = Math.round((i / files.length) * 85) + 10;
 
-        if (name.endsWith('.json')) {
+        if (kind === 'json') {
           const txt = await readFileAsTextSafe(file);
           const parsed = JSON.parse(txt);
           const arr = Array.isArray(parsed) ? parsed : (parsed.questions || []);
@@ -1964,13 +1984,13 @@
             setParseStatus(true, `Loaded ${questions.length} Questions from JSON`, file.name, false, 100, `${questions.length} Qs`);
             return;
           }
-        } else if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+        } else if (kind === 'pdf') {
           const pdfTxt = await extractTextFromPdfFile(file, basePct);
           combinedText += '\n' + pdfTxt;
-        } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
+        } else if (kind === 'image') {
           setParseStatus(true, `Scanning Image ${i + 1}/${files.length}`, file.name, false, basePct);
           const dataUrl = await readFileAsDataURLSafe(file);
-          const ocrTxt = await runFastImageOCR(dataUrl, 1.5);
+          const ocrTxt = await runFastImageOCR(dataUrl, 1.4);
           combinedText += '\n' + ocrTxt;
         } else {
           const txt = await readFileAsTextSafe(file);
@@ -1994,16 +2014,17 @@
       const autoCropEnabled = document.getElementById('autoCropQuestionsToggle')?.checked !== false;
       const allCroppedImagesByQNum = {};
       if (autoCropEnabled) {
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const name = file.name.toLowerCase();
-          if (name.endsWith('.pdf') || file.type === 'application/pdf') {
-            await extractTextFromPdfFile(file, 10, allCroppedImagesByQNum);
-          } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
-            const dataUrl = await readFileAsDataURLSafe(file);
-            const imgRes = await cropAndOcrImageFast(dataUrl, i);
-            Object.assign(allCroppedImagesByQNum, imgRes.crops || {});
-          }
+        for (let i = 0; i < fileKinds.length; i++) {
+          const { file, kind } = fileKinds[i];
+          try {
+            if (kind === 'pdf') {
+              await extractTextFromPdfFile(file, 10, allCroppedImagesByQNum);
+            } else if (kind === 'image') {
+              const dataUrl = await readFileAsDataURLSafe(file);
+              const imgRes = await cropAndOcrImageFast(dataUrl, i);
+              Object.assign(allCroppedImagesByQNum, imgRes.crops || {});
+            }
+          } catch (e) {}
         }
       }
 
