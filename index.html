@@ -1,0 +1,3707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0d9488" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NURA-2" />
+  <title>NURA-2 · Independent NEET CBT &amp; Weak Topic Tracker</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png" />
+
+  <style>
+    :root {
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #ccfbf1;
+      --primary-soft: #f0fdfa;
+      --accent: #f59e0b;
+      --bg: #f4f7f6;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #dce4e2;
+      --danger: #e11d48;
+      --danger-soft: #fff1f2;
+      --danger-border: #fecdd3;
+      --success: #059669;
+      --success-soft: #ecfdf5;
+      --success-border: #a7f3d0;
+      --warn: #d97706;
+      --warn-soft: #fffbeb;
+      --warn-border: #fde68a;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.45;
+    }
+    .hidden { display: none !important; }
+    .container { max-width: 1240px; width: 100%; margin: 0 auto; padding: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+    .grid-main { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 960px) { .grid-main { grid-template-columns: 1.85fr 1fr; } }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+    .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (min-width: 640px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      box-shadow: 0 2px 6px rgba(13, 148, 136, 0.06);
+    }
+    .nav-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .nura2-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+      color: #fff;
+      font-weight: 900;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 3px 8px rgba(13, 148, 136, 0.28);
+    }
+    .nura2-logo .badge-2 {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 17px;
+      height: 17px;
+      border-radius: 999px;
+      background: #f59e0b;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+    }
+    .nav-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+    button, .btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: 0.15s ease;
+      text-decoration: none;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+    .btn-soft { background: var(--primary-soft); color: var(--primary-dark); border-color: #99f6e4; }
+    .btn-soft:hover { background: var(--primary-light); }
+    .btn-dark { background: #0f172a; color: #fff; }
+    .btn-dark:hover { background: #1e293b; }
+    .btn-danger-soft { background: var(--danger-soft); color: var(--danger); border-color: var(--danger-border); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-warn { background: var(--warn); color: #fff; }
+    .btn-outline { background: #fff; color: var(--text); border-color: var(--border); }
+    .btn-outline:hover { background: #f8fafc; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .pill-teal { background: var(--primary-soft); color: var(--primary-dark); border: 1px solid #99f6e4; }
+    .pill-rose { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger-border); }
+    .pill-amber { background: var(--warn-soft); color: var(--warn); border: 1px solid var(--warn-border); }
+    .pill-green { background: var(--success-soft); color: var(--success); border: 1px solid var(--success-border); }
+
+    .pill-save {
+      background: #059669;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      border: none;
+    }
+    .pill-save:hover { background: #047857; }
+    .pill-pdf {
+      background: #f43f5e;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      border: none;
+    }
+    .pill-pdf:hover { background: #e11d48; }
+
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 8px 10px;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.14);
+    }
+    label.field-lbl {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .dropzone {
+      border: 2px dashed #5eead4;
+      background: #f0fdfa;
+      border-radius: 16px;
+      padding: 22px 16px;
+      text-align: center;
+      transition: 0.15s;
+    }
+    .dropzone.dragover { border-color: var(--primary-dark); background: #ccfbf1; }
+
+    .status-box { margin-top: 12px; border-radius: 12px; padding: 12px; border: 1px solid #99f6e4; background: #f0fdfa; color: #115e59; }
+    .status-box.error { border-color: var(--danger-border); background: var(--danger-soft); color: #881337; }
+    .status-box.done { border-color: var(--success-border); background: var(--success-soft); color: #064e3b; }
+    .progress-track { width: 100%; height: 7px; background: rgba(0,0,0,0.08); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .progress-fill { height: 100%; background: var(--primary); transition: width 0.2s; }
+
+    .nta-btn-answered { background: #16a34a; color: #fff; border-color: #15803d; }
+    .nta-btn-not-answered { background: #dc2626; color: #fff; border-color: #b91c1c; }
+    .nta-btn-marked { background: #7c3aed; color: #fff; border-color: #6d28d9; border-radius: 9999px; }
+    .nta-btn-marked-answered { background: #7c3aed; color: #fff; border-color: #6d28d9; position: relative; }
+    .nta-btn-marked-answered::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 9px; height: 9px; background: #22c55e; border: 2px solid #fff; border-radius: 9999px; }
+    .nta-btn-not-visited { background: #f1f5f9; color: #475569; border-color: #cbd5e1; }
+    .nta-btn-current { outline: 3px solid #0f172a; outline-offset: 2px; }
+
+    .opt-card {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #fff;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+      justify-content: flex-start;
+    }
+    .opt-card.selected { border-color: var(--primary); background: var(--primary-soft); }
+    .opt-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 900;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .opt-card.selected .opt-badge { background: var(--primary); color: #fff; }
+
+    .opt-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .opt-pill-btn {
+      padding: 13px 10px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #fff;
+      font-size: 15px;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .opt-pill-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(13, 148, 136, 0.25);
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--muted); font-size: 10px; text-transform: uppercase; }
+    td { padding: 9px 10px; border-bottom: 1px solid #f1f5f9; font-weight: 600; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(15, 23, 42, 0.58);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-card {
+      background: #fff;
+      border-radius: 18px;
+      max-width: 520px;
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+    }
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(15, 23, 42, 0.5);
+      display: flex;
+      justify-content: flex-end;
+    }
+    .drawer-panel {
+      background: #fff;
+      width: 100%;
+      max-width: 440px;
+      height: 100%;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .scroll-box { max-height: 480px; overflow-y: auto; padding-right: 4px; }
+    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; max-height: 300px; overflow-y: auto; padding: 4px; }
+
+    /* Vertical Y-Axis Bar Graph */
+    .graph-shell {
+      display: flex;
+      align-items: stretch;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 12px 10px 8px;
+      overflow-x: auto;
+    }
+    .y-axis-title-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      flex-shrink: 0;
+    }
+    .y-axis-title {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--primary-dark);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .y-axis-ticks {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 185px;
+      padding-right: 8px;
+      border-right: 2px solid #475569;
+      flex-shrink: 0;
+      min-width: 42px;
+      text-align: right;
+    }
+    .y-tick-lbl {
+      font-size: 10px;
+      font-weight: 800;
+      color: #334155;
+      line-height: 1;
+      transform: translateY(-4px);
+    }
+    .plot-area {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      padding-left: 10px;
+    }
+    .gridlines-layer {
+      position: relative;
+      height: 185px;
+      border-bottom: 2px solid #475569;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .gridline-row {
+      width: 100%;
+      border-top: 1px dashed #cbd5e1;
+      height: 0;
+    }
+    .gridline-row:first-child { border-top-style: solid; border-top-color: #e2e8f0; }
+    .bars-layer {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 0;
+      height: 185px;
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+    .bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+      min-width: 68px;
+      flex: 1;
+      max-width: 120px;
+    }
+    .bar-val-lbl {
+      font-size: 10px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+      white-space: nowrap;
+    }
+    .bar-rect {
+      width: 38px;
+      border-radius: 8px 8px 0 0;
+      background: linear-gradient(180deg, #0d9488 0%, #059669 100%);
+      min-height: 4px;
+      transition: height 0.25s ease;
+    }
+    .x-axis-labels {
+      display: flex;
+      gap: 14px;
+      padding: 6px 10px 0 10px;
+    }
+    .x-lbl-cell {
+      min-width: 68px;
+      flex: 1;
+      max-width: 120px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: #334155;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .q-crop-frame {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      margin-bottom: 10px;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .q-crop-frame img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-inner">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div class="brand" onclick="switchView('upload')">
+          <div class="nura2-logo">
+            <span id="headerLogoShort">NURA</span>
+            <span id="headerLogoBadge" class="badge-2">2</span>
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <strong id="headerBrandTitle" style="font-size:15px;font-weight:900;color:#0f172a;">NURA-2 · NEET CBT Simulator</strong>
+              <span class="pill pill-teal">100% Independent Offline App</span>
+            </div>
+            <div style="font-size:11px;color:#64748b;">Self-Contained Browser &amp; Installable App · Live: <a href="https://moaved53-crypto.github.io/NURA-Test-Tracker-/" target="_blank" rel="noopener noreferrer" style="color:var(--primary-dark);font-weight:700;">moaved53-crypto.github.io/NURA-Test-Tracker-</a></div>
+          </div>
+        </div>
+
+        <div style="display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:3px 6px;">
+          <input id="customAppNameInput" type="text" placeholder="Change App Name..." onkeydown="if(event.key==='Enter'){saveCustomAppName();}" style="width:140px;padding:4px 8px;font-size:11px;border-radius:7px;" />
+          <button type="button" class="btn-primary" onclick="saveCustomAppName()" style="padding:4px 9px;font-size:11px;border-radius:7px;">Save</button>
+          <span id="appNameSavedBadge" class="hidden" style="font-size:10px;font-weight:800;color:#059669;">Saved!</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button type="button" class="pill-save" onclick="saveAllDataToJsonFile()"><span id="headerSaveBtnLabel">⬇ Save</span></button>
+        <button type="button" class="pill-pdf" onclick="exportFullReportPdf()">PDF</button>
+        <button id="installAppBtn" type="button" class="btn-warn hidden" onclick="triggerInstallApp()">⬇ Install</button>
+        <button type="button" class="btn-outline" onclick="openInstallHelpModal()">Live &amp; Install</button>
+        <button id="navUploadBtn" type="button" class="btn-soft" onclick="switchView('upload')">+ New Test</button>
+        <button id="navGraphBtn" type="button" class="btn-soft" onclick="switchView('marksGraphView')">📊 Marks Graph</button>
+        <button id="navWrongQsBtn" type="button" class="btn-warn" onclick="switchView('wrongQsPage')">
+          <span>Wrong Qs Bank</span>
+          <span id="wrongQsHeaderBadge" style="background:#78350f;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
+        </button>
+        <button id="navWeakTrackerBtn" type="button" class="btn-danger-soft" onclick="switchView('weakTracker')">
+          <span>Weak Chapter &amp; Topic</span>
+          <span id="weakTrackerHeaderBadge" style="background:#e11d48;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
+        </button>
+        <button id="navHistoryBtn" type="button" class="btn-outline" onclick="openHistoryDrawer()">
+          <span>Saved &amp; History</span>
+          <span id="historyCountBadge" style="background:#0f172a;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="uploadView" class="container grid-main">
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <section class="card">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="width:26px;height:26px;border-radius:8px;background:#ccfbf1;color:#0f766e;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;">1</span>
+            <h2 style="margin:0;font-size:16px;font-weight:900;">Upload Practice Sheet (PDF, Screenshots, Text)</h2>
+          </div>
+          <span class="pill pill-teal">Zero-Cut Serial Cropper + OCR</span>
+        </div>
+
+        <div id="dropZone" class="dropzone">
+          <div style="width:44px;height:44px;margin:0 auto 10px;border-radius:14px;background:#ccfbf1;color:#0d9488;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;">↑</div>
+          <div style="font-size:14px;font-weight:900;color:#0f172a;">Tap or Drop PW DPP PDF, JPG/PNG Screenshots, CSV, JSON or TXT</div>
+          <div style="font-size:12px;color:#475569;margin-top:4px;max-width:540px;margin-left:auto;margin-right:auto;">
+            Crops each complete question (stem + formulas/diagrams + all 4 options) in strict serial order (1, 2, 3, ...), including cross-column &amp; cross-page stitching.
+          </div>
+
+          <div style="margin-top:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;">
+            <label for="fileInput" class="btn btn-primary" style="padding:10px 18px;font-size:13px;">Select Files from Device</label>
+            <button type="button" id="manualProcessFileBtn" class="btn-success" onclick="window.__onFileInputChanged(document.getElementById('fileInput'), true)" style="padding:10px 16px;font-size:13px;">
+              Process Selected File Now
+            </button>
+          </div>
+
+          <div style="margin-top:10px;">
+            <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" onchange="window.__onFileInputChanged(this, false)" oninput="window.__onFileInputChanged(this, false)" style="font-size:12px;color:#475569;" />
+          </div>
+
+          <div style="margin-top:12px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;font-size:11px;font-weight:700;">
+            <label style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;padding:6px 10px;border-radius:8px;border:1px solid #a7f3d0;cursor:pointer;color:#065f46;">
+              <input id="autoCropQuestionsToggle" type="checkbox" checked style="accent-color:#059669;" />
+              <span>Auto Question Image Cropper (Zero-Cut Visual Snipping)</span>
+            </label>
+            <label style="display:inline-flex;align-items:center;gap:6px;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--border);cursor:pointer;">
+              <input id="forcePdfOcrToggle" type="checkbox" style="accent-color:#0d9488;" />
+              <span>Force High-Accuracy OCR (Custom-Font PW PDFs)</span>
+            </label>
+            <label style="display:inline-flex;align-items:center;gap:6px;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--border);cursor:pointer;">
+              <input id="skipSolutionsToggle" type="checkbox" checked style="accent-color:#059669;" />
+              <span>Skip Hints &amp; Solutions Pages (Fast Mode)</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="parseStatusBox" class="status-box hidden">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div>
+              <div id="parseStatusTitle" style="font-size:13px;font-weight:900;"></div>
+              <div id="parseStatusSub" style="font-size:12px;margin-top:2px;"></div>
+            </div>
+            <span id="parseStatusMeta" class="pill pill-teal"></span>
+          </div>
+          <div id="parseProgressWrap" class="progress-track hidden">
+            <div id="parseProgressBar" class="progress-fill" style="width:10%;"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f1f5f9;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <label for="rawTextInput" style="font-size:12px;font-weight:800;">Extracted / Raw Sheet Text</label>
+            <div style="display:flex;gap:12px;">
+              <button type="button" onclick="insertSampleFormat()" style="background:none;border:none;color:var(--primary);padding:0;font-size:12px;">Format Example</button>
+              <button type="button" onclick="clearRawText()" style="background:none;border:none;color:var(--muted);padding:0;font-size:12px;">Clear</button>
+            </div>
+          </div>
+          <textarea id="rawTextInput" rows="4" placeholder="Q1 What is true about glycos?&#10;(1) Greek word, splitting  (2) Latin word, sugar  (3) Greek word, sugar  (4) Latin word, splitting&#10;Answer Key&#10;Q1 (3)" style="font-family:monospace;"></textarea>
+          <div style="margin-top:8px;display:flex;justify-content:flex-end;">
+            <button type="button" class="btn-dark" onclick="parseFromTextarea()">Extract Questions &amp; Auto-Tag Chapter/Topic/Sub-Topic</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="width:26px;height:26px;border-radius:8px;background:#ecfdf5;color:#059669;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;">2</span>
+            <div>
+              <h2 style="margin:0;font-size:16px;font-weight:900;">Question Bank &amp; Answer Key Editor</h2>
+              <div style="font-size:11px;color:var(--muted);">Verify Subject, Chapter Name, Topic, Specific Sub-Topic &amp; Answer Keys before starting CBT.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+            <span id="questionCountBadge" class="pill pill-green" style="font-size:11px;padding:4px 10px;">0 Questions</span>
+            <button type="button" class="btn-soft" onclick="openBulkKeyModal()">Bulk Key / Multi-Image OCR</button>
+            <button type="button" class="btn-outline" onclick="saveCurrentSheetToLibrary()">Save Sheet</button>
+            <button type="button" class="btn-outline" onclick="addManualQuestion()">+ Add Q</button>
+            <button type="button" class="btn-danger-soft" onclick="clearAllQuestions()">Clear</button>
+          </div>
+        </div>
+
+        <div id="questionBankList" class="scroll-box" style="display:flex;flex-direction:column;gap:10px;"></div>
+      </section>
+    </div>
+
+    <div>
+      <section class="card" style="position:sticky;top:76px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <span style="width:26px;height:26px;border-radius:8px;background:#fef3c7;color:#d97706;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;">3</span>
+          <h2 style="margin:0;font-size:16px;font-weight:900;">NURA-2 Exam Setup</h2>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <label class="field-lbl">Test / Chapter Title</label>
+            <input id="testTitleInput" type="text" placeholder="Auto-filled from uploaded file..." />
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label class="field-lbl">Duration Mode</label>
+              <select id="durationModeSelect" onchange="updateExamConfigSummary()">
+                <option value="auto">Auto (1 min / Q)</option>
+                <option value="neet200">Full NEET (200 min)</option>
+                <option value="custom">Custom Minutes</option>
+              </select>
+            </div>
+            <div>
+              <label class="field-lbl">Total Minutes</label>
+              <input id="totalMinutesInput" type="number" min="1" max="300" value="0" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label class="field-lbl">Correct (+)</label>
+              <input id="positiveMarkInput" type="number" value="4" style="color:#059669;background:#ecfdf5;" />
+            </div>
+            <div>
+              <label class="field-lbl">Incorrect (-)</label>
+              <input id="negativeMarkInput" type="number" value="-1" style="color:#e11d48;background:#fff1f2;" />
+            </div>
+          </div>
+
+          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:10px;">
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Subject Distribution</div>
+            <div id="subjectDistSummary" class="grid-2" style="font-size:12px;font-weight:700;">
+              <span>Physics: 0</span>
+              <span>Chemistry: 0</span>
+              <span>Botany: 0</span>
+              <span>Zoology: 0</span>
+            </div>
+          </div>
+
+          <button id="startTestBtn" type="button" class="btn-primary" onclick="startCBTExam()" disabled style="width:100%;padding:13px;font-size:14px;font-weight:900;">
+            Upload Practice Sheet to Start
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <section id="cbtView" class="hidden" style="flex:1;display:flex;flex-direction:column;">
+    <div style="background:#0f172a;color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+      <div>
+        <div id="cbtExamTitle" style="font-size:14px;font-weight:900;">NURA-2 NEET Practice Test</div>
+        <div style="font-size:11px;color:#94a3b8;">NTA / PW Computer-Based Test Mode</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="background:#1e293b;border:1px solid #334155;padding:4px 10px;border-radius:10px;text-align:right;">
+          <span style="display:block;font-size:9px;color:#94a3b8;text-transform:uppercase;font-weight:800;">Time Left</span>
+          <span id="cbtTimerDisplay" style="font-size:15px;font-weight:900;color:#fbbf24;font-family:monospace;">00:00</span>
+        </div>
+        <button type="button" class="btn-outline" onclick="toggleMobilePalette()" style="background:#1e293b;color:#fff;border-color:#334155;">Palette</button>
+        <button type="button" class="btn-success" onclick="confirmAndSubmitExam()" style="padding:9px 14px;font-size:13px;">Submit Test</button>
+      </div>
+    </div>
+
+    <div style="background:#fff;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;gap:6px;overflow-x:auto;">
+      <button type="button" onclick="filterCbtSubject('All')" data-cbt-sub="All" class="cbt-sub-tab btn-primary">All</button>
+      <button type="button" onclick="filterCbtSubject('Physics')" data-cbt-sub="Physics" class="cbt-sub-tab btn-outline">Physics</button>
+      <button type="button" onclick="filterCbtSubject('Chemistry')" data-cbt-sub="Chemistry" class="cbt-sub-tab btn-outline">Chemistry</button>
+      <button type="button" onclick="filterCbtSubject('Botany')" data-cbt-sub="Botany" class="cbt-sub-tab btn-outline">Botany</button>
+      <button type="button" onclick="filterCbtSubject('Zoology')" data-cbt-sub="Zoology" class="cbt-sub-tab btn-outline">Zoology</button>
+    </div>
+
+    <div class="container grid-main">
+      <div class="card" style="display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid #f1f5f9;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+              <span id="cbtQNumberBadge" style="background:#0f172a;color:#fff;padding:3px 9px;border-radius:8px;font-size:12px;font-weight:900;">Question 1 of 1</span>
+              <span id="cbtQSubjectBadge" class="pill pill-teal">Physics</span>
+              <span id="cbtQChapterBadge" class="pill pill-amber">Chapter</span>
+              <span id="cbtQTopicBadge" style="background:#f1f5f9;color:#475569;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:700;">Topic</span>
+              <span id="cbtQSubTopicBadge" class="pill pill-rose">Sub-Topic</span>
+            </div>
+            <div style="display:flex;gap:10px;font-size:12px;font-weight:700;">
+              <span>Q Time: <strong id="cbtQTimer" style="font-family:monospace;">0s</strong></span>
+              <span id="cbtMarkingBadge" style="color:#059669;">+4 / -1</span>
+            </div>
+          </div>
+
+          <div id="cbtQuestionImageWrap" class="q-crop-frame hidden" style="margin-top:14px;">
+            <img id="cbtQuestionImage" src="" alt="Question Image" />
+          </div>
+          <div id="cbtQuestionText" style="margin-top:14px;font-size:15px;font-weight:600;white-space:pre-line;"></div>
+          <div id="cbtOptionsContainer" style="margin-top:16px;"></div>
+        </div>
+
+        <div style="margin-top:20px;padding-top:14px;border-top:1px solid #f1f5f9;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;">
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="btn-outline" onclick="cbtPrevQuestion()">← Previous</button>
+            <button type="button" class="btn-danger-soft" onclick="cbtClearResponse()">Clear Response</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button type="button" onclick="cbtMarkForReviewAndNext()" style="background:#7c3aed;color:#fff;">Mark for Review &amp; Next</button>
+            <button type="button" class="btn-success" onclick="cbtSaveAndNext()">Save &amp; Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <aside id="cbtPalettePanel" class="card" style="height:fit-content;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <strong style="font-size:14px;">Question Palette</strong>
+          <button type="button" class="btn-outline" onclick="toggleMobilePalette()" style="padding:4px 8px;font-size:11px;">Toggle</button>
+        </div>
+
+        <div class="grid-2" style="font-size:11px;font-weight:700;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:6px;background:#f8fafc;padding:6px;border-radius:8px;"><span id="palAnsweredCount" class="nta-btn-answered" style="width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;">0</span> Answered</div>
+          <div style="display:flex;align-items:center;gap:6px;background:#f8fafc;padding:6px;border-radius:8px;"><span id="palNotAnsweredCount" class="nta-btn-not-answered" style="width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;">0</span> Not Answered</div>
+          <div style="display:flex;align-items:center;gap:6px;background:#f8fafc;padding:6px;border-radius:8px;"><span id="palNotVisitedCount" class="nta-btn-not-visited" style="width:20px;height:20px;border-radius:6px;border:1px solid #cbd5e1;display:inline-flex;align-items:center;justify-content:center;font-size:10px;">0</span> Not Visited</div>
+          <div style="display:flex;align-items:center;gap:6px;background:#f8fafc;padding:6px;border-radius:8px;"><span id="palMarkedCount" class="nta-btn-marked" style="width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;">0</span> Marked</div>
+        </div>
+
+        <div id="cbtPaletteGrid" class="palette-grid"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="resultView" class="container hidden" style="display:flex;flex-direction:column;gap:18px;">
+    <div id="missingKeyAlertBanner" class="hidden" style="border-radius:16px;border:1px solid #fcd34d;background:#fffbeb;padding:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+      <div>
+        <strong style="font-size:14px;color:#78350f;">Some Questions Did Not Have Answer Keys Set</strong>
+        <div style="font-size:12px;color:#92400e;margin-top:2px;">Upload one or more Answer Key screenshots or paste a bulk key to recalculate scorecard &amp; topics.</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <label for="directResultKeyFileInput" class="btn btn-primary">Upload Answer Key Screenshots</label>
+        <input id="directResultKeyFileInput" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.txt,.csv,image/*,application/pdf" onchange="handleDirectResultKeyUpload(this)" class="hidden" />
+        <button type="button" class="btn-warn" onclick="openBulkKeyModal(true)">Bulk Key / Paste</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-teal">NURA-2 Detailed Performance Report</span>
+          <h2 id="resTestTitle" style="margin:4px 0 2px;font-size:20px;font-weight:900;">Practice Test Report</h2>
+          <div id="resTestTimestamp" style="font-size:12px;color:var(--muted);"></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button type="button" class="pill-pdf" onclick="exportFullReportPdf()">Download PDF Report</button>
+          <button type="button" class="btn-warn" onclick="switchView('wrongQsPage')">View Saved Wrong Qs Page →</button>
+          <button type="button" class="btn-danger-soft" onclick="switchView('weakTracker')">Open Master Weak Chapter &amp; Topic Page →</button>
+          <button type="button" class="btn-danger" onclick="reattemptFilteredQuestions('weak')">Re-Attempt Weak Only</button>
+          <button type="button" class="btn-warn" onclick="reattemptFilteredQuestions('weak_mod')">Re-Attempt Weak + Moderate</button>
+        </div>
+      </div>
+
+      <div class="grid-4" style="margin-top:14px;">
+        <div style="background:var(--primary-soft);border:1px solid #99f6e4;border-radius:12px;padding:12px;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--primary-dark);">Net Score</div>
+          <div id="resNetScore" style="font-size:22px;font-weight:900;color:#115e59;margin-top:2px;">0 / 0</div>
+          <div id="resPercentText" style="font-size:11px;font-weight:700;color:var(--primary);">0% Score</div>
+        </div>
+        <div style="background:var(--success-soft);border:1px solid var(--success-border);border-radius:12px;padding:12px;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--success);">Accuracy</div>
+          <div id="resAccuracy" style="font-size:22px;font-weight:900;color:#064e3b;margin-top:2px;">0%</div>
+          <div id="resMarksSplit" style="font-size:11px;font-weight:700;color:var(--success);">+0 Pos | -0 Neg</div>
+        </div>
+        <div style="background:var(--warn-soft);border:1px solid var(--warn-border);border-radius:12px;padding:12px;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--warn);">Time Taken</div>
+          <div id="resTotalTime" style="font-size:22px;font-weight:900;color:#78350f;margin-top:2px;">0m 0s</div>
+          <div id="resAvgTime" style="font-size:11px;font-weight:700;color:var(--warn);">Avg 0s / Q</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted);">Attempt Summary</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+            <span id="resCorrectCount" class="pill pill-green">0 ✓</span>
+            <span id="resIncorrectCount" class="pill pill-rose">0 ✗</span>
+            <span id="resSkippedCount" style="background:#e2e8f0;color:#334155;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800;">0 Skip</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f1f5f9;">
+        <h3 style="margin:0 0 8px;font-size:14px;font-weight:900;">Obtained Marks vs Each Test</h3>
+        <div id="resultMarksGraphMount"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;font-weight:900;">Subject-Wise Marks, Accuracy &amp; Time</h3>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr><th>Subject</th><th>Total Qs</th><th>Correct</th><th>Wrong</th><th>Skipped</th><th>Net Score</th><th>Accuracy</th><th>Time</th></tr>
+          </thead>
+          <tbody id="resSubjectTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card" style="border:2px solid var(--danger-border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div>
+            <span class="pill pill-rose">Auto-Added to Weak Page</span>
+            <h3 style="margin:4px 0 0;font-size:16px;font-weight:900;color:#881337;">Weak Chapters, Topics &amp; Sub-Topics</h3>
+          </div>
+          <span id="weakTopicsCountBadge" style="width:26px;height:26px;border-radius:999px;background:var(--danger);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;">0</span>
+        </div>
+        <div id="weakTopicsList" style="display:flex;flex-direction:column;gap:10px;"></div>
+      </div>
+
+      <div class="card" style="border:2px solid var(--warn-border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div>
+            <span class="pill pill-amber">Needs Speed / Practice</span>
+            <h3 style="margin:4px 0 0;font-size:16px;font-weight:900;color:#78350f;">Moderate Topics</h3>
+          </div>
+          <span id="moderateTopicsCountBadge" style="width:26px;height:26px;border-radius:999px;background:var(--warn);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;">0</span>
+        </div>
+        <div id="moderateTopicsList" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+
+      <div class="card" style="border:2px solid var(--success-border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div>
+            <span class="pill pill-green">Exam Ready</span>
+            <h3 style="margin:4px 0 0;font-size:16px;font-weight:900;color:#064e3b;">Strong Topics</h3>
+          </div>
+          <span id="strongTopicsCountBadge" style="width:26px;height:26px;border-radius:999px;background:var(--success);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;">0</span>
+        </div>
+        <div id="strongTopicsList" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:15px;font-weight:900;">Question-by-Question Review &amp; 1-Tap Key Override</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button type="button" onclick="filterResultQuestions('all')" data-res-filter="all" class="res-filter-btn btn-dark">All</button>
+          <button type="button" onclick="filterResultQuestions('weak')" data-res-filter="weak" class="res-filter-btn btn-danger-soft">Weak (Wrong)</button>
+          <button type="button" onclick="filterResultQuestions('moderate')" data-res-filter="moderate" class="res-filter-btn btn-outline">Moderate</button>
+          <button type="button" onclick="filterResultQuestions('strong')" data-res-filter="strong" class="res-filter-btn btn-outline">Strong</button>
+        </div>
+      </div>
+      <div id="resQuestionReviewList" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+  </section>
+
+  <section id="marksGraphView" class="container hidden" style="max-width:1040px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-teal">Auto-Updated After Every Test</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Obtained Marks vs Each Test</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            Vertical Y-axis shows <strong>Obtained Marks</strong> and horizontal X-axis shows <strong>Each Test</strong> in chronological order.
+          </p>
+        </div>
+        <button type="button" class="btn-outline" onclick="switchView('upload')">+ New Test</button>
+      </div>
+
+      <div class="grid-3" style="margin-top:14px;margin-bottom:14px;">
+        <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted);">Tests Plotted</div>
+          <div id="mgTotalTests" style="font-size:22px;font-weight:900;margin-top:2px;">0</div>
+        </div>
+        <div style="background:var(--primary-soft);border:1px solid #99f6e4;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--primary-dark);">Latest Test Marks</div>
+          <div id="mgLatestMarks" style="font-size:22px;font-weight:900;color:#115e59;margin-top:2px;">0 / 0</div>
+        </div>
+        <div style="background:var(--success-soft);border:1px solid var(--success-border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--success);">Highest Obtained Marks</div>
+          <div id="mgHighestMarks" style="font-size:22px;font-weight:900;color:#064e3b;margin-top:2px;">0 / 0</div>
+        </div>
+      </div>
+
+      <div id="dedicatedMarksGraphMount"></div>
+
+      <div style="margin-top:16px;overflow-x:auto;">
+        <table>
+          <thead>
+            <tr><th>Test #</th><th>Test Name</th><th>Obtained Marks</th><th>Score %</th><th>Accuracy</th><th>Date</th></tr>
+          </thead>
+          <tbody id="marksGraphTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="weakTrackerView" class="container hidden" style="max-width:1040px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-rose">Cumulative Mistake Notebook · Auto-Synced Every Test</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Master Weak Chapters, Topics &amp; Sub-Topics Tracker</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            Har test ke galat questions ke <strong>Chapter Name</strong>, <strong>Topic</strong>, aur <strong>Specific Sub-Topic</strong> yahan automatically add hote hain. Jab topic <strong>Strong</strong> ho jaye toh checkbox par <strong>Tick ✓</strong> karein!
+          </p>
+        </div>
+        <button type="button" class="btn-primary" onclick="openAddWeakTopicForm()">+ Add Chapter, Topic &amp; Sub-Topic</button>
+      </div>
+
+      <div class="grid-3" style="margin-top:14px;">
+        <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted);">Total Tracked</div>
+          <div id="wtTotalCount" style="font-size:22px;font-weight:900;margin-top:2px;">0</div>
+        </div>
+        <div style="background:var(--danger-soft);border:1px solid var(--danger-border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--danger);">Still Weak (Needs Revision)</div>
+          <div id="wtActiveCount" style="font-size:22px;font-weight:900;color:var(--danger);margin-top:2px;">0</div>
+        </div>
+        <div style="background:var(--success-soft);border:1px solid var(--success-border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--success);">Strong / Mastered (Ticked ✓)</div>
+          <div id="wtMasteredCount" style="font-size:22px;font-weight:900;color:var(--success);margin-top:2px;">0</div>
+        </div>
+      </div>
+
+      <div id="addWeakTopicBox" class="hidden" style="margin-top:14px;padding:14px;border-radius:12px;background:var(--primary-soft);border:1px solid #99f6e4;">
+        <div style="font-size:12px;font-weight:900;color:#115e59;margin-bottom:8px;">Add / Edit Weak Chapter, Topic &amp; Specific Sub-Topic</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:8px;">
+          <select id="newWtSubject">
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Botany">Botany</option>
+            <option value="Zoology">Zoology</option>
+          </select>
+          <input id="newWtChapter" type="text" placeholder="Chapter Name" />
+          <input id="newWtTopic" type="text" placeholder="Topic Name" />
+          <input id="newWtSubTopic" type="text" placeholder="Specific Sub-Topic" />
+          <input id="newWtNote" type="text" placeholder="Note (optional)..." />
+          <div style="display:flex;gap:6px;">
+            <button type="button" class="btn-primary" onclick="saveNewManualWeakTopic()" style="flex:1;">Save</button>
+            <button type="button" class="btn-outline" onclick="document.getElementById('addWeakTopicBox').classList.add('hidden')">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid #f1f5f9;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button type="button" onclick="setWeakTrackerFilter('subject', 'All')" data-wt-sub="All" class="wt-sub-btn btn-dark">All Subjects</button>
+          <button type="button" onclick="setWeakTrackerFilter('subject', 'Physics')" data-wt-sub="Physics" class="wt-sub-btn btn-outline">Physics</button>
+          <button type="button" onclick="setWeakTrackerFilter('subject', 'Chemistry')" data-wt-sub="Chemistry" class="wt-sub-btn btn-outline">Chemistry</button>
+          <button type="button" onclick="setWeakTrackerFilter('subject', 'Botany')" data-wt-sub="Botany" class="wt-sub-btn btn-outline">Botany</button>
+          <button type="button" onclick="setWeakTrackerFilter('subject', 'Zoology')" data-wt-sub="Zoology" class="wt-sub-btn btn-outline">Zoology</button>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button type="button" onclick="setWeakTrackerFilter('status', 'all')" data-wt-status="all" class="wt-status-btn btn-primary">All</button>
+          <button type="button" onclick="setWeakTrackerFilter('status', 'active')" data-wt-status="active" class="wt-status-btn btn-danger-soft">Weak Only</button>
+          <button type="button" onclick="setWeakTrackerFilter('status', 'mastered')" data-wt-status="mastered" class="wt-status-btn btn-outline">Ticked Strong ✓</button>
+        </div>
+      </div>
+
+      <div id="masterWeakTopicsContainer" style="margin-top:14px;display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+  </section>
+
+  <section id="wrongQsPageView" class="container hidden" style="max-width:1040px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-amber">Per-Test Mistake Bank · Exact Question Numbers Preserved</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Test-Wise Wrong Questions Bank &amp; Direct Re-Attempt</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            Har test ke galat questions unke <strong>exact original Question No. (Q1, Q5, Q14...)</strong>, <strong>Chapter</strong>, <strong>Topic</strong>, aur <strong>Specific Sub-Topic</strong> ke saath yahan save hote hain.
+          </p>
+        </div>
+        <button type="button" class="btn-primary" onclick="reattemptAllSavedWrongQuestions()">Re-Attempt All Saved Wrong Qs</button>
+      </div>
+
+      <div id="wrongQsTestsContainer" style="margin-top:14px;display:flex;flex-direction:column;gap:14px;"></div>
+    </div>
+  </section>
+
+  <div id="bulkKeyModal" class="modal-backdrop hidden">
+    <div class="modal-card" style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="font-size:15px;">Bulk Answer Key &amp; Multi-Image Screenshot OCR</strong>
+        <button type="button" class="btn-outline" onclick="closeBulkKeyModal()" style="padding:4px 8px;">✕</button>
+      </div>
+      <div id="bulkKeyDropZone" class="dropzone" style="padding:14px;">
+        <div style="font-size:12px;font-weight:900;color:#115e59;">Upload Multiple Answer Key Screenshots / PDFs / Files</div>
+        <div style="font-size:11px;color:#475569;margin-top:2px;">Select multiple answer key screenshots at once — all Q# keys will be scanned and combined automatically.</div>
+        <label for="bulkKeyFileInput" class="btn btn-primary" style="margin-top:8px;">Choose Answer Key Screenshots / Files</label>
+        <input id="bulkKeyFileInput" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.pdf,.txt,.csv,image/*,application/pdf" onchange="handleBulkKeyFileUpload(this)" class="hidden" />
+        <div id="bulkKeyOcrStatus" class="hidden" style="font-size:11px;font-weight:800;color:#0d9488;margin-top:6px;"></div>
+      </div>
+      <div>
+        <label class="field-lbl">Detected / Paste Key Pairs (e.g., Q1 (3), Q2 (1) or Q1 C)</label>
+        <textarea id="bulkKeyTextarea" rows="4" style="font-family:monospace;"></textarea>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" class="btn-outline" onclick="closeBulkKeyModal()">Close</button>
+        <button type="button" class="btn-success" onclick="applyBulkKeyFromModal()">Apply Bulk Key</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="installHelpModal" class="modal-backdrop hidden">
+    <div class="modal-card" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="nura2-logo" style="width:32px;height:32px;font-size:10px;"><span>NURA</span><span class="badge-2" style="width:14px;height:14px;font-size:9px;">2</span></div>
+          <strong style="font-size:15px;">Live Link &amp; Installable NURA-2</strong>
+        </div>
+        <button type="button" class="btn-outline" onclick="closeInstallHelpModal()" style="padding:4px 8px;">✕</button>
+      </div>
+      <div style="font-size:12px;color:#334155;line-height:1.55;">
+        <p style="margin:0 0 8px;"><strong>Live URL:</strong> <a href="https://moaved53-crypto.github.io/NURA-Test-Tracker-/" target="_blank" rel="noopener noreferrer" style="color:var(--primary-dark);font-weight:800;">https://moaved53-crypto.github.io/NURA-Test-Tracker-/</a></p>
+        <p style="margin:0 0 8px;">NURA-2 has its own <code>manifest.json</code>, <code>sw.js</code>, and PNG icons so Android Chrome / Desktop can install it as an independent WebAPK app, and all your data stays locally in your browser + downloadable <code>.json</code> backups.</p>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" class="btn-primary" onclick="closeInstallHelpModal()">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="historyDrawer" class="drawer-backdrop hidden">
+    <div class="drawer-panel" style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border);">
+        <strong style="font-size:15px;">Saved Sheets, History &amp; JSON Backup</strong>
+        <button type="button" class="btn-outline" onclick="closeHistoryDrawer()" style="padding:4px 8px;">✕</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button type="button" class="btn-dark" onclick="saveAllDataToJsonFile()" style="flex:1;">Export JSON Backup</button>
+        <label for="restoreBackupInput" class="btn btn-outline" style="flex:1;text-align:center;">Import / Restore JSON</label>
+        <input id="restoreBackupInput" type="file" accept=".json,application/json" onchange="importFullBackupJson(this)" class="hidden" />
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Obtained Marks vs Each Test</div>
+        <div id="drawerMarksGraphMount"></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Saved Practice Sheets</div>
+        <div id="savedSheetsList" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Past Test Reports</div>
+        <div id="testHistoryList" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function registerNura2ServiceWorker() {
+      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function() {});
+      }
+    })();
+
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const btn = document.getElementById('installAppBtn');
+      if (btn) btn.classList.remove('hidden');
+    });
+
+    async function triggerInstallApp() {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        document.getElementById('installAppBtn').classList.add('hidden');
+      } else {
+        openInstallHelpModal();
+      }
+    }
+
+    function openInstallHelpModal() { document.getElementById('installHelpModal').classList.remove('hidden'); }
+    function closeInstallHelpModal() { document.getElementById('installHelpModal').classList.add('hidden'); }
+
+    const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    const PDFJS_WORKER_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const TESSERACT_CDN = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+
+    const STORAGE_KEYS = {
+      APP_NAME: 'nura2_custom_app_name_v1',
+      SHEETS: 'nura2_saved_sheets_v1',
+      HISTORY: 'nura2_test_history_v1',
+      MARKS_GRAPH: 'nura2_marks_graph_history_v1',
+      WEAK_TRACKER: 'nura2_weak_tracker_v1',
+      WRONG_QS_BANK: 'nura2_wrong_qs_bank_v1'
+    };
+
+    let questions = [];
+    let cbtState = {
+      active: false, filteredIndices: [], currentPos: 0, subjectFilter: 'All',
+      answers: {}, marked: {}, visited: {}, timeSpent: {},
+      remainingSeconds: 0, totalSeconds: 0, timerInterval: null
+    };
+    let lastReport = null;
+    let currentResultFilter = 'all';
+    let weakTrackerFilter = { subject: 'All', status: 'all' };
+    let sharedOcrWorker = null;
+    let activeWrongBankTestId = null;
+
+    // IndexedDB store for zero-cut question images so localStorage never overflows
+    const questionImageMemoryCache = {};
+    const IDB_NAME = 'nura2_cropped_images_db_v1';
+    const IDB_STORE = 'q_images';
+
+    function openNura2ImageDB() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) { reject(new Error('IndexedDB unavailable')); return; }
+        const req = indexedDB.open(IDB_NAME, 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbPutImage(imgKey, dataUrl) {
+      if (!imgKey || !dataUrl) return;
+      questionImageMemoryCache[imgKey] = dataUrl;
+      try {
+        const db = await openNura2ImageDB();
+        await new Promise((res, rej) => {
+          const tx = db.transaction(IDB_STORE, 'readwrite');
+          tx.objectStore(IDB_STORE).put(dataUrl, imgKey);
+          tx.oncomplete = () => res();
+          tx.onerror = () => rej(tx.error);
+        });
+      } catch (e) {}
+    }
+
+    async function hydrateAllSavedQuestionImages() {
+      try {
+        const db = await openNura2ImageDB();
+        await new Promise((res) => {
+          const tx = db.transaction(IDB_STORE, 'readonly');
+          const store = tx.objectStore(IDB_STORE);
+          const req = store.openCursor();
+          req.onsuccess = (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+              questionImageMemoryCache[cursor.key] = cursor.value;
+              cursor.continue();
+            } else {
+              res();
+            }
+          };
+          req.onerror = () => res();
+        });
+      } catch (e) {}
+    }
+
+    function getQuestionImageUrl(q) {
+      if (!q) return '';
+      if (q.imageDataUrl && q.imageDataUrl.startsWith('data:image/')) return q.imageDataUrl;
+      if (q.imageKey && questionImageMemoryCache[q.imageKey]) return questionImageMemoryCache[q.imageKey];
+      return '';
+    }
+
+    function stripInlineImageForLocalStorage(q) {
+      const copy = { ...q };
+      if (copy.imageDataUrl && copy.imageKey) {
+        questionImageMemoryCache[copy.imageKey] = copy.imageDataUrl;
+        delete copy.imageDataUrl;
+      }
+      return copy;
+    }
+
+    function isPureAnswerKeyOnlyPage(text) {
+      const clean = sanitizeExtractedMathText(text || '');
+      if (!clean) return false;
+      const hasOptionText = /\(\s*[1-4A-Da-d]\s*\)\s+[A-Za-z0-9\\+\-\=\(\[\^]/.test(clean);
+      if (hasOptionText && clean.length > 350) return false;
+      const hasKeyHeading = /\b(?:Answer\s*Key|Ans\.?\s*Key|Correct\s*Answer)\b/i.test(clean);
+      const keyPairs = clean.match(/(?:Q\.?\s*\d{1,3}|\b\d{1,3})\s*[\.\-\:\)]?\s*\(?[A-Da-d1-4]\)?/gi) || [];
+      return (hasKeyHeading && keyPairs.length >= 4 && !hasOptionText) || (!hasOptionText && keyPairs.length >= 10 && clean.length < 900);
+    }
+
+    function stitchTwoDataUrlImagesVertically(topDataUrl, botDataUrl, quality = 0.90) {
+      return new Promise((resolve) => {
+        if (!topDataUrl) { resolve(botDataUrl || ''); return; }
+        if (!botDataUrl) { resolve(topDataUrl || ''); return; }
+        const img1 = new Image();
+        const img2 = new Image();
+        let loaded = 0;
+        const finish = () => {
+          loaded++;
+          if (loaded < 2) return;
+          try {
+            const w = Math.max(img1.width || 1, img2.width || 1);
+            const gap = 4;
+            const h = (img1.height || 1) + gap + (img2.height || 1);
+            const c = document.createElement('canvas');
+            c.width = w;
+            c.height = h;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, w, h);
+            ctx.drawImage(img1, 0, 0);
+            ctx.drawImage(img2, 0, (img1.height || 1) + gap);
+            resolve(c.toDataURL('image/jpeg', quality));
+          } catch (e) {
+            resolve(topDataUrl || botDataUrl);
+          }
+        };
+        img1.onload = finish;
+        img1.onerror = finish;
+        img2.onload = finish;
+        img2.onerror = finish;
+        img1.src = topDataUrl;
+        img2.src = botDataUrl;
+      });
+    }
+
+    function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.88) {
+      const padX = 10, padTop = 7, padBot = 9;
+      const sx = Math.max(0, Math.floor(x0 - padX));
+      const sy = Math.max(0, Math.floor(y0 - padTop));
+      const sw = Math.min(srcCanvas.width - sx, Math.ceil((x1 - x0) + padX * 2));
+      const sh = Math.min(srcCanvas.height - sy, Math.ceil((y1 - y0) + padTop + padBot));
+      if (sw < 45 || sh < 26) return '';
+
+      const tmp = document.createElement('canvas');
+      tmp.width = sw;
+      tmp.height = sh;
+      const tctx = tmp.getContext('2d');
+      tctx.fillStyle = '#ffffff';
+      tctx.fillRect(0, 0, sw, sh);
+      tctx.drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+
+      try {
+        const imgData = tctx.getImageData(0, 0, sw, sh).data;
+        let minX = sw, minY = sh, maxX = 0, maxY = 0, foundDark = false;
+        for (let py = 0; py < sh; py += 4) {
+          for (let px = 0; px < sw; px += 4) {
+            const idx = (py * sw + px) * 4;
+            if (imgData[idx] < 240 || imgData[idx + 1] < 240 || imgData[idx + 2] < 240) {
+              foundDark = true;
+              if (px < minX) minX = px;
+              if (px > maxX) maxX = px;
+              if (py < minY) minY = py;
+              if (py > maxY) maxY = py;
+            }
+          }
+        }
+        if (foundDark && maxX > minX && maxY > minY) {
+          const trimPad = 10;
+          const tx0 = Math.max(0, minX - trimPad);
+          const ty0 = Math.max(0, minY - trimPad);
+          const tw = Math.min(sw - tx0, (maxX - minX) + trimPad * 2);
+          const th = Math.min(sh - ty0, (maxY - minY) + trimPad * 2);
+          if (tw > 45 && th > 22) {
+            const trimmed = document.createElement('canvas');
+            trimmed.width = tw;
+            trimmed.height = th;
+            const trCtx = trimmed.getContext('2d');
+            trCtx.fillStyle = '#ffffff';
+            trCtx.fillRect(0, 0, tw, th);
+            trCtx.drawImage(tmp, tx0, ty0, tw, th, 0, 0, tw, th);
+            return trimmed.toDataURL('image/jpeg', quality);
+          }
+        }
+      } catch (e) {}
+      return tmp.toDataURL('image/jpeg', quality);
+    }
+
+    function detectTwoColumnSplitX(mappedItems, canvasWidth) {
+      const midX = canvasWidth * 0.49;
+      const leftItems = mappedItems.filter(it => it.xCanvas < midX);
+      const rightItems = mappedItems.filter(it => it.xCanvas >= midX);
+      const qMarkerRx = /^(?:Q\.?\s*\d{1,3}|\d{1,3}[\.\)])(?:\s|$)/i;
+      const leftHasQ = leftItems.some(it => qMarkerRx.test(it.str));
+      const rightHasQ = rightItems.some(it => qMarkerRx.test(it.str));
+      if ((leftHasQ && rightHasQ) || (leftItems.length > 8 && rightItems.length > 8 && (leftHasQ || rightHasQ))) {
+        const maxLeftX = leftItems.reduce((m, it) => Math.max(m, it.xRight || it.xCanvas), canvasWidth * 0.42);
+        const minRightX = rightItems.reduce((m, it) => Math.min(m, it.xCanvas), canvasWidth * 0.52);
+        if (minRightX > maxLeftX + 10) {
+          return Math.round((maxLeftX + minRightX) / 2);
+        }
+        return Math.round(midX);
+      }
+      return 0;
+    }
+
+    // Merge adjacent small tokens on the same baseline (e.g. "Q" + "1" or "12" + ".") so question markers never split
+    function coalesceBaselineMarkers(items) {
+      const sorted = [...items].sort((a, b) => (Math.abs(a.topY - b.topY) > 7 ? a.topY - b.topY : a.xCanvas - b.xCanvas));
+      const merged = [];
+      for (let i = 0; i < sorted.length; i++) {
+        const cur = sorted[i];
+        let combinedStr = cur.str;
+        let xRight = cur.xRight || cur.xCanvas;
+        let j = i + 1;
+        while (j < sorted.length && Math.abs(sorted[j].topY - cur.topY) <= 7 && (sorted[j].xCanvas - xRight) < 28 && combinedStr.length < 8) {
+          combinedStr = (combinedStr + (sorted[j].str.startsWith('.') || sorted[j].str.startsWith(')') ? '' : ' ') + sorted[j].str).trim();
+          xRight = Math.max(xRight, sorted[j].xRight || sorted[j].xCanvas);
+          j++;
+        }
+        merged.push({ str: combinedStr, xCanvas: cur.xCanvas, xRight, topY: cur.topY });
+        i = j - 1;
+      }
+      return merged;
+    }
+
+    function sliceSingleColumnQuestions(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas, pageTag, outMap, serialCursor = { next: 1 }) {
+      const coalesced = coalesceBaselineMarkers(colItems);
+      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+      const markers = [];
+      let stopY = footerCutoffY;
+
+      coalesced.forEach(it => {
+        if (it.topY < headerCutoffY || it.topY > footerCutoffY) return;
+        if (/^(?:Hints\s*&?\s*Solutions|Answer\s*Key|Video\s*Solution|Text\s*Solution)/i.test(it.str)) {
+          if (it.topY < stopY) stopY = it.topY - 8;
+          return;
+        }
+        const m = it.str.match(qMarkerRx);
+        if (m) {
+          const hasQPrefix = /^Q\.?\s*\d/i.test(it.str);
+          const rawNum = parseInt(m[1] || m[2], 10);
+          if (rawNum >= 1 && rawNum <= 300) {
+            const dup = markers.find(mk => Math.abs(mk.y - it.topY) < 22);
+            if (!dup) markers.push({ rawNum, hasQPrefix, y: it.topY });
+          }
+        }
+      });
+
+      markers.sort((a, b) => a.y - b.y);
+      for (let i = 0; i < markers.length; i++) {
+        const cur = markers[i];
+        const serialNum = serialCursor.next++;
+        const nextY = (i + 1 < markers.length) ? (markers[i + 1].y - 10) : stopY;
+        if (nextY - cur.y >= 26) {
+          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, nextY, 0.88);
+          if (dataUrl) {
+            outMap[serialNum] = {
+              imageKey: `qimg_${Date.now()}_${pageTag}_q${serialNum}_${Math.random().toString(36).slice(2, 6)}`,
+              imageDataUrl: dataUrl
+            };
+          }
+        }
+      }
+    }
+
+    function extractLeadingContinuationBeforeFirstMarker(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas) {
+      const coalesced = coalesceBaselineMarkers(colItems).filter(it => it.topY >= headerCutoffY && it.topY <= footerCutoffY);
+      if (!coalesced.length) return '';
+      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+      let firstMarkerY = footerCutoffY;
+      for (const it of coalesced) {
+        if (/^(?:Hints\s*&?\s*Solutions|Answer\s*Key|Video\s*Solution|Text\s*Solution)/i.test(it.str)) {
+          firstMarkerY = Math.min(firstMarkerY, it.topY - 8);
+          break;
+        }
+        if (qMarkerRx.test(it.str)) {
+          firstMarkerY = it.topY - 8;
+          break;
+        }
+      }
+      if (firstMarkerY - headerCutoffY >= 24) {
+        const hasContinuationCue = coalesced
+          .filter(it => it.topY < firstMarkerY)
+          .some(it => /(?:\([1-4A-Da-d]\)|sqrt|integral|theta|->|=|\d+\s*[A-Za-z%])/i.test(it.str));
+        if (hasContinuationCue) {
+          return sliceQuestionCropFromCanvas(canvas, x0, headerCutoffY, x1, firstMarkerY, 0.90);
+        }
+      }
+      return '';
+    }
+
+    function cropQuestionsFromRenderedPageCanvas(canvas, textItems, pdfWidth, pdfHeight, scale, pageIndex) {
+      const cropsByQNum = {};
+      const pendingCont = window.__nura2PendingContinuation || (window.__nura2PendingContinuation = { dataUrl: '' });
+      if (!textItems || !textItems.length) return cropsByQNum;
+
+      const mapped = textItems.map(it => {
+        const xPdf = it.transform[4];
+        const yPdfBottom = it.transform[5];
+        const wPdf = Math.abs(it.width || 0);
+        const hPdf = Math.abs(it.height || it.transform[3] || 11);
+        const topCanvasY = (pdfHeight - (yPdfBottom + hPdf)) * scale;
+        return {
+          str: sanitizeExtractedMathText(it.str || ''),
+          xCanvas: xPdf * scale,
+          xRight: (xPdf + wPdf) * scale,
+          topY: topCanvasY
+        };
+      }).filter(it => it.str && !/^(Android App|iOS App|PW Website|CUSTOMER|SPACE FOR ROUGH WORK)$/i.test(it.str));
+
+      if (isPureAnswerKeyOnlyPage(mapped.map(m => m.str).join(' '))) return cropsByQNum;
+
+      const splitX = detectTwoColumnSplitX(mapped, canvas.width);
+      const headerCutoffY = canvas.height * 0.035;
+      const footerCutoffY = canvas.height * 0.965;
+      const cursor = window.__nura2SerialCursor || (window.__nura2SerialCursor = { next: 1 });
+
+      const processColSequence = (colItems, x0, x1, tag) => {
+        const leadCont = extractLeadingContinuationBeforeFirstMarker(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas);
+        if (pendingCont.dataUrl && leadCont) {
+          cropsByQNum.__stitchPrev = { topUrl: pendingCont.dataUrl, botUrl: leadCont };
+          pendingCont.dataUrl = '';
+        }
+        const beforeCount = Object.keys(cropsByQNum).length;
+        sliceSingleColumnQuestions(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas, tag, cropsByQNum, cursor);
+
+        // Check if last marker in this column reaches near footer (likely split across next column/page)
+        const coalesced = coalesceBaselineMarkers(colItems).filter(it => it.topY >= headerCutoffY && it.topY <= footerCutoffY);
+        const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+        const markers = coalesced.filter(it => qMarkerRx.test(it.str)).sort((a, b) => a.y - b.y);
+        if (markers.length && Object.keys(cropsByQNum).length > beforeCount) {
+          const lastM = markers[markers.length - 1];
+          const lastSerialKey = Math.max(...Object.keys(cropsByQNum).filter(k => k !== '__stitchPrev').map(Number));
+          if (footerCutoffY - lastM.y >= 26 && cropsByQNum[lastSerialKey]?.imageDataUrl) {
+            pendingCont.dataUrl = cropsByQNum[lastSerialKey].imageDataUrl;
+            pendingCont.targetKey = lastSerialKey;
+          }
+        }
+      };
+
+      if (splitX > 0) {
+        const leftItems = mapped.filter(it => it.xCanvas < splitX);
+        const rightItems = mapped.filter(it => it.xCanvas >= splitX);
+        processColSequence(leftItems, 8, splitX - 6, `p${pageIndex}L`);
+        processColSequence(rightItems, splitX + 6, canvas.width - 8, `p${pageIndex}R`);
+      } else {
+        processColSequence(mapped, 8, canvas.width - 8, `p${pageIndex}S`);
+      }
+
+      return cropsByQNum;
+    }
+
+    async function cropAndOcrImageFast(dataUrl, fileIndex = 0) {
+      const cropsByQNum = {};
+      let text = '';
+      try {
+        const img = await new Promise((res, rej) => {
+          const im = new Image();
+          im.onload = () => res(im);
+          im.onerror = rej;
+          im.src = dataUrl;
+        });
+        const scale = img.width < 950 ? 1.25 : 1.0;
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const worker = await getSharedOcrWorker();
+        const ocrRes = await worker.recognize(canvas.toDataURL('image/jpeg', 0.84));
+        text = sanitizeExtractedMathText(ocrRes?.data?.text || '');
+        const lines = ocrRes?.data?.lines || [];
+        const mappedLines = lines.map(ln => {
+          const bbox = ln.bbox || { x0: 0, y0: 0, x1: canvas.width, y1: 20 };
+          return {
+            str: sanitizeExtractedMathText(ln.text || ''),
+            xCanvas: bbox.x0,
+            xRight: bbox.x1,
+            topY: bbox.y0
+          };
+        }).filter(it => it.str);
+
+        if (isPureAnswerKeyOnlyPage(text)) return { crops: cropsByQNum, text };
+
+        const splitX = detectTwoColumnSplitX(mappedLines, canvas.width);
+        const cursor = window.__nura2SerialCursor || (window.__nura2SerialCursor = { next: 1 });
+        if (splitX > 0) {
+          sliceSingleColumnQuestions(mappedLines.filter(l => l.xCanvas < splitX), 8, splitX - 8, 6, canvas.height - 6, canvas, `img${fileIndex}L`, cropsByQNum, cursor);
+          sliceSingleColumnQuestions(mappedLines.filter(l => l.xCanvas >= splitX), splitX + 8, canvas.width - 8, 6, canvas.height - 6, canvas, `img${fileIndex}R`, cropsByQNum, cursor);
+        } else {
+          sliceSingleColumnQuestions(mappedLines, 8, canvas.width - 8, 6, canvas.height - 6, canvas, `img${fileIndex}S`, cropsByQNum, cursor);
+        }
+
+        if (!Object.keys(cropsByQNum).length) {
+          const singleCrop = sliceQuestionCropFromCanvas(canvas, 8, 8, canvas.width - 8, canvas.height - 8, 0.86);
+          if (singleCrop) {
+            const sNum = cursor.next++;
+            cropsByQNum[sNum] = {
+              imageKey: `qimg_${Date.now()}_img${fileIndex}_q${sNum}_${Math.random().toString(36).slice(2, 6)}`,
+              imageDataUrl: singleCrop
+            };
+          }
+        }
+      } catch (e) {}
+      return { crops: cropsByQNum, text };
+    }
+
+    function removeQuestionCroppedImage(idx) {
+      if (!questions[idx]) return;
+      delete questions[idx].imageDataUrl;
+      delete questions[idx].imageKey;
+      renderQuestionBank();
+    }
+
+    function loadStorage(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) { return fallback; }
+    }
+    function saveStorage(key, val) {
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+    }
+
+    function applyCustomAppNameToUI() {
+      const savedName = (localStorage.getItem(STORAGE_KEYS.APP_NAME) || '').trim();
+      const inputEl = document.getElementById('customAppNameInput');
+      const titleEl = document.getElementById('headerBrandTitle');
+      const shortEl = document.getElementById('headerLogoShort');
+      const badgeEl = document.getElementById('headerLogoBadge');
+      if (savedName) {
+        if (inputEl && document.activeElement !== inputEl) inputEl.value = savedName;
+        if (titleEl) titleEl.textContent = savedName;
+        document.title = savedName;
+        const cleanWord = savedName.replace(/[^A-Za-z0-9]/g, '');
+        if (shortEl) shortEl.textContent = (cleanWord.slice(0, 5) || 'NURA').toUpperCase();
+        const numMatch = savedName.match(/(\d+)/);
+        if (badgeEl && numMatch) badgeEl.textContent = numMatch[1].slice(0, 2);
+      } else {
+        if (titleEl) titleEl.textContent = 'NURA-2 · NEET CBT Simulator';
+        if (shortEl) shortEl.textContent = 'NURA';
+        if (badgeEl) badgeEl.textContent = '2';
+      }
+    }
+
+    function saveCustomAppName() {
+      const inputEl = document.getElementById('customAppNameInput');
+      const val = (inputEl ? inputEl.value : '').trim();
+      if (val) localStorage.setItem(STORAGE_KEYS.APP_NAME, val);
+      else localStorage.removeItem(STORAGE_KEYS.APP_NAME);
+      applyCustomAppNameToUI();
+      const badge = document.getElementById('appNameSavedBadge');
+      if (badge) {
+        badge.classList.remove('hidden');
+        setTimeout(() => badge.classList.add('hidden'), 1800);
+      }
+    }
+
+    function updateHeaderBadges() {
+      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
+      const history = loadStorage(STORAGE_KEYS.HISTORY, []);
+      const weakItems = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const wrongTests = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      const totalWrongQs = wrongTests.reduce((acc, t) => acc + (t.questions ? t.questions.length : 0), 0);
+      document.getElementById('historyCountBadge').textContent = sheets.length + history.length;
+      document.getElementById('weakTrackerHeaderBadge').textContent = weakItems.filter(w => !w.mastered).length;
+      const wqBadge = document.getElementById('wrongQsHeaderBadge');
+      if (wqBadge) wqBadge.textContent = totalWrongQs;
+    }
+
+    function switchView(viewName) {
+      ['uploadView', 'cbtView', 'resultView', 'marksGraphView', 'weakTrackerView', 'wrongQsPageView'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+      if (viewName === 'upload') document.getElementById('uploadView').classList.remove('hidden');
+      if (viewName === 'cbt') document.getElementById('cbtView').classList.remove('hidden');
+      if (viewName === 'result') {
+        document.getElementById('resultView').classList.remove('hidden');
+        renderMarksBarGraphInto('resultMarksGraphMount');
+      }
+      if (viewName === 'marksGraphView') {
+        document.getElementById('marksGraphView').classList.remove('hidden');
+        renderMarksGraphPage();
+      }
+      if (viewName === 'weakTracker') {
+        document.getElementById('weakTrackerView').classList.remove('hidden');
+        renderMasterWeakTracker();
+      }
+      if (viewName === 'wrongQsPage') {
+        document.getElementById('wrongQsPageView').classList.remove('hidden');
+        renderWrongQsBankPage();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setParseStatus(visible, title, sub, isError = false, pct = null, meta = '') {
+      const box = document.getElementById('parseStatusBox');
+      if (!box) return;
+      if (!visible) { box.classList.add('hidden'); return; }
+      box.classList.remove('hidden', 'error', 'done');
+      if (isError) box.classList.add('error');
+      else if (pct === 100) box.classList.add('done');
+
+      document.getElementById('parseStatusTitle').textContent = title;
+      document.getElementById('parseStatusSub').textContent = sub;
+      document.getElementById('parseStatusMeta').textContent = meta || '';
+
+      const pWrap = document.getElementById('parseProgressWrap');
+      const pBar = document.getElementById('parseProgressBar');
+      if (pct !== null && !isError) {
+        pWrap.classList.remove('hidden');
+        pBar.style.width = Math.max(5, Math.min(100, pct)) + '%';
+      } else {
+        pWrap.classList.add('hidden');
+      }
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes) return '0 B';
+      const k = 1024, sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function isRawPdfSyntax(str) {
+      if (!str) return false;
+      const sample = str.slice(0, 1200);
+      return /^%PDF-/i.test(sample.trim()) || (/\d+\s+0\s+obj/i.test(sample) && /\/(MediaBox|Contents|Font|Resources|Type\s*\/Page)/i.test(sample));
+    }
+
+    function setupFileDropzone() {
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      let busy = false;
+      let lastProcessedSignature = '';
+
+      const buildFileSignature = (files) => {
+        if (!files || !files.length) return '';
+        return Array.from(files).map(f => `${f.name}:${f.size}:${f.lastModified}`).join('|');
+      };
+
+      const runWithUploadTimeout = (promise, ms = 45000) => {
+        let timerId = null;
+        const timeoutPromise = new Promise((_, reject) => {
+          timerId = setTimeout(() => {
+            reject(new Error('File processing took too long. Uncheck "Auto Question Image Cropper" or paste text in Raw Sheet Text box.'));
+          }, ms);
+        });
+        return Promise.race([promise, timeoutPromise]).finally(() => {
+          if (timerId) clearTimeout(timerId);
+        });
+      };
+
+      const startProcessingSelectedFiles = (files, force = false) => {
+        if (!files || !files.length) {
+          setParseStatus(true, 'No File Selected', 'Tap "Select Files from Device" first to choose a PDF, image, JSON, CSV, or TXT file.', true);
+          return;
+        }
+        const sig = buildFileSignature(files);
+        if (!force && (busy || sig === lastProcessedSignature)) return;
+
+        busy = true;
+        lastProcessedSignature = sig;
+        const primary = files[0];
+        const meta = files.length > 1 ? `${files.length} files` : `${formatBytes(primary.size)}`;
+        const titleInput = document.getElementById('testTitleInput');
+        if (titleInput && !titleInput.value.trim()) {
+          titleInput.value = primary.name.replace(/\.[^/.]+$/, '');
+        }
+
+        setParseStatus(true, `Reading: ${primary.name}`, 'Extracting questions, chapters, sub-topics & answer keys...', false, 10, meta);
+        runWithUploadTimeout(handleUploadedFiles(Array.from(files)))
+          .catch(err => {
+            setParseStatus(true, 'Extraction Error', err?.message || 'Could not process file.', true, null, meta);
+          })
+          .finally(() => {
+            busy = false;
+          });
+      };
+
+      window.__onFileInputChanged = (el, force = false) => {
+        const target = el || fileInput;
+        const files = target?.files ? Array.from(target.files) : [];
+        startProcessingSelectedFiles(files, force);
+      };
+
+      if (fileInput) {
+        fileInput.addEventListener('change', () => window.__onFileInputChanged(fileInput, true));
+        fileInput.addEventListener('input', () => window.__onFileInputChanged(fileInput, true));
+      }
+
+      setInterval(() => {
+        if (fileInput && fileInput.files && fileInput.files.length && !busy) {
+          const sig = buildFileSignature(fileInput.files);
+          if (sig !== lastProcessedSignature) {
+            startProcessingSelectedFiles(Array.from(fileInput.files), false);
+          }
+        }
+      }, 350);
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+      });
+      ['dragleave', 'drop'].forEach(evt => {
+        dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+      });
+      dropZone.addEventListener('drop', e => {
+        if (e.dataTransfer?.files?.length) startProcessingSelectedFiles(Array.from(e.dataTransfer.files), true);
+      });
+    }
+
+    async function readFileAsArrayBufferSafe(file) {
+      if (typeof file.arrayBuffer === 'function') {
+        try {
+          const ab = await file.arrayBuffer();
+          if (ab && ab.byteLength > 0) return ab;
+        } catch (e) {}
+      }
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = () => reject(new Error('Could not read file buffer. If selected from Google Drive/Cloud, download it to local storage first.'));
+        r.readAsArrayBuffer(file);
+      });
+    }
+    function readFileAsDataURLSafe(file) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = () => reject(new Error('Could not read image file.'));
+        r.readAsDataURL(file);
+      });
+    }
+    function readFileAsTextSafe(file) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = () => reject(new Error('Could not read text file.'));
+        r.readAsText(file);
+      });
+    }
+    function loadScriptDynamic(src) {
+      return new Promise((resolve, reject) => {
+        const existing = document.querySelector(`script[src="${src}"]`);
+        if (existing) {
+          if (existing.dataset.loaded === '1') { resolve(); return; }
+          existing.addEventListener('load', resolve, { once: true });
+          existing.addEventListener('error', () => reject(new Error('Could not load library: ' + src)), { once: true });
+          return;
+        }
+        const s = document.createElement('script');
+        s.src = src;
+        s.async = true;
+        s.onload = () => { s.dataset.loaded = '1'; resolve(); };
+        s.onerror = () => reject(new Error('Could not load library: ' + src));
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ensurePdfJsReady() {
+      if (!window.pdfjsLib) await loadScriptDynamic(PDFJS_CDN);
+      if (!window.pdfjsLib) throw new Error('PDF engine unavailable.');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_CDN;
+    }
+
+    async function loadPdfDocumentResilient(arrayBuffer) {
+      await ensurePdfJsReady();
+      const rawCopy = new Uint8Array(arrayBuffer);
+      try {
+        const doc1 = await pdfjsLib.getDocument({ data: new Uint8Array(rawCopy.slice(0)) }).promise;
+        if (doc1 && typeof doc1.numPages === 'number') return doc1;
+      } catch (e) {}
+      const doc2 = await pdfjsLib.getDocument({ data: new Uint8Array(rawCopy.slice(0)), disableWorker: true }).promise;
+      if (!doc2 || typeof doc2.numPages !== 'number') throw new Error('Unable to open PDF structure.');
+      return doc2;
+    }
+
+    async function getSharedOcrWorker() {
+      if (sharedOcrWorker) return sharedOcrWorker;
+      if (!window.Tesseract) await loadScriptDynamic(TESSERACT_CDN);
+      if (!window.Tesseract) throw new Error('OCR engine unavailable offline.');
+      sharedOcrWorker = await Tesseract.createWorker('eng');
+      return sharedOcrWorker;
+    }
+
+    function sanitizeExtractedMathText(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/Master\s*NCERT\s*with\s*PW\s*Books\s*APP/gi, ' ')
+        .replace(/PW\s*Web\/?App\s*-\s*https?:\/\/\S+/gi, ' ')
+        .replace(/Library-\s*https?:\/\/\S+/gi, ' ')
+        .replace(/SPACE\s*FOR\s*ROUGH\s*WORK/gi, ' ')
+        .replace(/ (?:Android App|iOS App|PW Website|CUSTOMER) /gi, ' ')
+        .replace(/[-]/g, ' ')
+        .replace(/[‘’ʼ]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/√/g, ' sqrt ')
+        .replace(/θ/g, ' theta ')
+        .replace(/→/g, ' -> ')
+        .replace(/×/g, ' x ')
+        .replace(/[·⋅]/g, ' . ')
+        .replace(/≤/g, ' <= ')
+        .replace(/≥/g, ' >= ')
+        .replace(/≠/g, ' != ')
+        .replace(/∫/g, ' integral ')
+        .replace(/∞/g, ' infinity ')
+        .replace(/([ijk])\s*[\^ˆ]/g, '$1_hat')
+        .replace(/([A-Za-z])\s*[⃗]/g, 'vec($1)')
+        .replace(/[^\x20-\x7E\n]/g, ' ')
+        .replace(/ simpli\s*fi\s*cation /gi, 'simplification')
+        .replace(/ fi\s*gure /gi, 'figure')
+        .replace(/([A-Za-z0-9\)\]])\s+(?:->\s*){2,}([A-Za-z0-9\(\[])/g, '$1 -> $2')
+        .replace(/(?:->\s*){2,}/g, ' -> ')
+        .replace(/[ 	]{2,}/g, ' ')
+        .trim();
+    }
+
+    function splitInlineNumberedOrLetteredOptions(rawQText, existingOptions = null) {
+      const cleanRaw = sanitizeExtractedMathText(rawQText || '');
+      const hasValidExisting = Array.isArray(existingOptions) && existingOptions.length === 4 &&
+        existingOptions.every(o => {
+          const s = sanitizeExtractedMathText(o);
+          return s && !/^Option\s*[A-D1-4]$/i.test(s);
+        });
+
+      const splitTokens = (markerList) => {
+        const positions = [];
+        let searchFrom = 0;
+        for (let i = 0; i < markerList.length; i++) {
+          const rx = new RegExp(markerList[i], 'g');
+          rx.lastIndex = searchFrom;
+          let found = null;
+          let m;
+          while ((m = rx.exec(cleanRaw)) !== null) {
+            if (m.index < cleanRaw.length * 0.12) continue;
+            if (found === null) found = { index: m.index, fullLen: m[0].trim().length };
+          }
+          if (!found) return null;
+          positions.push(found);
+          searchFrom = found.index + found.fullLen;
+        }
+        if (positions.length !== 4) return null;
+        const stem = cleanRaw.slice(0, positions[0].index).trim();
+        const opts = positions.map((pos, idx) => {
+          const start = pos.index + pos.fullLen;
+          const end = idx < 3 ? positions[idx + 1].index : cleanRaw.length;
+          return cleanRaw.slice(start, end).trim() || `Choice (${idx + 1})`;
+        });
+        if (stem.length >= 2 && opts.every(o => o.length >= 1)) {
+          return { text: stem, options: opts };
+        }
+        return null;
+      };
+
+      const numSplit = splitTokens(['\(1\)', '\(2\)', '\(3\)', '\(4\)']);
+      if (numSplit) return numSplit;
+
+      const letSplit = splitTokens(['\([Aa]\)', '\([Bb]\)', '\([Cc]\)', '\([Dd]\)']);
+      if (letSplit) return letSplit;
+
+      if (hasValidExisting) {
+        return { text: cleanRaw, options: existingOptions.map(o => sanitizeExtractedMathText(o)) };
+      }
+      return {
+        text: cleanRaw,
+        options: Array.isArray(existingOptions) && existingOptions.length === 4
+          ? existingOptions.map((o, i) => sanitizeExtractedMathText(o) || `Choice (${i + 1})`)
+          : ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)']
+      };
+    }
+
+    function extractCoverPageSyllabusMap(rawText) {
+      const map = {};
+      const lines = String(rawText || '').split('\n').map(l => l.trim()).filter(Boolean);
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const m = line.match(/^(Physics|Chemistry|Botany|Zoology)\s*:\s*(.+)$/i);
+        if (m) {
+          const subj = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
+          let val = m[2].replace(/\(Complete Chapter\)/gi, '').replace(/\s+\/\s+/g, ', ').trim();
+          if (i + 1 < lines.length && !/^(Physics|Chemistry|Botany|Zoology|General Instructions|OMR)/i.test(lines[i + 1]) && lines[i + 1].length < 90 && !/^Q\.?\s*\d{1,3} /i.test(lines[i + 1])) {
+            val += ' ' + lines[i + 1].replace(/\(Complete Chapter\)/gi, '').trim();
+          }
+          map[subj] = val.replace(/,\s*$/, '').trim();
+        }
+      }
+      return map;
+    }
+
+    function classifyQuestionTaxonomy(qText, qNum = 1, fallbackSub = '', coverSyllabusMap = {}) {
+      const clean = sanitizeExtractedMathText(qText || '');
+      const lower = clean.toLowerCase();
+      let sub = ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(fallbackSub) ? fallbackSub : '';
+      if (!sub) {
+        if (qNum >= 1 && qNum <= 45) sub = 'Physics';
+        else if (qNum >= 46 && qNum <= 90) sub = 'Chemistry';
+        else if (qNum >= 91 && qNum <= 135) sub = 'Botany';
+        else if (qNum >= 136 && qNum <= 180) sub = 'Zoology';
+        else sub = 'Physics';
+      }
+
+      const rules = [
+        { sub: 'Physics', rx: / (integral|definite integral|derivative|differentiate|dy\/dx|quadratic|minimum|maximum|binomial|radian|arcminute|arcsecond|slope|curve|area of.*region|y\^2\s*=|y\s*=.*x\^|log_5|sec\s*theta|cos\^2|tan\^2) /i, ch: 'Basic Maths & Calculus (Mathematical Tools)', tp: 'Calculus, Trigonometry & Graphs', st: / (integral|definite integral) /i.test(lower) ? 'Definite & Indefinite Integration' : (/ (derivative|differentiate|dy\/dx|rate of increase|slope|minimum|maximum) /i.test(lower) ? 'Differentiation & Rate of Change' : (/ (radian|arcminute|arcsecond|cos\^2|sec\s*theta|tan\^2) /i.test(lower) ? 'Trigonometry & Angle Units' : 'Graphs, Logarithms & Area Under Curve')) },
+        { sub: 'Physics', rx: / (vector|unit vector|resultant|perpendicular|dot product|cross product|i_hat|j_hat|k_hat|body diagonal|angle between) /i, ch: 'Vectors', tp: 'Vector Algebra, Resolution & Products', st: / (cross product|dot product|p\s*x\s*q|r\s*\.\s*p) /i.test(lower) ? 'Dot & Cross Product Properties' : (/ (unit vector|perpendicular|body diagonal) /i.test(lower) ? 'Unit Vectors, Components & Projections' : 'Resultant & Angle Between Vectors') },
+        { sub: 'Chemistry', rx: / (molarity|molality|ppm|mole fraction|limiting reagent|stoichiometry|empirical formula|molecular formula|significant figures|vapour density|avogadro|s\.i\. prefixes|s\.i\. base|mass %|combustion|moles of electrons|h\+\s*ions) /i, ch: 'Some Basic Concepts of Chemistry', tp: 'Mole Concept, Stoichiometry & Concentration', st: / (limiting reagent|unreacted|moles of.*formed|mass of.*required) /i.test(lower) ? 'Limiting Reagent & Reaction Stoichiometry' : (/ (molarity|molality|ppm|mole fraction) /i.test(lower) ? 'Molarity, Molality, Mole Fraction & ppm' : (/ (empirical formula|molecular formula|combustion|mass %) /i.test(lower) ? 'Empirical/Molecular Formula & Combustion' : 'Mole Calculation, Significant Figures & Laws')) },
+        { sub: 'Botany', rx: / (cell theory|schleiden|schwann|virchow|organelle|mitochondria|chloroplast|ribosome|70s|80s|polysome|golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast|plasma membrane|phospholipid|fluid mosaic|centrosome|centriole|cilium|axoneme|nucleus|chromatin|nucleolus|chromosome|metacentric|telocentric|mesosome|cell envelope|glycocalyx|plasmid|chromatophore|leucoplast|chromoplast|mycoplasma|prokaryotic|sieve cell) /i, ch: 'Cell - The Unit of Life', tp: 'Cell Theory, Membrane & Cell Organelles', st: / (mitochondria|chloroplast|thylakoid|stroma|70s|80s|ribosome|polysome) /i.test(lower) ? 'Mitochondria, Chloroplast & Ribosomes' : (/ (golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast) /i.test(lower) ? 'Endomembrane System (ER, Golgi, Lysosome, Vacuole)' : (/ (plasma membrane|phospholipid|fluid mosaic|cell wall|calcium pectate) /i.test(lower) ? 'Plasma Membrane & Cell Wall' : (/ (nucleus|chromatin|chromosome|metacentric|telocentric|centriole|axoneme) /i.test(lower) ? 'Nucleus, Chromosomes & Cytoskeleton/Centriole' : 'Prokaryotic Cell, Envelope & Cell Overview'))) },
+        { sub: 'Zoology', rx: / (cockroach|periplaneta|ommatidia|tergite|sternite|haemolymph|haemocoel|ostia|malpighian|ootheca|spermatheca|phallomere|gonopore|spermatophore|ovariole|anal cerci|anal styles|spiracle|mandible|crop|gizzard|hindgut|frog|rana|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation|epithelium|connective tissue|areolar|adipose|cartilage|bone|osteocyte|chondrocyte|intercalated discs|cardiac muscle|skeletal muscle|smooth muscle|exocrine|endocrine|neuron|nerve impulse) /i, ch: 'Structural Organisation in Animals', tp: 'Animal Tissues, Cockroach & Frog', st: / (cockroach|ommatidia|tergite|sternite|haemolymph|malpighian|ootheca|spermatheca|phallomere|anal cerci|spiracle) /i.test(lower) ? 'Cockroach Morphology & Organ Systems' : (/ (frog|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation) /i.test(lower) ? 'Frog Morphology & Organ Systems' : 'Epithelial, Connective, Muscular & Neural Tissues') }
+      ];
+
+      for (const r of rules) {
+        if (r.rx.test(clean)) {
+          const detectedSub = r.sub || sub;
+          const coverCh = coverSyllabusMap[detectedSub] || '';
+          const chapter = (coverCh && coverCh.length < 85) ? coverCh : r.ch;
+          return { subject: detectedSub, chapter, topic: r.tp, subTopic: r.st };
+        }
+      }
+
+      const coverCh = coverSyllabusMap[sub] || '';
+      const defaultChapter = coverCh || (sub === 'Physics' ? 'Mathematical Tools & Vectors' : sub === 'Chemistry' ? 'Some Basic Concepts of Chemistry' : sub === 'Botany' ? 'Cell - The Unit of Life' : 'Structural Organisation in Animals');
+      return {
+        subject: sub,
+        chapter: defaultChapter,
+        topic: sub === 'Physics' ? 'Mechanics & Mathematical Physics' : sub === 'Chemistry' ? 'Physical & General Chemistry' : sub === 'Botany' ? 'Cell Biology' : 'Animal Structure & Physiology',
+        subTopic: 'Core Concept Application'
+      };
+    }
+
+    function enrichQuestionObj(q, idx = 0, fallbackSub = '', coverSyllabusMap = {}) {
+      const qNum = parseInt(q.num, 10) || (idx + 1);
+      const split = splitInlineNumberedOrLetteredOptions(q.text || '', q.options);
+      const tax = classifyQuestionTaxonomy(split.text + ' ' + split.options.join(' '), qNum, q.subject || fallbackSub, coverSyllabusMap);
+      const chapter = (q.chapter && !/^General Chapter$/i.test(q.chapter.trim())) ? sanitizeExtractedMathText(q.chapter) : tax.chapter;
+      const topic = (q.topic && !/^General Concept$/i.test(q.topic.trim())) ? sanitizeExtractedMathText(q.topic) : tax.topic;
+      const subTopic = (q.subTopic && q.subTopic.trim()) ? sanitizeExtractedMathText(q.subTopic) : tax.subTopic;
+      const imgKey = q.imageKey || '';
+      const imgUrl = q.imageDataUrl || (imgKey ? questionImageMemoryCache[imgKey] : '') || '';
+      if (imgKey && imgUrl) questionImageMemoryCache[imgKey] = imgUrl;
+      return {
+        id: q.id || ('q_' + Date.now() + '_' + idx),
+        num: qNum,
+        subject: ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(q.subject) ? q.subject : tax.subject,
+        chapter,
+        topic,
+        subTopic,
+        text: split.text,
+        options: split.options,
+        imageKey: imgKey,
+        imageDataUrl: imgUrl,
+        correct: ['A', 'B', 'C', 'D', '1', '2', '3', '4'].includes(String(q.correct || '').toUpperCase()) ? String(q.correct).toUpperCase() : ''
+      };
+    }
+
+    async function handleUploadedFiles(files) {
+      window.__nura2SerialCursor = { next: 1 };
+      window.__nura2PendingContinuation = { dataUrl: '', targetKey: null };
+      let combinedText = '';
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const name = file.name.toLowerCase();
+        const basePct = Math.round((i / files.length) * 85) + 10;
+
+        if (name.endsWith('.json')) {
+          const txt = await readFileAsTextSafe(file);
+          const parsed = JSON.parse(txt);
+          const arr = Array.isArray(parsed) ? parsed : (parsed.questions || []);
+          if (arr.length) {
+            questions = arr.map((q, idx) => enrichQuestionObj(q, idx));
+            renderQuestionBank();
+            setParseStatus(true, `Loaded ${questions.length} Questions from JSON`, file.name, false, 100, `${questions.length} Qs`);
+            return;
+          }
+        } else if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+          const pdfTxt = await extractTextFromPdfFile(file, basePct);
+          combinedText += '\n' + pdfTxt;
+        } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
+          setParseStatus(true, `Scanning Image ${i + 1}/${files.length}`, file.name, false, basePct);
+          const dataUrl = await readFileAsDataURLSafe(file);
+          const ocrTxt = await runFastImageOCR(dataUrl, 1.5);
+          combinedText += '\n' + ocrTxt;
+        } else {
+          const txt = await readFileAsTextSafe(file);
+          if (isRawPdfSyntax(txt)) throw new Error('Raw PDF binary detected.');
+          combinedText += '\n' + txt;
+        }
+      }
+
+      const cleanText = truncateBeforeSolutions(combinedText.trim());
+      if (!cleanText || isRawPdfSyntax(cleanText)) {
+        throw new Error('No readable text found. Try enabling "Force High-Accuracy OCR".');
+      }
+
+      document.getElementById('rawTextInput').value = cleanText;
+      const extracted = parsePracticeSheetText(cleanText);
+      if (!extracted.length) {
+        setParseStatus(true, 'Text Extracted — Check Formatting', 'Tick "Force High-Accuracy OCR" if this is a custom-font PW PDF.', true);
+        return;
+      }
+
+      const autoCropEnabled = document.getElementById('autoCropQuestionsToggle')?.checked !== false;
+      const allCroppedImagesByQNum = {};
+      if (autoCropEnabled) {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const name = file.name.toLowerCase();
+          if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+            await extractTextFromPdfFile(file, 10, allCroppedImagesByQNum);
+          } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
+            const dataUrl = await readFileAsDataURLSafe(file);
+            const imgRes = await cropAndOcrImageFast(dataUrl, i);
+            Object.assign(allCroppedImagesByQNum, imgRes.crops || {});
+          }
+        }
+      }
+
+      if (allCroppedImagesByQNum.__stitchPrev) {
+        const { topUrl, botUrl } = allCroppedImagesByQNum.__stitchPrev;
+        const stitchedUrl = await stitchTwoDataUrlImagesVertically(topUrl, botUrl, 0.90);
+        const prevKey = window.__nura2PendingContinuation?.targetKey;
+        if (stitchedUrl && prevKey && allCroppedImagesByQNum[prevKey]) {
+          allCroppedImagesByQNum[prevKey].imageDataUrl = stitchedUrl;
+        }
+        delete allCroppedImagesByQNum.__stitchPrev;
+      }
+
+      const cropEntries = Object.entries(allCroppedImagesByQNum)
+        .map(([k, v]) => [parseInt(k, 10), v])
+        .filter(([k, v]) => Number.isFinite(k) && v && v.imageDataUrl)
+        .sort((a, b) => a[0] - b[0]);
+
+      if (cropEntries.length > extracted.length && extracted.length > 0) {
+        const targetCount = Math.max(extracted.length, cropEntries.length);
+        while (extracted.length < targetCount) {
+          const n = extracted.length + 1;
+          extracted.push(enrichQuestionObj({ num: n, text: `Q${n}`, options: ['(1)', '(2)', '(3)', '(4)'] }, n - 1));
+        }
+      }
+
+      let croppedAttached = 0;
+      for (let i = 0; i < extracted.length; i++) {
+        extracted[i].num = i + 1;
+        const cropEntry = cropEntries[i];
+        if (cropEntry && cropEntry[1] && cropEntry[1].imageDataUrl) {
+          extracted[i].imageKey = cropEntry[1].imageKey;
+          extracted[i].imageDataUrl = cropEntry[1].imageDataUrl;
+          croppedAttached++;
+          await idbPutImage(cropEntry[1].imageKey, cropEntry[1].imageDataUrl);
+        }
+      }
+
+      const matchedKeys = extracted.filter(q => q.correct).length;
+      questions = extracted;
+      renderQuestionBank();
+      setParseStatus(
+        true,
+        `Ready: ${questions.length} Questions (${croppedAttached} Cropped · ${matchedKeys}/${questions.length} Keys Matched)`,
+        'Single-question serial cropping & cross-page stitching active (1..N).',
+        false,
+        100,
+        `${questions.length} Qs`
+      );
+    }
+
+    function truncateBeforeSolutions(text) {
+      const rx = /\n\s*(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:|Note\s*:\s*scan\s*the\s*QR\s*code)/i;
+      const match = text.match(rx);
+      if (match && match.index > 30) return text.slice(0, match.index).trim();
+      return text;
+    }
+
+    function isExtractedPageTextUsable(txt) {
+      const cleaned = txt.replace(/Android App|iOS App|PW Website|CUSTOMER/gi, '').trim();
+      if (cleaned.length < 40) return false;
+      const hasQuestionPattern = /(?:^|\n|\s)(?:Q\.?\s*\d{1,3}|\d{1,3}\s*[\.\)])\s+[A-Za-z]/i.test(cleaned);
+      const hasAnswerKeyPattern = /Answer\s*Key/i.test(cleaned) && /(?:Q\.?\s*\d{1,3}|\d{1,3})\s*[\.\-\:\s]\s*\(?[A-D1-4]\)?/i.test(cleaned);
+      const printableRatio = (cleaned.match(/[A-Za-z0-9\s\(\)\.\,\?\-\+\=]/g) || []).length / Math.max(1, cleaned.length);
+      return printableRatio > 0.72 && (hasQuestionPattern || hasAnswerKeyPattern);
+    }
+
+    async function extractTextFromPdfFile(file, startPct = 10, cropCollector = null) {
+      const buf = await readFileAsArrayBufferSafe(file);
+      if (!buf || buf.byteLength === 0) throw new Error('Empty 0-byte PDF stream.');
+      const pdf = await loadPdfDocumentResilient(buf);
+      const forceOcr = document.getElementById('forcePdfOcrToggle')?.checked || false;
+      const skipSolutions = document.getElementById('skipSolutionsToggle')?.checked !== false;
+
+      let fullOut = '';
+      let sawQuestions = false;
+      let sawAnswerKey = false;
+
+      for (let p = 1; p <= pdf.numPages; p++) {
+        const pct = Math.min(92, startPct + Math.round((p / pdf.numPages) * 75));
+        setParseStatus(true, `Processing Page ${p} of ${pdf.numPages}`, file.name, false, pct);
+
+        const page = await pdf.getPage(p);
+        const viewport = page.getViewport({ scale: 1.0 });
+        const textContent = await page.getTextContent();
+        let pageText = reconstructColumnAwareText(textContent.items, viewport.width, viewport.height);
+        if (cropCollector && !isPureAnswerKeyOnlyPage(pageText)) {
+          try {
+            const cScale = 1.4;
+            const cVp = page.getViewport({ scale: cScale });
+            const cCanvas = document.createElement('canvas');
+            cCanvas.width = Math.round(cVp.width);
+            cCanvas.height = Math.round(cVp.height);
+            const cCtx = cCanvas.getContext('2d');
+            cCtx.fillStyle = '#ffffff';
+            cCtx.fillRect(0, 0, cCanvas.width, cCanvas.height);
+            await page.render({ canvasContext: cCtx, viewport: cVp }).promise;
+            const pCrops = cropQuestionsFromRenderedPageCanvas(cCanvas, textContent.items, viewport.width, viewport.height, cScale, p);
+            Object.assign(cropCollector, pCrops);
+          } catch (e) {}
+        }
+
+        if (skipSolutions && /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText)) break;
+
+        if (forceOcr || !isExtractedPageTextUsable(pageText)) {
+          setParseStatus(true, `Fast OCR Page ${p}/${pdf.numPages}`, file.name, false, pct);
+          const scale = /Answer\s*Key/i.test(pageText) ? 2.1 : 1.65;
+          const hiVp = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = hiVp.width;
+          canvas.height = hiVp.height;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.filter = 'contrast(1.35) grayscale(1)';
+          await page.render({ canvasContext: ctx, viewport: hiVp }).promise;
+          pageText = await runFastImageOCR(canvas.toDataURL('image/jpeg', 0.86));
+        }
+
+        if (skipSolutions && /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText)) {
+          const cutPart = truncateBeforeSolutions(pageText);
+          if (cutPart.length > 20) fullOut += '\n' + cutPart;
+          break;
+        }
+
+        fullOut += '\n' + pageText;
+        if (/(?:^|\n|\s)Q\.?\s*1\b/i.test(pageText)) sawQuestions = true;
+        if (/Answer\s*Key/i.test(pageText)) sawAnswerKey = true;
+        if (skipSolutions && sawQuestions && sawAnswerKey) break;
+      }
+      return fullOut;
+    }
+
+    function mergeStackedFractions(rawLines) {
+      const out = [];
+      let i = 0;
+      while (i < rawLines.length) {
+        if (
+          i + 2 < rawLines.length &&
+          /^[A-Za-z0-9\+\-\^\s]{1,12}$/.test(rawLines[i]) &&
+          /^[\-\u2013\u2014\u2212]{2,}$/.test(rawLines[i + 1]) &&
+          /^[A-Za-z0-9\+\-\^\s]{1,12}$/.test(rawLines[i + 2])
+        ) {
+          out.push(`(${rawLines[i].trim()}/${rawLines[i + 2].trim()})`);
+          i += 3;
+        } else {
+          out.push(rawLines[i]);
+          i += 1;
+        }
+      }
+      return out;
+    }
+
+    function reconstructColumnAwareText(items, pageWidth, pageHeight) {
+      if (!items || !items.length) return '';
+      const filtered = items
+        .map(it => ({ str: sanitizeExtractedMathText(it.str || ''), x: it.transform[4], y: it.transform[5] }))
+        .filter(it => it.str && !/^(Android App|iOS App|PW Website|CUSTOMER)$/i.test(it.str));
+
+      const sortLines = (arr) => {
+        arr.sort((a, b) => (Math.abs(b.y - a.y) > 5 ? b.y - a.y : a.x - b.x));
+        let lines = [], curY = null, curLine = [];
+        arr.forEach(item => {
+          if (curY === null || Math.abs(curY - item.y) <= 5) {
+            curLine.push(item.str);
+            if (curY === null) curY = item.y;
+          } else {
+            lines.push(curLine.join(' '));
+            curLine = [item.str];
+            curY = item.y;
+          }
+        });
+        if (curLine.length) lines.push(curLine.join(' '));
+        return mergeStackedFractions(lines).join('\n');
+      };
+
+      const rawSingleCol = sortLines([...filtered]);
+      if (/Answer\s*Key/i.test(rawSingleCol)) return rawSingleCol;
+
+      const midX = pageWidth * 0.48;
+      const leftItems = filtered.filter(it => it.x < midX);
+      const rightItems = filtered.filter(it => it.x >= midX);
+      const leftStartsWithQ = leftItems.some(it => /^Q\.?\s*\d+/i.test(it.str));
+      const rightStartsWithQ = rightItems.some(it => /^Q\.?\s*\d+/i.test(it.str));
+
+      if (leftStartsWithQ && rightStartsWithQ && leftItems.length > 8 && rightItems.length > 8) {
+        return sortLines(leftItems) + '\n' + sortLines(rightItems);
+      }
+      return rawSingleCol;
+    }
+
+    async function runFastImageOCR(dataUrl, scaleFactor = 1.0) {
+      const worker = await getSharedOcrWorker();
+      if (scaleFactor === 1.0) {
+        const res = await worker.recognize(dataUrl);
+        return sanitizeExtractedMathText(res?.data?.text || '');
+      }
+      const img = await new Promise((res, rej) => {
+        const im = new Image();
+        im.onload = () => res(im);
+        im.onerror = rej;
+        im.src = dataUrl;
+      });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scaleFactor);
+      canvas.height = Math.round(img.height * scaleFactor);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.filter = 'contrast(1.4) grayscale(1)';
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const res = await worker.recognize(canvas.toDataURL('image/jpeg', 0.88));
+      return sanitizeExtractedMathText(res?.data?.text || '');
+    }
+
+    function preNormalizeSheetText(raw) {
+      let text = sanitizeExtractedMathText(truncateBeforeSolutions(raw)).replace(/\r/g, '\n');
+      text = text.replace(/Android App\s*iOS App\s*PW Website/gi, '');
+      text = text.replace(/([^\n])\s+(?=(?:Q\.?\s*\d{1,3}|\d{1,3}\s*[\.\)]\s+[A-Za-z]))/g, '$1\n');
+      text = text.replace(/([^\n])\s+(?=\([A-Da-d1-4]\)\s+)/g, '$1\n');
+      return text;
+    }
+
+    function extractAnswerKeyMap(text) {
+      const keyMap = {};
+      const cleaned = sanitizeExtractedMathText(text).replace(/\b[PW]\b/g, ' ');
+      const rx = /(?:Q\.?\s*)(\d{1,3})\s*[\.\-\:\)]?\s*\(?([A-Da-d1-4])\)?(?=\s|$|,|;)|(?<![Q\d])(\d{1,3})\s*[\.\-\:\)]?\s*\(?([A-Da-d1-4])\)?(?=\s|$|,|;)/gi;
+      let m;
+      while ((m = rx.exec(cleaned)) !== null) {
+        const qNum = parseInt(m[1] || m[3], 10);
+        const ans = (m[2] || m[4] || '').toUpperCase();
+        if (qNum >= 1 && qNum <= 300 && ['A', 'B', 'C', 'D', '1', '2', '3', '4'].includes(ans)) {
+          keyMap[qNum] = ans;
+        }
+      }
+      return keyMap;
+    }
+
+    function parsePracticeSheetText(raw) {
+      const coverSyllabusMap = extractCoverPageSyllabusMap(raw);
+      const normalized = preNormalizeSheetText(raw);
+      const lines = normalized.split('\n').map(l => l.trim()).filter(Boolean);
+
+      let answerSectionIdx = lines.findIndex(l => /^answer\s*key\b/i.test(l));
+      const questionLines = answerSectionIdx > 0 ? lines.slice(0, answerSectionIdx) : lines;
+      const answerLines = answerSectionIdx > 0 ? lines.slice(answerSectionIdx).join('\n') : '';
+      const keyMap = extractAnswerKeyMap(answerLines);
+
+      const parsed = [];
+      let curSub = '';
+      let curQ = null;
+
+      const qStartRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])\s*(.*)$/i;
+      const optRx = /^(?:\(([A-Da-d1-4])\)|([A-Da-d1-4])[\.\)])\s*(.*)$/;
+
+      const flushQ = () => {
+        if (!curQ) return;
+        const qNum = curQ.num || (parsed.length + 1);
+        const cleanStem = sanitizeExtractedMathText(curQ.text || '');
+        const cleanOpts = curQ.options.map(o => sanitizeExtractedMathText(o || ''));
+        const hasAll4LineOpts = cleanOpts.every(o => o.length >= 1 && !/^\([1-4A-Da-d]\)$/.test(o));
+        let finalStem = cleanStem;
+        let finalOpts = cleanOpts;
+        if (!hasAll4LineOpts) {
+          const rawCombined = (cleanStem + ' ' + cleanOpts.map((o, i) => o ? `(${i + 1}) ${o}` : '').join(' ')).trim();
+          const split = splitInlineNumberedOrLetteredOptions(rawCombined, cleanOpts);
+          finalStem = split.text;
+          finalOpts = split.options;
+        }
+        if (finalStem.length > 2) {
+          const tax = classifyQuestionTaxonomy(finalStem + ' ' + finalOpts.join(' '), qNum, curSub, coverSyllabusMap);
+          curSub = tax.subject;
+          parsed.push({
+            id: 'q_' + Date.now() + '_' + parsed.length,
+            num: qNum,
+            subject: tax.subject,
+            chapter: tax.chapter,
+            topic: tax.topic,
+            subTopic: tax.subTopic,
+            text: finalStem,
+            options: finalOpts,
+            correct: keyMap[qNum] || ''
+          });
+        }
+        curQ = null;
+      };
+
+      for (const line of questionLines) {
+        if (/^(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)/i.test(line)) break;
+        const subLineMatch = line.match(/^(Physics|Chemistry|Botany|Zoology)\b/i);
+        if (subLineMatch && line.length < 40) {
+          curSub = subLineMatch[1].charAt(0).toUpperCase() + subLineMatch[1].slice(1).toLowerCase();
+          continue;
+        }
+
+        const qMatch = line.match(qStartRx);
+        if (qMatch && !/^\([A-Da-d1-4]\)/.test(line)) {
+          flushQ();
+          const numStr = qMatch[1] || qMatch[2];
+          curQ = {
+            num: numStr ? parseInt(numStr, 10) : parsed.length + 1,
+            text: qMatch[3] || '',
+            options: ['', '', '', ''],
+            lastOptIdx: -1
+          };
+          continue;
+        }
+
+        const oMatch = line.match(optRx);
+        if (oMatch && curQ) {
+          const code = (oMatch[1] || oMatch[2] || '').toUpperCase();
+          const idx = ['A', 'B', 'C', 'D'].includes(code) ? ['A', 'B', 'C', 'D'].indexOf(code) : (['1', '2', '3', '4'].includes(code) ? ['1', '2', '3', '4'].indexOf(code) : -1);
+          if (idx >= 0) {
+            curQ.options[idx] = oMatch[3] || '';
+            curQ.lastOptIdx = idx;
+            continue;
+          }
+        }
+
+        if (curQ) {
+          if (curQ.lastOptIdx >= 0) curQ.options[curQ.lastOptIdx] += ' ' + line;
+          else curQ.text += ' ' + line;
+        }
+      }
+      flushQ();
+
+      const merged = [];
+      parsed.forEach((pq) => {
+        const looksLikeOrphanContinuation =
+          merged.length > 0 &&
+          (!pq.text || /^Q\d+$/i.test(pq.text.trim())) &&
+          pq.options.every(o => /^Choice\s*\([1-4]\)$/i.test(o));
+        if (looksLikeOrphanContinuation) {
+          return;
+        }
+        merged.push(pq);
+      });
+
+      merged.forEach((pq, i) => {
+        pq.num = i + 1;
+        if (!pq.correct && keyMap[pq.num]) pq.correct = keyMap[pq.num];
+      });
+      return merged;
+    }
+
+    function parseFromTextarea() {
+      const txt = document.getElementById('rawTextInput').value.trim();
+      if (!txt) return;
+      const extracted = parsePracticeSheetText(txt);
+      if (!extracted.length) {
+        setParseStatus(true, 'No MCQs Matched', 'Ensure questions are numbered (Q1, Q2 or 1., 2.) with options (1)-(4) or (A)-(D).', true);
+        return;
+      }
+      const matchedKeys = extracted.filter(q => q.correct).length;
+      questions = extracted;
+      renderQuestionBank();
+      setParseStatus(true, `Extracted ${questions.length} Questions (${matchedKeys}/${questions.length} Keys Matched)`, 'Ready for CBT test.', false, 100);
+    }
+
+    function insertSampleFormat() {
+      document.getElementById('rawTextInput').value =
+"Q1 What is true about glycos?\n(1) Greek word, splitting  (2) Latin word, sugar  (3) Greek word, sugar  (4) Latin word, splitting\nQ2 Glycolysis is found in\n(1) Eukaryotic cells  (2) Anaerobic cells  (3) Virtually all cells  (4) Most muscle cells\nAnswer Key\nQ1 (3)   Q2 (3)";
+    }
+
+    function clearRawText() {
+      document.getElementById('rawTextInput').value = '';
+      setParseStatus(false);
+    }
+
+    function renderQuestionBank() {
+      const list = document.getElementById('questionBankList');
+      document.getElementById('questionCountBadge').textContent = `${questions.length} Questions`;
+
+      if (!questions.length) {
+        list.innerHTML = '<div style="text-align:center;padding:34px 16px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;">' +
+          '<div style="font-size:14px;font-weight:800;color:#475569;">0 Questions Loaded<\/div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-top:4px;">Upload a PW practice sheet PDF, screenshot, or paste text above.<\/div>' +
+          '<\/div>';
+        updateExamConfigSummary();
+        return;
+      }
+
+      list.innerHTML = questions.map((q, idx) => {
+        const cropUrl = getQuestionImageUrl(q);
+        return '<div style="border:1px solid var(--border);border-radius:12px;padding:12px;background:#f8fafc;">' +
+          '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:8px;">' +
+            '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">' +
+              '<span style="background:#0f172a;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + (idx + 1) + '<\/span>' +
+              '<select onchange="updateQuestionField(' + idx + ', \'subject\', this.value)" style="width:auto;padding:4px 8px;font-size:11px;">' +
+                ['Physics', 'Chemistry', 'Botany', 'Zoology'].map(s => '<option value="' + s + '" ' + (q.subject === s ? 'selected' : '') + '>' + s + '<\/option>').join('') +
+              '<\/select>' +
+              '<input type="text" value="' + escapeHtml(q.chapter) + '" onchange="updateQuestionField(' + idx + ', \'chapter\', this.value)" style="width:155px;padding:4px 8px;font-size:11px;" placeholder="Chapter Name" />' +
+              '<input type="text" value="' + escapeHtml(q.topic) + '" onchange="updateQuestionField(' + idx + ', \'topic\', this.value)" style="width:145px;padding:4px 8px;font-size:11px;" placeholder="Topic Name" />' +
+              '<input type="text" value="' + escapeHtml(q.subTopic || '') + '" onchange="updateQuestionField(' + idx + ', \'subTopic\', this.value)" style="width:165px;padding:4px 8px;font-size:11px;" placeholder="Specific Sub-Topic" />' +
+            '<\/div>' +
+            '<div style="display:flex;align-items:center;gap:6px;">' +
+              '<span style="font-size:11px;font-weight:700;color:var(--muted);">Ans:<\/span>' +
+              '<select onchange="updateQuestionField(' + idx + ', \'correct\', this.value)" style="width:auto;padding:4px 8px;font-size:11px;font-weight:900;background:' + (q.correct ? '#ecfdf5' : '#fffbeb') + ';color:' + (q.correct ? '#065f46' : '#92400e') + ';">' +
+                '<option value="">Not Set<\/option>' +
+                ['(1)', '(2)', '(3)', '(4)', 'A', 'B', 'C', 'D'].map(opt => '<option value="' + opt + '" ' + (q.correct === opt ? 'selected' : '') + '>' + opt + '<\/option>').join('') +
+              '<\/select>' +
+              '<button type="button" class="btn-danger-soft" onclick="deleteQuestion(' + idx + ')" style="padding:4px 8px;">✕<\/button>' +
+            '<\/div>' +
+          '<\/div>' +
+          (cropUrl ? (
+            '<div class="q-crop-frame">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+                '<span class="pill pill-green">Zero-Cut Cropped Question Image<\/span>' +
+                '<button type="button" class="btn-outline" onclick="removeQuestionCroppedImage(' + idx + ')" style="padding:2px 8px;font-size:10px;">Use Text Only<\/button>' +
+              '<\/div>' +
+              '<img src="' + cropUrl + '" alt="Q' + (idx + 1) + '" />' +
+            '<\/div>'
+          ) : '') +
+          '<textarea rows="2" onchange="updateQuestionField(' + idx + ', \'text\', this.value)" style="margin-bottom:8px;">' + escapeHtml(q.text) + '<\/textarea>' +
+          '<div class="grid-2">' +
+            ['(1)', '(2)', '(3)', '(4)'].map((lbl, oIdx) =>
+              '<div style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:4px 8px;">' +
+                '<span style="font-size:11px;font-weight:900;color:var(--muted);">' + lbl + ':<\/span>' +
+                '<input type="text" value="' + escapeHtml(q.options[oIdx]) + '" onchange="updateOptionField(' + idx + ', ' + oIdx + ', this.value)" style="border:none;padding:2px;box-shadow:none;" />' +
+              '<\/div>'
+            ).join('') +
+          '<\/div>' +
+        '<\/div>';
+      }).join('');
+
+      updateExamConfigSummary();
+    }
+
+    function updateQuestionField(idx, field, val) {
+      if (questions[idx]) {
+        questions[idx][field] = val;
+        if (field === 'subject') updateExamConfigSummary();
+        if (field === 'correct') renderQuestionBank();
+      }
+    }
+    function updateOptionField(idx, oIdx, val) { if (questions[idx]) questions[idx].options[oIdx] = val; }
+    function deleteQuestion(idx) { questions.splice(idx, 1); renderQuestionBank(); }
+    function clearAllQuestions() { questions = []; renderQuestionBank(); }
+    function addManualQuestion() {
+      questions.push(enrichQuestionObj({
+        id: 'q_' + Date.now(), num: questions.length + 1, subject: 'Physics',
+        chapter: 'Basic Maths & Calculus (Mathematical Tools)', topic: 'Calculus, Trigonometry & Graphs', subTopic: 'Core Concept Application',
+        text: 'Enter question text here...',
+        options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'], correct: ''
+      }, questions.length));
+      renderQuestionBank();
+    }
+
+    function updateExamConfigSummary() {
+      const counts = { Physics: 0, Chemistry: 0, Botany: 0, Zoology: 0 };
+      questions.forEach(q => { if (counts[q.subject] !== undefined) counts[q.subject]++; });
+      document.getElementById('subjectDistSummary').innerHTML =
+        '<span>Physics: ' + counts.Physics + '<\/span><span>Chemistry: ' + counts.Chemistry + '<\/span>' +
+        '<span>Botany: ' + counts.Botany + '<\/span><span>Zoology: ' + counts.Zoology + '<\/span>';
+      const mode = document.getElementById('durationModeSelect').value;
+      const minInput = document.getElementById('totalMinutesInput');
+      if (mode === 'auto') minInput.value = questions.length;
+      if (mode === 'neet200') minInput.value = 200;
+
+      const btn = document.getElementById('startTestBtn');
+      if (questions.length > 0) {
+        btn.disabled = false;
+        btn.textContent = `Start NURA-2 CBT Test (${questions.length} Qs)`;
+      } else {
+        btn.disabled = true;
+        btn.textContent = 'Upload Practice Sheet to Start';
+      }
+    }
+
+    let bulkKeyFromResults = false;
+    function openBulkKeyModal(fromResults = false) {
+      bulkKeyFromResults = fromResults;
+      document.getElementById('bulkKeyTextarea').value = questions.map((q, i) => q.correct ? `Q${q.num || (i + 1)} ${q.correct}` : '').filter(Boolean).join(', ');
+      document.getElementById('bulkKeyOcrStatus').classList.add('hidden');
+      document.getElementById('bulkKeyModal').classList.remove('hidden');
+    }
+    function closeBulkKeyModal() { document.getElementById('bulkKeyModal').classList.add('hidden'); }
+
+    async function processAnswerKeyFiles(fileList) {
+      const files = Array.from(fileList || []);
+      if (!files.length) return;
+      const statusEl = document.getElementById('bulkKeyOcrStatus');
+      statusEl.classList.remove('hidden');
+      const mergedKeyMap = extractAnswerKeyMap(document.getElementById('bulkKeyTextarea').value || '');
+      let combinedRaw = '';
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        statusEl.textContent = `Scanning file ${i + 1} of ${files.length} (${file.name}) with Offline OCR...`;
+        let rawText = '';
+        if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
+          rawText = await extractTextFromPdfFile(file, 20);
+        } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(file.name)) {
+          const dataUrl = await readFileAsDataURLSafe(file);
+          rawText = await runFastImageOCR(dataUrl, 2.0);
+        } else {
+          rawText = await readFileAsTextSafe(file);
+        }
+        combinedRaw += '\n' + rawText;
+        const fileKeys = extractAnswerKeyMap(rawText);
+        Object.assign(mergedKeyMap, fileKeys);
+      }
+
+      const entries = Object.entries(mergedKeyMap).sort((a, b) => Number(a[0]) - Number(b[0]));
+      if (!entries.length) {
+        statusEl.textContent = 'Could not detect numbered keys automatically. Paste or verify below.';
+        document.getElementById('bulkKeyTextarea').value = combinedRaw.trim();
+        return;
+      }
+      const formatted = entries.map(([num, ans]) => `Q${num} (${ans})`).join(', ');
+      document.getElementById('bulkKeyTextarea').value = formatted;
+      statusEl.textContent = `Detected ${entries.length} Answer Keys across ${files.length} file(s)!`;
+      applyBulkKeyString(formatted);
+    }
+
+    async function handleBulkKeyFileUpload(inputEl) {
+      if (inputEl?.files?.length) await processAnswerKeyFiles(inputEl.files);
+    }
+    async function handleDirectResultKeyUpload(inputEl) {
+      if (!inputEl?.files?.length) return;
+      openBulkKeyModal(true);
+      await processAnswerKeyFiles(inputEl.files);
+    }
+
+    function normalizeAnswerChoice(val) {
+      const s = String(val || '').trim().toUpperCase().replace(/[\(\)\.\s]/g, '');
+      const map = { '1': '1', 'A': '1', '2': '2', 'B': '2', '3': '3', 'C': '3', '4': '4', 'D': '4' };
+      return map[s] || '';
+    }
+    function formatAnswerChoiceDisplay(val) {
+      const n = normalizeAnswerChoice(val);
+      return n ? `(${n})` : '-';
+    }
+
+    function applyBulkKeyString(str) {
+      const keyMap = extractAnswerKeyMap(str);
+      let applied = 0;
+      questions.forEach((q, idx) => {
+        const k = keyMap[q.num] || keyMap[idx + 1];
+        if (k) { q.correct = k; applied++; }
+      });
+      renderQuestionBank();
+      if (bulkKeyFromResults || !document.getElementById('resultView').classList.contains('hidden')) computeAndRenderResults(false);
+      return applied;
+    }
+
+    function applyBulkKeyFromModal() {
+      applyBulkKeyString(document.getElementById('bulkKeyTextarea').value);
+      closeBulkKeyModal();
+    }
+
+    function saveTestWrongQuestionsToBank(testTitle, evaluatedQuestions) {
+      const wrongItems = evaluatedQuestions
+        .filter(item => item.status === 'incorrect')
+        .map(item => {
+          const lightQ = stripInlineImageForLocalStorage(item.q);
+          return {
+            ...lightQ,
+            num: item.idx + 1,
+            lastUserAns: item.userAns,
+            lastTimeSec: item.tSec
+          };
+        });
+      const bank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      if (!activeWrongBankTestId) activeWrongBankTestId = 'wqtest_' + Date.now();
+      const existingIdx = bank.findIndex(b => b.id === activeWrongBankTestId);
+
+      if (!wrongItems.length) {
+        if (existingIdx >= 0) { bank.splice(existingIdx, 1); saveStorage(STORAGE_KEYS.WRONG_QS_BANK, bank); updateHeaderBadges(); }
+        return;
+      }
+      const entry = { id: activeWrongBankTestId, title: testTitle, date: new Date().toLocaleString(), questions: wrongItems };
+      if (existingIdx >= 0) bank[existingIdx] = entry;
+      else bank.unshift(entry);
+      saveStorage(STORAGE_KEYS.WRONG_QS_BANK, bank.slice(0, 40));
+      updateHeaderBadges();
+    }
+
+    function renderWrongQsBankPage() {
+      const bank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      const container = document.getElementById('wrongQsTestsContainer');
+      if (!bank.length) {
+        container.innerHTML = '<div style="text-align:center;padding:34px 16px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;">' +
+          '<div style="font-size:14px;font-weight:800;color:#475569;">No Wrong Questions Saved Yet<\/div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-top:4px;">Har test ke galat questions unke exact Question No. ke saath yahan separate list mein aa jayenge.<\/div>' +
+          '<\/div>';
+        return;
+      }
+      container.innerHTML = bank.map(testEntry =>
+        '<div style="border:2px solid var(--danger-border);border-radius:14px;padding:14px;background:#fff;">' +
+          '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid #f1f5f9;">' +
+            '<div>' +
+              '<strong style="font-size:15px;color:#0f172a;">' + escapeHtml(testEntry.title) + '<\/strong> ' +
+              '<span class="pill pill-rose">' + testEntry.questions.length + ' Wrong Questions<\/span>' +
+              '<div style="font-size:11px;color:var(--muted);margin-top:2px;">Saved: ' + escapeHtml(testEntry.date) + '<\/div>' +
+            '<\/div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+              '<button type="button" class="btn-danger" onclick="reattemptSavedTestWrongQs(\'' + testEntry.id + '\')">▶ Re-Attempt All ' + testEntry.questions.length + ' Wrong Qs<\/button>' +
+              '<button type="button" class="btn-outline" onclick="deleteSavedWrongTest(\'' + testEntry.id + '\')" style="padding:6px 10px;">Delete Test<\/button>' +
+            '<\/div>' +
+          '<\/div>' +
+          '<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">' +
+            testEntry.questions.map((rawQ, qIdx) => {
+              const q = enrichQuestionObj(rawQ, qIdx);
+              const cropUrl = getQuestionImageUrl(q);
+              const dispNum = rawQ.num || q.num;
+              return '<div style="border:1px solid var(--border);border-radius:10px;padding:10px;background:#fff1f244;">' +
+                '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;">' +
+                  '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+                    '<span style="background:#e11d48;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + dispNum + '<\/span>' +
+                    '<span class="pill pill-teal">' + escapeHtml(q.subject) + '<\/span>' +
+                    '<span class="pill pill-amber">Ch: ' + escapeHtml(q.chapter) + '<\/span>' +
+                    '<span style="font-size:11px;font-weight:700;color:#334155;">Topic: ' + escapeHtml(q.topic) + ' · Sub-Topic: ' + escapeHtml(q.subTopic) + '<\/span>' +
+                  '<\/div>' +
+                  '<div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;">' +
+                    '<span style="color:var(--danger);">Your: ' + escapeHtml(formatAnswerChoiceDisplay(rawQ.lastUserAns)) + '<\/span>' +
+                    '<span style="color:var(--success);">Correct: ' + escapeHtml(formatAnswerChoiceDisplay(q.correct)) + '<\/span>' +
+                    '<button type="button" class="btn-soft" onclick="reattemptSingleWrongQuestion(\'' + testEntry.id + '\', ' + qIdx + ')" style="padding:3px 8px;font-size:11px;">Solve Q' + dispNum + '<\/button>' +
+                  '<\/div>' +
+                '<\/div>' +
+                (cropUrl ? (
+                  '<div class="q-crop-frame"><img src="' + cropUrl + '" alt="Q' + dispNum + '" /><\/div>'
+                ) : (
+                  '<div style="font-size:13px;font-weight:600;margin-bottom:6px;">' + escapeHtml(q.text) + '<\/div>' +
+                  '<div class="grid-2" style="font-size:11px;">' +
+                    ['(1)', '(2)', '(3)', '(4)'].map((lbl, oIdx) => {
+                      const optNorm = normalizeAnswerChoice(lbl);
+                      const corrNorm = normalizeAnswerChoice(q.correct);
+                      const userNorm = normalizeAnswerChoice(rawQ.lastUserAns);
+                      return '<div style="padding:4px 8px;border-radius:6px;border:1px solid ' + (corrNorm === optNorm ? 'var(--success-border)' : (userNorm === optNorm ? 'var(--danger-border)' : 'var(--border)')) + ';background:' + (corrNorm === optNorm ? 'var(--success-soft)' : (userNorm === optNorm ? 'var(--danger-soft)' : '#fff')) + ';">' +
+                        '<strong>' + lbl + '<\/strong> ' + escapeHtml(q.options[oIdx] || '') +
+                      '<\/div>';
+                    }).join('') +
+                  '<\/div>'
+                )) +
+              '<\/div>';
+            }).join('') +
+          '<\/div>' +
+        '<\/div>'
+      ).join('');
+    }
+
+    function reattemptSavedTestWrongQs(testId) {
+      const entry = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).find(b => b.id === testId);
+      if (!entry || !entry.questions.length) return;
+      activeWrongBankTestId = entry.id;
+      questions = entry.questions.map((q, idx) => enrichQuestionObj(q, idx));
+      document.getElementById('testTitleInput').value = entry.title;
+      renderQuestionBank();
+      startCBTExam(true);
+    }
+    function reattemptSingleWrongQuestion(testId, qIdx) {
+      const entry = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).find(b => b.id === testId);
+      if (!entry || !entry.questions[qIdx]) return;
+      activeWrongBankTestId = null;
+      questions = [enrichQuestionObj(entry.questions[qIdx], 0)];
+      document.getElementById('testTitleInput').value = `${entry.title} (Q${entry.questions[qIdx].num || 1} Practice)`;
+      renderQuestionBank();
+      startCBTExam(true);
+    }
+    function reattemptAllSavedWrongQuestions() {
+      const allQs = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).flatMap(b => b.questions || []);
+      if (!allQs.length) {
+        setParseStatus(true, 'No Saved Wrong Questions', 'Complete a test first so wrong questions are saved automatically.', true);
+        return;
+      }
+      activeWrongBankTestId = null;
+      questions = allQs.map((q, idx) => enrichQuestionObj(q, idx));
+      document.getElementById('testTitleInput').value = `All Saved Wrong Questions (${allQs.length} Qs)`;
+      renderQuestionBank();
+      startCBTExam(true);
+    }
+    function deleteSavedWrongTest(testId) {
+      const bank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).filter(b => b.id !== testId);
+      saveStorage(STORAGE_KEYS.WRONG_QS_BANK, bank);
+      updateHeaderBadges();
+      renderWrongQsBankPage();
+    }
+
+    function startCBTExam(preserveBankId = false) {
+      if (!questions.length) return;
+      if (!preserveBankId) activeWrongBankTestId = null;
+      const mins = Math.max(1, parseInt(document.getElementById('totalMinutesInput').value, 10) || questions.length);
+      cbtState = {
+        active: true, filteredIndices: questions.map((_, i) => i), currentPos: 0, subjectFilter: 'All',
+        answers: {}, marked: {}, visited: { 0: true }, timeSpent: {},
+        remainingSeconds: mins * 60, totalSeconds: mins * 60, timerInterval: null
+      };
+      document.getElementById('cbtExamTitle').textContent = document.getElementById('testTitleInput').value.trim() || 'NURA-2 NEET Practice Test';
+      const posM = document.getElementById('positiveMarkInput').value || 4;
+      const negM = document.getElementById('negativeMarkInput').value || -1;
+      document.getElementById('cbtMarkingBadge').textContent = `+${posM} / ${negM}`;
+      switchView('cbt');
+      renderCbtQuestion();
+      renderCbtPalette();
+      if (cbtState.timerInterval) clearInterval(cbtState.timerInterval);
+      cbtState.timerInterval = setInterval(tickCbtTimer, 1000);
+    }
+
+    function tickCbtTimer() {
+      if (!cbtState.active) return;
+      const curQIdx = cbtState.filteredIndices[cbtState.currentPos];
+      if (curQIdx !== undefined) {
+        cbtState.timeSpent[curQIdx] = (cbtState.timeSpent[curQIdx] || 0) + 1;
+        document.getElementById('cbtQTimer').textContent = `${cbtState.timeSpent[curQIdx]}s`;
+      }
+      cbtState.remainingSeconds--;
+      if (cbtState.remainingSeconds <= 0) { submitCBTExam(); return; }
+      const m = Math.floor(cbtState.remainingSeconds / 60), s = cbtState.remainingSeconds % 60;
+      document.getElementById('cbtTimerDisplay').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function filterCbtSubject(sub) {
+      cbtState.subjectFilter = sub;
+      document.querySelectorAll('.cbt-sub-tab').forEach(btn => {
+        btn.className = `cbt-sub-tab ${btn.dataset.cbtSub === sub ? 'btn-primary' : 'btn-outline'}`;
+      });
+      cbtState.filteredIndices = questions.map((q, i) => ({ q, i })).filter(item => sub === 'All' || item.q.subject === sub).map(item => item.i);
+      if (!cbtState.filteredIndices.length) cbtState.filteredIndices = questions.map((_, i) => i);
+      cbtState.currentPos = 0;
+      cbtState.visited[cbtState.filteredIndices[0]] = true;
+      renderCbtQuestion();
+      renderCbtPalette();
+    }
+
+    function renderCbtQuestion() {
+      const qIdx = cbtState.filteredIndices[cbtState.currentPos];
+      const q = questions[qIdx];
+      if (!q) return;
+      cbtState.visited[qIdx] = true;
+      document.getElementById('cbtQNumberBadge').textContent = `Question ${qIdx + 1} of ${questions.length}`;
+      document.getElementById('cbtQSubjectBadge').textContent = q.subject;
+      document.getElementById('cbtQChapterBadge').textContent = q.chapter || 'Chapter';
+      document.getElementById('cbtQTopicBadge').textContent = q.topic || 'Topic';
+      const subTopEl = document.getElementById('cbtQSubTopicBadge');
+      if (subTopEl) subTopEl.textContent = q.subTopic || 'Sub-Topic';
+      document.getElementById('cbtQTimer').textContent = `${cbtState.timeSpent[qIdx] || 0}s`;
+      const qImgUrl = getQuestionImageUrl(q);
+      const imgWrap = document.getElementById('cbtQuestionImageWrap');
+      const imgEl = document.getElementById('cbtQuestionImage');
+      const textEl = document.getElementById('cbtQuestionText');
+      const selectedNorm = normalizeAnswerChoice(cbtState.answers[qIdx] || '');
+      const optsContainer = document.getElementById('cbtOptionsContainer');
+
+      if (qImgUrl && imgWrap && imgEl) {
+        imgEl.src = qImgUrl;
+        imgWrap.classList.remove('hidden');
+        textEl.classList.add('hidden');
+        optsContainer.innerHTML =
+          '<div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase;">Select Your Answer Option:<\/div>' +
+          '<div class="opt-pill-grid">' +
+            ['(1)', '(2)', '(3)', '(4)'].map(lbl => {
+              const optNorm = normalizeAnswerChoice(lbl);
+              return '<button type="button" onclick="selectCbtOption(\'' + lbl + '\')" class="opt-pill-btn ' + (selectedNorm === optNorm ? 'selected' : '') + '">' + lbl + '<\/button>';
+            }).join('') +
+          '<\/div>';
+      } else {
+        if (imgWrap) imgWrap.classList.add('hidden');
+        textEl.classList.remove('hidden');
+        textEl.textContent = q.text;
+        optsContainer.innerHTML = ['(1)', '(2)', '(3)', '(4)'].map((lbl, oIdx) => {
+          const optNorm = normalizeAnswerChoice(lbl);
+          return '<button type="button" onclick="selectCbtOption(\'' + lbl + '\')" class="opt-card ' + (selectedNorm === optNorm ? 'selected' : '') + '">' +
+            '<span class="opt-badge">' + lbl + '<\/span>' +
+            '<span style="font-size:13px;font-weight:600;color:#0f172a;padding-top:3px;">' + escapeHtml(q.options[oIdx]) + '<\/span>' +
+          '<\/button>';
+        }).join('');
+      }
+    }
+
+    function selectCbtOption(opt) { cbtState.answers[cbtState.filteredIndices[cbtState.currentPos]] = opt; renderCbtQuestion(); renderCbtPalette(); }
+    function cbtClearResponse() {
+      const qIdx = cbtState.filteredIndices[cbtState.currentPos];
+      delete cbtState.answers[qIdx]; delete cbtState.marked[qIdx]; renderCbtQuestion(); renderCbtPalette();
+    }
+    function cbtSaveAndNext() {
+      delete cbtState.marked[cbtState.filteredIndices[cbtState.currentPos]];
+      if (cbtState.currentPos < cbtState.filteredIndices.length - 1) cbtState.currentPos++;
+      renderCbtQuestion(); renderCbtPalette();
+    }
+    function cbtMarkForReviewAndNext() {
+      cbtState.marked[cbtState.filteredIndices[cbtState.currentPos]] = true;
+      if (cbtState.currentPos < cbtState.filteredIndices.length - 1) cbtState.currentPos++;
+      renderCbtQuestion(); renderCbtPalette();
+    }
+    function cbtPrevQuestion() { if (cbtState.currentPos > 0) { cbtState.currentPos--; renderCbtQuestion(); renderCbtPalette(); } }
+    function jumpToCbtPos(pos) { cbtState.currentPos = pos; renderCbtQuestion(); renderCbtPalette(); }
+
+    function renderCbtPalette() {
+      let ans = 0, notAns = 0, notVis = 0, marked = 0;
+      questions.forEach((_, idx) => {
+        if (cbtState.marked[idx]) marked++;
+        else if (cbtState.answers[idx]) ans++;
+        else if (cbtState.visited[idx]) notAns++;
+        else notVis++;
+      });
+      document.getElementById('palAnsweredCount').textContent = ans;
+      document.getElementById('palNotAnsweredCount').textContent = notAns;
+      document.getElementById('palNotVisitedCount').textContent = notVis;
+      document.getElementById('palMarkedCount').textContent = marked;
+
+      const curQIdx = cbtState.filteredIndices[cbtState.currentPos];
+      document.getElementById('cbtPaletteGrid').innerHTML = cbtState.filteredIndices.map((qIdx, pos) => {
+        const hasAns = !!cbtState.answers[qIdx], isMar = !!cbtState.marked[qIdx], isVis = !!cbtState.visited[qIdx];
+        let cls = 'nta-btn-not-visited';
+        if (isMar && hasAns) cls = 'nta-btn-marked-answered';
+        else if (isMar) cls = 'nta-btn-marked';
+        else if (hasAns) cls = 'nta-btn-answered';
+        else if (isVis) cls = 'nta-btn-not-answered';
+        if (qIdx === curQIdx) cls += ' nta-btn-current';
+        return '<button type="button" onclick="jumpToCbtPos(' + pos + ')" class="' + cls + '" style="height:34px;font-weight:900;">' + (qIdx + 1) + '<\/button>';
+      }).join('');
+    }
+
+    function toggleMobilePalette() { document.getElementById('cbtPalettePanel').classList.toggle('hidden'); }
+    function confirmAndSubmitExam() { submitCBTExam(); }
+    function submitCBTExam() {
+      cbtState.active = false;
+      if (cbtState.timerInterval) clearInterval(cbtState.timerInterval);
+      switchView('result');
+      computeAndRenderResults(true);
+    }
+
+    function recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, timestampStr) {
+      const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+      const pct = maxMarks > 0 ? Math.round((netScore / maxMarks) * 100) : 0;
+      entries.push({
+        id: 'mg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+        title: testTitle,
+        netScore,
+        maxMarks,
+        pct,
+        accuracy,
+        date: timestampStr || new Date().toLocaleString()
+      });
+      saveStorage(STORAGE_KEYS.MARKS_GRAPH, entries.slice(-60));
+    }
+
+    function renderMarksBarGraphInto(targetId) {
+      const mount = document.getElementById(targetId);
+      if (!mount) return;
+      const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+      if (!entries.length) {
+        mount.innerHTML = '<div style="padding:18px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;text-align:center;font-size:12px;color:var(--muted);">Submit a test to plot Obtained Marks vs Each Test on the vertical Y-axis graph.<\/div>';
+        return;
+      }
+
+      const rawMax = Math.max(100, ...entries.map(e => Math.max(e.maxMarks || 0, e.netScore || 0)));
+      const yMax = Math.ceil(rawMax / 100) * 100;
+      const ticks = [yMax, Math.round(yMax * 0.75), Math.round(yMax * 0.5), Math.round(yMax * 0.25), 0];
+
+      mount.innerHTML =
+        '<div class="graph-shell">' +
+          '<div class="y-axis-title-wrap"><span class="y-axis-title">Obtained Marks<\/span><\/div>' +
+          '<div class="y-axis-ticks">' +
+            ticks.map(t => '<span class="y-tick-lbl">' + t + '<\/span>').join('') +
+          '<\/div>' +
+          '<div class="plot-area">' +
+            '<div class="gridlines-layer">' +
+              ticks.map(() => '<div class="gridline-row"><\/div>').join('') +
+            '<\/div>' +
+            '<div class="bars-layer">' +
+              entries.map(e => {
+                const clampedScore = Math.max(0, e.netScore);
+                const heightPct = Math.min(100, Math.round((clampedScore / yMax) * 100));
+                return '<div class="bar-col" title="' + escapeHtml(e.title) + ': ' + e.netScore + ' / ' + e.maxMarks + ' (' + e.date + ')">' +
+                  '<span class="bar-val-lbl">' + e.netScore + '<\/span>' +
+                  '<div class="bar-rect" style="height:' + heightPct + '%;"><\/div>' +
+                '<\/div>';
+              }).join('') +
+            '<\/div>' +
+            '<div class="x-axis-labels">' +
+              entries.map((e, idx) => '<div class="x-lbl-cell" title="' + escapeHtml(e.title) + '">T' + (idx + 1) + ': ' + escapeHtml(e.title) + '<\/div>').join('') +
+            '<\/div>' +
+          '<\/div>' +
+        '<\/div>';
+    }
+
+    function renderMarksGraphPage() {
+      const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+      document.getElementById('mgTotalTests').textContent = entries.length;
+      if (!entries.length) {
+        document.getElementById('mgLatestMarks').textContent = '0 / 0';
+        document.getElementById('mgHighestMarks').textContent = '0 / 0';
+        document.getElementById('marksGraphTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);">No tests recorded yet.<\/td><\/tr>';
+        renderMarksBarGraphInto('dedicatedMarksGraphMount');
+        return;
+      }
+      const latest = entries[entries.length - 1];
+      const highest = entries.reduce((best, cur) => (cur.netScore > best.netScore ? cur : best), entries[0]);
+      document.getElementById('mgLatestMarks').textContent = `${latest.netScore} / ${latest.maxMarks}`;
+      document.getElementById('mgHighestMarks').textContent = `${highest.netScore} / ${highest.maxMarks}`;
+      renderMarksBarGraphInto('dedicatedMarksGraphMount');
+      document.getElementById('marksGraphTableBody').innerHTML = entries.map((e, i) =>
+        '<tr>' +
+          '<td><strong>T' + (i + 1) + '<\/strong><\/td>' +
+          '<td>' + escapeHtml(e.title) + '<\/td>' +
+          '<td style="font-weight:900;color:var(--primary-dark);">' + e.netScore + ' / ' + e.maxMarks + '<\/td>' +
+          '<td>' + e.pct + '%<\/td>' +
+          '<td>' + e.accuracy + '%<\/td>' +
+          '<td style="color:var(--muted);">' + escapeHtml(e.date) + '<\/td>' +
+        '<\/tr>'
+      ).join('');
+    }
+
+    function computeAndRenderResults(saveToHistory = true) {
+      const posMark = parseFloat(document.getElementById('positiveMarkInput').value) || 4;
+      const negMark = parseFloat(document.getElementById('negativeMarkInput').value) || -1;
+      const testTitle = document.getElementById('testTitleInput').value.trim() || 'NURA-2 Practice Test';
+
+      let correct = 0, incorrect = 0, skipped = 0, totalTime = 0, missingKeys = 0;
+      const subjStats = {
+        Physics: { total: 0, correct: 0, wrong: 0, skipped: 0, score: 0, time: 0 },
+        Chemistry: { total: 0, correct: 0, wrong: 0, skipped: 0, score: 0, time: 0 },
+        Botany: { total: 0, correct: 0, wrong: 0, skipped: 0, score: 0, time: 0 },
+        Zoology: { total: 0, correct: 0, wrong: 0, skipped: 0, score: 0, time: 0 }
+      };
+      const topicMap = {}, evaluatedQuestions = [];
+
+      questions.forEach((rawQ, idx) => {
+        const q = enrichQuestionObj({ ...rawQ, num: idx + 1 }, idx);
+        questions[idx] = q;
+        const userAns = cbtState.answers[idx] || '', corrAns = q.correct || '', tSec = cbtState.timeSpent[idx] || 0, isMarked = !!cbtState.marked[idx];
+        totalTime += tSec;
+        if (!corrAns) missingKeys++;
+
+        const sObj = subjStats[q.subject] || subjStats.Physics;
+        sObj.total++; sObj.time += tSec;
+
+        const chapName = q.chapter || testTitle;
+        const topName = q.topic || 'Core Concept';
+        const subTopName = q.subTopic || 'General Sub-Topic';
+        const tKey = `${q.subject}::${chapName}::${topName}::${subTopName}`;
+        if (!topicMap[tKey]) {
+          topicMap[tKey] = { subject: q.subject, chapter: chapName, topic: topName, subTopic: subTopName, total: 0, correct: 0, wrong: 0, skipped: 0, marked: 0, time: 0, wrongQs: [] };
+        }
+        const tObj = topicMap[tKey];
+        tObj.total++; tObj.time += tSec; if (isMarked) tObj.marked++;
+
+        const uNorm = normalizeAnswerChoice(userAns);
+        const cNorm = normalizeAnswerChoice(corrAns);
+
+        let status = 'skipped', bucket = 'moderate', marksAwarded = 0;
+        if (!uNorm) { skipped++; sObj.skipped++; tObj.skipped++; }
+        else if (cNorm && uNorm === cNorm) {
+          correct++; sObj.correct++; tObj.correct++; marksAwarded = posMark; sObj.score += posMark; status = 'correct';
+          bucket = (isMarked || tSec > 90) ? 'moderate' : 'strong';
+        } else if (cNorm && uNorm !== cNorm) {
+          incorrect++; sObj.wrong++; tObj.wrong++; tObj.wrongQs.push(idx + 1); marksAwarded = negMark; sObj.score += negMark; status = 'incorrect'; bucket = 'weak';
+        } else { skipped++; sObj.skipped++; tObj.skipped++; status = 'ungraded'; }
+
+        evaluatedQuestions.push({ idx, q, userAns, corrAns, tSec, status, bucket, marksAwarded });
+      });
+
+      document.getElementById('missingKeyAlertBanner').classList.toggle('hidden', missingKeys === 0);
+      const maxMarks = questions.length * posMark, netScore = (correct * posMark) + (incorrect * negMark);
+      const attempted = correct + incorrect, accuracy = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+      const scorePct = maxMarks > 0 ? Math.round((netScore / maxMarks) * 100) : 0;
+      const tsStr = new Date().toLocaleString();
+
+      document.getElementById('resTestTitle').textContent = testTitle;
+      document.getElementById('resTestTimestamp').textContent = tsStr;
+      document.getElementById('resNetScore').textContent = `${netScore} / ${maxMarks}`;
+      document.getElementById('resPercentText').textContent = `${scorePct}% Net Score`;
+      document.getElementById('resAccuracy').textContent = `${accuracy}%`;
+      document.getElementById('resMarksSplit').textContent = `+${correct * posMark} Pos | ${incorrect * negMark} Neg`;
+      document.getElementById('resTotalTime').textContent = `${Math.floor(totalTime / 60)}m ${totalTime % 60}s`;
+      document.getElementById('resAvgTime').textContent = `Avg ${questions.length ? Math.round(totalTime / questions.length) : 0}s / Q`;
+      document.getElementById('resCorrectCount').textContent = `${correct} ✓`;
+      document.getElementById('resIncorrectCount').textContent = `${incorrect} ✗`;
+      document.getElementById('resSkippedCount').textContent = `${skipped} Skip`;
+
+      document.getElementById('resSubjectTableBody').innerHTML = Object.entries(subjStats).filter(([, st]) => st.total > 0).map(([sub, st]) => {
+        const att = st.correct + st.wrong, acc = att > 0 ? Math.round((st.correct / att) * 100) : 0;
+        return '<tr><td style="font-weight:900;">' + sub + '<\/td><td>' + st.total + '<\/td><td style="color:var(--success);">' + st.correct + '<\/td><td style="color:var(--danger);">' + st.wrong + '<\/td><td style="color:var(--muted);">' + st.skipped + '<\/td><td style="font-weight:900;color:var(--primary-dark);">' + st.score + ' / ' + (st.total * posMark) + '<\/td><td>' + acc + '%<\/td><td style="color:var(--muted);">' + Math.floor(st.time / 60) + 'm ' + (st.time % 60) + 's<\/td><\/tr>';
+      }).join('');
+
+      const weakTopics = [], moderateTopics = [], strongTopics = [];
+      Object.values(topicMap).forEach(t => {
+        const att = t.correct + t.wrong, acc = att > 0 ? Math.round((t.correct / att) * 100) : 0, avgT = t.total > 0 ? Math.round(t.time / t.total) : 0;
+        t.accuracy = acc; t.avgTime = avgT;
+        if (t.wrong > 0 || (att > 0 && acc < 55)) weakTopics.push(t);
+        else if (att > 0 && acc >= 80 && t.wrong === 0 && avgT <= 90) strongTopics.push(t);
+        else moderateTopics.push(t);
+      });
+
+      document.getElementById('weakTopicsCountBadge').textContent = weakTopics.length;
+      document.getElementById('moderateTopicsCountBadge').textContent = moderateTopics.length;
+      document.getElementById('strongTopicsCountBadge').textContent = strongTopics.length;
+
+      document.getElementById('weakTopicsList').innerHTML = weakTopics.length ? weakTopics.map(t =>
+        '<div style="padding:12px;border-radius:12px;background:var(--danger-soft);border:1px solid var(--danger-border);font-size:12px;line-height:1.55;">' +
+          '<div style="display:flex;justify-content:space-between;font-weight:900;color:#881337;">' +
+            '<span>' + escapeHtml(t.subTopic) + '<\/span>' +
+            '<span>' + t.accuracy + '% Acc<\/span>' +
+          '<\/div>' +
+          '<div style="font-size:11px;color:#9f1239;margin-top:4px;"><strong>Chapter:<\/strong> ' + escapeHtml(t.chapter) + '<\/div>' +
+          '<div style="font-size:11px;color:#9f1239;margin-top:2px;"><strong>Topic:<\/strong> ' + escapeHtml(t.topic) + '<\/div>' +
+          '<div style="font-size:11px;color:#be123c;margin-top:2px;"><strong>Sub-Topic:<\/strong> ' + escapeHtml(t.subTopic) + ' (' + t.subject + ') · Wrong: ' + t.wrongQs.map(n => 'Q' + n).join(', ') + '<\/div>' +
+        '<\/div>'
+      ).join('') : '<div style="font-size:12px;color:var(--muted);font-style:italic;">No weak topics in this test.<\/div>';
+
+      document.getElementById('moderateTopicsList').innerHTML = moderateTopics.length ? moderateTopics.map(t => '<div style="padding:10px;border-radius:10px;background:var(--warn-soft);border:1px solid var(--warn-border);font-size:12px;"><div style="display:flex;justify-content:space-between;font-weight:900;color:#78350f;"><span>' + escapeHtml(t.subTopic) + '<\/span><span>' + t.accuracy + '% Acc<\/span><\/div><div style="font-size:11px;color:#92400e;margin-top:2px;">' + t.subject + ' · Ch: ' + escapeHtml(t.chapter) + ' · Topic: ' + escapeHtml(t.topic) + ' · Avg ' + t.avgTime + 's<\/div><\/div>').join('') : '<div style="font-size:12px;color:var(--muted);font-style:italic;">No moderate topics in this test.<\/div>';
+      document.getElementById('strongTopicsList').innerHTML = strongTopics.length ? strongTopics.map(t => '<div style="padding:10px;border-radius:10px;background:var(--success-soft);border:1px solid var(--success-border);font-size:12px;"><div style="display:flex;justify-content:space-between;font-weight:900;color:#064e3b;"><span>' + escapeHtml(t.subTopic) + '<\/span><span>' + t.accuracy + '% Acc<\/span><\/div><div style="font-size:11px;color:#047857;margin-top:2px;">' + t.subject + ' · Ch: ' + escapeHtml(t.chapter) + ' · Topic: ' + escapeHtml(t.topic) + ' (' + t.avgTime + 's/Q)<\/div><\/div>').join('') : '<div style="font-size:12px;color:var(--muted);font-style:italic;">No strong topics flagged yet.<\/div>';
+
+      syncWeakTopicsToTracker(topicMap, testTitle);
+      saveTestWrongQuestionsToBank(testTitle, evaluatedQuestions);
+      lastReport = { id: 'rep_' + Date.now(), title: testTitle, date: tsStr, netScore, maxMarks, accuracy, evaluatedQuestions, weakTopics };
+
+      if (saveToHistory) {
+        recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, tsStr);
+        const hist = loadStorage(STORAGE_KEYS.HISTORY, []);
+        hist.unshift({ id: lastReport.id, title: testTitle, date: tsStr, score: `${netScore}/${maxMarks}`, accuracy: `${accuracy}%` });
+        saveStorage(STORAGE_KEYS.HISTORY, hist.slice(0, 40));
+        updateHeaderBadges();
+      }
+      renderMarksBarGraphInto('resultMarksGraphMount');
+      renderResultQuestionReview();
+    }
+
+    function filterResultQuestions(filter) {
+      currentResultFilter = filter;
+      document.querySelectorAll('.res-filter-btn').forEach(btn => { btn.className = `res-filter-btn ${btn.dataset.resFilter === filter ? 'btn-dark' : 'btn-outline'}`; });
+      renderResultQuestionReview();
+    }
+    function overrideResultQuestionKey(qIdx, newOpt) {
+      if (!questions[qIdx]) return;
+      questions[qIdx].correct = newOpt;
+      renderQuestionBank();
+      computeAndRenderResults(false);
+    }
+    function renderResultQuestionReview() {
+      if (!lastReport) return;
+      const items = lastReport.evaluatedQuestions.filter(item => currentResultFilter === 'all' || item.bucket === currentResultFilter);
+      document.getElementById('resQuestionReviewList').innerHTML = items.map(item => {
+        const pillCls = item.bucket === 'weak' ? 'pill-rose' : (item.bucket === 'strong' ? 'pill-green' : 'pill-amber');
+        const cropUrl = getQuestionImageUrl(item.q);
+        return '<div style="border:1px solid var(--border);border-radius:12px;padding:12px;">' +
+          '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">' +
+            '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+              '<span style="background:#0f172a;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + (item.idx + 1) + '<\/span>' +
+              '<span style="font-size:12px;font-weight:800;color:var(--primary-dark);">' + item.q.subject + ' · Ch: ' + escapeHtml(item.q.chapter || '') + ' · Topic: ' + escapeHtml(item.q.topic) + ' · Sub-Topic: ' + escapeHtml(item.q.subTopic || '') + '<\/span>' +
+              '<span class="pill ' + pillCls + '" style="text-transform:uppercase;">' + item.bucket + '<\/span>' +
+            '<\/div>' +
+            '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;font-weight:700;">' +
+              '<span>Your: <strong style="color:' + (item.status === 'correct' ? 'var(--success)' : 'var(--danger)') + ';">' + escapeHtml(formatAnswerChoiceDisplay(item.userAns)) + '<\/strong><\/span>' +
+              '<span style="display:inline-flex;align-items:center;gap:3px;">Key: ' + ['(1)', '(2)', '(3)', '(4)'].map(opt => '<button type="button" onclick="overrideResultQuestionKey(' + item.idx + ', \'' + opt + '\')" style="padding:2px 6px;border-radius:6px;font-size:10px;background:' + (normalizeAnswerChoice(item.corrAns) === normalizeAnswerChoice(opt) ? 'var(--success)' : '#f1f5f9') + ';color:' + (normalizeAnswerChoice(item.corrAns) === normalizeAnswerChoice(opt) ? '#fff' : '#334155') + ';">' + opt + '<\/button>').join('') + '<\/span>' +
+              '<span>Time: <strong>' + item.tSec + 's<\/strong><\/span>' +
+            '<\/div>' +
+          '<\/div>' +
+          (cropUrl ? ('<div class="q-crop-frame" style="margin-top:6px;"><img src="' + cropUrl + '" alt="Q' + (item.idx + 1) + '" /><\/div>') : ('<div style="font-size:13px;font-weight:600;">' + escapeHtml(item.q.text) + '<\/div>')) +
+        '<\/div>';
+      }).join('');
+    }
+    function reattemptFilteredQuestions(mode) {
+      if (!lastReport) return;
+      const subset = lastReport.evaluatedQuestions.filter(it => mode === 'weak' ? it.bucket === 'weak' : (it.bucket === 'weak' || it.bucket === 'moderate')).map((it, i) => ({ ...it.q, num: i + 1 }));
+      if (!subset.length) {
+        setParseStatus(true, 'No Questions in Selected Bucket', 'There are no questions matching that filter to re-attempt.', true);
+        return;
+      }
+      questions = subset;
+      document.getElementById('testTitleInput').value = `${lastReport.title} (${mode === 'weak' ? 'Weak Revision' : 'Weak + Moderate Revision'})`;
+      renderQuestionBank();
+      startCBTExam();
+    }
+
+    function syncWeakTopicsToTracker(topicMap, testTitle) {
+      const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      Object.values(topicMap).forEach(t => {
+        const att = t.correct + t.wrong, acc = att > 0 ? Math.round((t.correct / att) * 100) : 0;
+        if (t.wrong > 0 || (att > 0 && acc < 55)) {
+          const chapVal = t.chapter || testTitle;
+          const topVal = t.topic || 'Core Concept';
+          const subTopVal = t.subTopic || 'General Sub-Topic';
+          const existing = tracker.find(item =>
+            item.subject === t.subject &&
+            (item.chapter || '').toLowerCase() === chapVal.toLowerCase() &&
+            (item.topic || '').toLowerCase() === topVal.toLowerCase() &&
+            (item.subTopic || subTopVal).toLowerCase() === subTopVal.toLowerCase()
+          );
+          if (existing) {
+            existing.wrongCount = (existing.wrongCount || 0) + Math.max(1, t.wrong);
+            existing.subTopic = subTopVal;
+            existing.mastered = false; existing.lastTest = testTitle; existing.updatedAt = new Date().toLocaleDateString();
+          } else {
+            tracker.unshift({
+              id: 'wt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+              subject: t.subject, chapter: chapVal, topic: topVal, subTopic: subTopVal,
+              wrongCount: Math.max(1, t.wrong), mastered: false, note: '', lastTest: testTitle, updatedAt: new Date().toLocaleDateString()
+            });
+          }
+        }
+      });
+      saveStorage(STORAGE_KEYS.WEAK_TRACKER, tracker);
+      updateHeaderBadges();
+    }
+
+    function setWeakTrackerFilter(type, val) {
+      weakTrackerFilter[type] = val;
+      if (type === 'subject') document.querySelectorAll('.wt-sub-btn').forEach(b => { b.className = `wt-sub-btn ${b.dataset.wtSub === val ? 'btn-dark' : 'btn-outline'}`; });
+      else document.querySelectorAll('.wt-status-btn').forEach(b => { b.className = `wt-status-btn ${b.dataset.wtStatus === val ? 'btn-primary' : 'btn-outline'}`; });
+      renderMasterWeakTracker();
+    }
+
+    function renderMasterWeakTracker() {
+      const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const total = tracker.length, mastered = tracker.filter(t => t.mastered).length;
+      document.getElementById('wtTotalCount').textContent = total;
+      document.getElementById('wtActiveCount').textContent = total - mastered;
+      document.getElementById('wtMasteredCount').textContent = mastered;
+
+      const filtered = tracker.filter(item => {
+        if (weakTrackerFilter.subject !== 'All' && item.subject !== weakTrackerFilter.subject) return false;
+        if (weakTrackerFilter.status === 'active' && item.mastered) return false;
+        if (weakTrackerFilter.status === 'mastered' && !item.mastered) return false;
+        return true;
+      });
+
+      const container = document.getElementById('masterWeakTopicsContainer');
+      if (!filtered.length) {
+        container.innerHTML = '<div style="text-align:center;padding:30px 16px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;"><div style="font-size:14px;font-weight:800;color:#475569;">No Weak Chapters / Topics in This View<\/div><\/div>';
+        return;
+      }
+      container.innerHTML = filtered.map(rawItem => {
+        const tax = classifyQuestionTaxonomy(`${rawItem.chapter || ''} ${rawItem.topic || ''} ${rawItem.subTopic || ''}`, 1, rawItem.subject);
+        const chap = rawItem.chapter || tax.chapter;
+        const top = rawItem.topic || tax.topic;
+        const subTop = rawItem.subTopic || tax.subTopic;
+        return '<div style="border-radius:12px;border:1px solid ' + (rawItem.mastered ? 'var(--success-border)' : 'var(--danger-border)') + ';background:' + (rawItem.mastered ? 'var(--success-soft)' : '#ffffff') + ';padding:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">' +
+          '<div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:230px;">' +
+            '<input type="checkbox" ' + (rawItem.mastered ? 'checked' : '') + ' onchange="toggleWeakTopicMastered(\'' + rawItem.id + '\')" style="margin-top:3px;width:20px;height:20px;accent-color:#059669;cursor:pointer;" />' +
+            '<div style="flex:1;line-height:1.55;">' +
+              '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+                '<span class="pill ' + (rawItem.mastered ? 'pill-green' : 'pill-rose') + '">' + rawItem.subject + '<\/span>' +
+                '<span style="font-size:14px;font-weight:900;' + (rawItem.mastered ? 'text-decoration:line-through;color:#065f46;' : 'color:#0f172a;') + '">' + escapeHtml(subTop) + '<\/span>' +
+                (rawItem.mastered ? '<span class="pill pill-green" style="background:#059669;color:#fff;">✓ Strong<\/span>' : '<span style="font-size:11px;font-weight:800;color:var(--danger);">' + (rawItem.wrongCount || 1) + ' Wrong Qs<\/span>') +
+              '<\/div>' +
+              '<div style="font-size:12px;color:#334155;margin-top:4px;"><strong>Chapter:<\/strong> ' + escapeHtml(chap) + ' · <strong>Topic:<\/strong> ' + escapeHtml(top) + ' · <strong>Sub-Topic:<\/strong> ' + escapeHtml(subTop) + '<\/div>' +
+              '<div style="font-size:11px;color:var(--muted);margin-top:2px;">Test: ' + escapeHtml(rawItem.lastTest || 'Manual') + ' · Updated ' + (rawItem.updatedAt || '') + (rawItem.note ? ' · Note: ' + escapeHtml(rawItem.note) : '') + '<\/div>' +
+            '<\/div>' +
+          '<\/div>' +
+          '<div style="display:flex;gap:6px;">' +
+            '<button type="button" class="btn-outline" onclick="openEditWeakTopicModal(\'' + rawItem.id + '\')" style="padding:5px 10px;">Edit<\/button>' +
+            '<button type="button" class="btn-danger-soft" onclick="deleteWeakTopicItem(\'' + rawItem.id + '\')" style="padding:5px 10px;">✕<\/button>' +
+          '<\/div>' +
+        '<\/div>';
+      }).join('');
+    }
+
+    function toggleWeakTopicMastered(id) {
+      const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const item = tracker.find(t => t.id === id);
+      if (item) { item.mastered = !item.mastered; saveStorage(STORAGE_KEYS.WEAK_TRACKER, tracker); updateHeaderBadges(); renderMasterWeakTracker(); }
+    }
+    function openEditWeakTopicModal(id) {
+      const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const item = tracker.find(t => t.id === id);
+      if (!item) return;
+      document.getElementById('newWtSubject').value = item.subject || 'Physics';
+      document.getElementById('newWtChapter').value = item.chapter || '';
+      document.getElementById('newWtTopic').value = item.topic || '';
+      document.getElementById('newWtSubTopic').value = item.subTopic || '';
+      document.getElementById('newWtNote').value = item.note || '';
+      document.getElementById('addWeakTopicBox').dataset.editingId = id;
+      document.getElementById('addWeakTopicBox').classList.remove('hidden');
+    }
+    function deleteWeakTopicItem(id) {
+      saveStorage(STORAGE_KEYS.WEAK_TRACKER, loadStorage(STORAGE_KEYS.WEAK_TRACKER, []).filter(t => t.id !== id));
+      updateHeaderBadges(); renderMasterWeakTracker();
+    }
+    function openAddWeakTopicForm() {
+      delete document.getElementById('addWeakTopicBox').dataset.editingId;
+      document.getElementById('addWeakTopicBox').classList.remove('hidden');
+    }
+    function saveNewManualWeakTopic() {
+      const box = document.getElementById('addWeakTopicBox');
+      const editingId = box.dataset.editingId || '';
+      const sub = document.getElementById('newWtSubject').value;
+      const chapter = document.getElementById('newWtChapter').value.trim() || 'General Chapter';
+      const topic = document.getElementById('newWtTopic').value.trim() || 'Core Concept';
+      const subTopic = document.getElementById('newWtSubTopic').value.trim();
+      const note = document.getElementById('newWtNote').value.trim();
+      if (!subTopic && !topic) return;
+      const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      if (editingId) {
+        const existing = tracker.find(t => t.id === editingId);
+        if (existing) {
+          existing.subject = sub;
+          existing.chapter = chapter;
+          existing.topic = topic;
+          existing.subTopic = subTopic || topic;
+          existing.note = note;
+          existing.updatedAt = new Date().toLocaleDateString();
+        }
+        delete box.dataset.editingId;
+      } else {
+        tracker.unshift({
+          id: 'wt_' + Date.now(), subject: sub, chapter, topic, subTopic: subTopic || topic,
+          wrongCount: 1, mastered: false, note, lastTest: 'Manual Entry', updatedAt: new Date().toLocaleDateString()
+        });
+      }
+      saveStorage(STORAGE_KEYS.WEAK_TRACKER, tracker);
+      document.getElementById('newWtChapter').value = '';
+      document.getElementById('newWtTopic').value = '';
+      document.getElementById('newWtSubTopic').value = '';
+      document.getElementById('newWtNote').value = '';
+      box.classList.add('hidden');
+      updateHeaderBadges(); renderMasterWeakTracker();
+    }
+
+    function saveCurrentSheetToLibrary() {
+      if (!questions.length) return;
+      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
+      const lightQuestions = questions.map(q => stripInlineImageForLocalStorage(q));
+      sheets.unshift({ id: 'sh_' + Date.now(), title: document.getElementById('testTitleInput').value.trim() || `Practice Sheet (${questions.length} Qs)`, date: new Date().toLocaleDateString(), questions: lightQuestions });
+      saveStorage(STORAGE_KEYS.SHEETS, sheets.slice(0, 30));
+      updateHeaderBadges();
+      setParseStatus(true, 'Practice Sheet Saved Locally!', 'Access anytime offline from Saved & History.', false, 100);
+    }
+
+    function saveAllDataToJsonFile() {
+      const sheetsWithImages = loadStorage(STORAGE_KEYS.SHEETS, []).map(s => ({
+        ...s,
+        questions: (s.questions || []).map(q => ({ ...q, imageDataUrl: getQuestionImageUrl(q) || '' }))
+      }));
+      const wrongBankWithImages = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).map(b => ({
+        ...b,
+        questions: (b.questions || []).map(q => ({ ...q, imageDataUrl: getQuestionImageUrl(q) || '' }))
+      }));
+      const payload = {
+        app: 'NURA-2',
+        customAppName: localStorage.getItem(STORAGE_KEYS.APP_NAME) || '',
+        exportedAt: new Date().toISOString(),
+        sheets: sheetsWithImages,
+        history: loadStorage(STORAGE_KEYS.HISTORY, []),
+        marksGraph: loadStorage(STORAGE_KEYS.MARKS_GRAPH, []),
+        weakTracker: loadStorage(STORAGE_KEYS.WEAK_TRACKER, []),
+        wrongQsBank: wrongBankWithImages
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `NURA2_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      const lbl = document.getElementById('headerSaveBtnLabel');
+      if (lbl) {
+        lbl.textContent = '✓ Saved!';
+        setTimeout(() => { lbl.textContent = '⬇ Save'; }, 1800);
+      }
+    }
+
+    function openHistoryDrawer() {
+      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []), history = loadStorage(STORAGE_KEYS.HISTORY, []);
+      renderMarksBarGraphInto('drawerMarksGraphMount');
+      document.getElementById('savedSheetsList').innerHTML = sheets.length ? sheets.map((s, idx) => '<div style="padding:10px;border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-size:12px;font-weight:800;">' + escapeHtml(s.title) + '<\/div><div style="font-size:11px;color:var(--muted);">' + s.questions.length + ' Qs · ' + s.date + '<\/div><\/div><button type="button" class="btn-primary" onclick="loadSavedSheet(' + idx + ')">Load<\/button><\/div>').join('') : '<div style="font-size:12px;color:var(--muted);">No saved sheets yet.<\/div>';
+      document.getElementById('testHistoryList').innerHTML = history.length ? history.map(h => '<div style="padding:10px;border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-size:12px;font-weight:800;">' + escapeHtml(h.title) + '<\/div><div style="font-size:11px;color:var(--muted);">' + h.date + '<\/div><\/div><span style="font-size:12px;font-weight:900;color:var(--primary-dark);">' + h.score + ' (' + h.accuracy + ')<\/span><\/div>').join('') : '<div style="font-size:12px;color:var(--muted);">No completed tests yet.<\/div>';
+      document.getElementById('historyDrawer').classList.remove('hidden');
+    }
+    function closeHistoryDrawer() { document.getElementById('historyDrawer').classList.add('hidden'); }
+    function loadSavedSheet(idx) {
+      const s = loadStorage(STORAGE_KEYS.SHEETS, [])[idx];
+      if (s) { questions = s.questions.map((q, i) => enrichQuestionObj({ ...q, num: i + 1 }, i)); document.getElementById('testTitleInput').value = s.title; renderQuestionBank(); closeHistoryDrawer(); switchView('upload'); }
+    }
+
+    async function importFullBackupJson(inputEl) {
+      const file = inputEl?.files?.[0]; if (!file) return;
+      const data = JSON.parse(await readFileAsTextSafe(file));
+      if (data.customAppName) localStorage.setItem(STORAGE_KEYS.APP_NAME, data.customAppName);
+      if (data.sheets) {
+        for (const s of data.sheets) {
+          for (const q of (s.questions || [])) {
+            if (q.imageDataUrl && q.imageKey) await idbPutImage(q.imageKey, q.imageDataUrl);
+          }
+          s.questions = (s.questions || []).map(q => stripInlineImageForLocalStorage(q));
+        }
+        saveStorage(STORAGE_KEYS.SHEETS, data.sheets);
+      }
+      if (data.history) saveStorage(STORAGE_KEYS.HISTORY, data.history);
+      if (data.marksGraph) saveStorage(STORAGE_KEYS.MARKS_GRAPH, data.marksGraph);
+      if (data.weakTracker) saveStorage(STORAGE_KEYS.WEAK_TRACKER, data.weakTracker);
+      if (data.wrongQsBank) {
+        for (const b of data.wrongQsBank) {
+          for (const q of (b.questions || [])) {
+            if (q.imageDataUrl && q.imageKey) await idbPutImage(q.imageKey, q.imageDataUrl);
+          }
+          b.questions = (b.questions || []).map(q => stripInlineImageForLocalStorage(q));
+        }
+        saveStorage(STORAGE_KEYS.WRONG_QS_BANK, data.wrongQsBank);
+      }
+      applyCustomAppNameToUI();
+      updateHeaderBadges();
+      openHistoryDrawer();
+    }
+
+    function escapePdfText(str) {
+      return String(str || '')
+        .replace(/[^\x20-\x7E]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/\\/g, '\\\\')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)');
+    }
+
+    function wrapPdfText(str, maxChars) {
+      const clean = String(str || '').replace(/[^\x20-\x7E]/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!clean) return [''];
+      const words = clean.split(' ');
+      const lines = [];
+      let cur = '';
+      for (const w of words) {
+        if (w.length > maxChars) {
+          if (cur) { lines.push(cur); cur = ''; }
+          for (let i = 0; i < w.length; i += maxChars) lines.push(w.slice(i, i + maxChars));
+          continue;
+        }
+        const next = cur ? cur + ' ' + w : w;
+        if (next.length <= maxChars) cur = next;
+        else { lines.push(cur); cur = w; }
+      }
+      if (cur) lines.push(cur);
+      return lines;
+    }
+
+    function parseJpegDimensions(bytes) {
+      let i = 2;
+      while (i + 8 < bytes.length) {
+        if (bytes[i] !== 0xFF) break;
+        const marker = bytes[i + 1];
+        const segLen = (bytes[i + 2] << 8) + bytes[i + 3];
+        if (marker >= 0xC0 && marker <= 0xC3) {
+          return { height: (bytes[i + 5] << 8) + bytes[i + 6], width: (bytes[i + 7] << 8) + bytes[i + 8] };
+        }
+        i += 2 + segLen;
+      }
+      return { width: 400, height: 180 };
+    }
+
+    function dataUrlToBinaryBytes(dataUrl) {
+      const base64 = dataUrl.split(',')[1] || '';
+      const binStr = atob(base64);
+      const len = binStr.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) bytes[i] = binStr.charCodeAt(i);
+      return bytes;
+    }
+
+    function buildNativeReportPdfBytes() {
+      const appName = (localStorage.getItem(STORAGE_KEYS.APP_NAME) || 'NURA-2 · NEET CBT Simulator').trim();
+      const marksEntries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+      const weakItems = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const wrongTests = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+
+      const pageW = 595.28, pageH = 841.89, margin = 32;
+      const pages = [{ cmds: [], xObjs: {} }];
+      const curPage = () => pages[pages.length - 1];
+      const newPage = () => { pages.push({ cmds: [], xObjs: {} }); return curPage(); };
+      const pdfImages = [];
+
+      const registerPdfJpeg = (dataUrl) => {
+        if (!dataUrl || !dataUrl.startsWith('data:image/jpeg')) return null;
+        const bytes = dataUrlToBinaryBytes(dataUrl);
+        const dims = parseJpegDimensions(bytes);
+        const idx = pdfImages.length + 1;
+        const name = `/Im${idx}`;
+        pdfImages.push({ name, bytes, width: dims.width, height: dims.height, objId: 0 });
+        return pdfImages[pdfImages.length - 1];
+      };
+
+      const addText = (pg, x, y, text, size = 9, bold = false, rgb = [0.06, 0.09, 0.16]) => {
+        const font = bold ? '/F2' : '/F1';
+        pg.cmds.push(`BT ${font} ${size} Tf ${rgb[0].toFixed(2)} ${rgb[1].toFixed(2)} ${rgb[2].toFixed(2)} rg 1 0 0 1 ${x.toFixed(1)} ${y.toFixed(1)} Tm (${escapePdfText(text)}) Tj ET`);
+      };
+      const addRect = (pg, x, y, w, h, fillRgb = null, strokeRgb = null, lw = 0.6) => {
+        let cmd = `${lw} w `;
+        if (strokeRgb) cmd += `${strokeRgb[0].toFixed(2)} ${strokeRgb[1].toFixed(2)} ${strokeRgb[2].toFixed(2)} RG `;
+        if (fillRgb) cmd += `${fillRgb[0].toFixed(2)} ${fillRgb[1].toFixed(2)} ${fillRgb[2].toFixed(2)} rg `;
+        cmd += `${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)} `;
+        cmd += fillRgb && strokeRgb ? 'B' : (fillRgb ? 'f' : 'S');
+        pg.cmds.push(cmd);
+      };
+      const addLine = (pg, x1, y1, x2, y2, strokeRgb = [0.75, 0.80, 0.85], lw = 0.6) => {
+        pg.cmds.push(`${lw} w ${strokeRgb[0].toFixed(2)} ${strokeRgb[1].toFixed(2)} ${strokeRgb[2].toFixed(2)} RG ${x1.toFixed(1)} ${y1.toFixed(1)} m ${x2.toFixed(1)} ${y2.toFixed(1)} l S`);
+      };
+      const addImage = (pg, imgObj, x, yBot, w, h) => {
+        pg.xObjs[imgObj.name] = imgObj;
+        pg.cmds.push(`q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${yBot.toFixed(2)} cm ${imgObj.name} Do Q`);
+      };
+
+      // Part 1: Summary + Marks vs Each Test + Detailed Weak Chapter/Topic/Sub-Topic
+      let p1 = curPage();
+      addRect(p1, margin, pageH - 76, pageW - margin * 2, 46, [0.05, 0.58, 0.53]);
+      addText(p1, margin + 12, pageH - 50, appName, 14, true, [1, 1, 1]);
+      addText(p1, margin + 12, pageH - 66, `Performance Summary & Sub-Topic Revision Guide · ${new Date().toLocaleString()}`, 8.5, false, [0.85, 0.99, 0.96]);
+
+      let y = pageH - 96;
+      const totalTests = marksEntries.length;
+      const best = totalTests ? marksEntries.reduce((b, c) => (c.netScore > b.netScore ? c : b), marksEntries[0]) : null;
+      const latest = totalTests ? marksEntries[totalTests - 1] : null;
+      const activeWeak = weakItems.filter(w => !w.mastered).length;
+      const masteredWeak = weakItems.filter(w => w.mastered).length;
+      const totalWrongQs = wrongTests.reduce((a, b) => a + (b.questions ? b.questions.length : 0), 0);
+
+      addRect(p1, margin, y - 16, pageW - margin * 2, 18, [0.94, 0.99, 0.98]);
+      addText(p1, margin + 8, y - 11, '1. OVERALL PERFORMANCE SUMMARY', 9.5, true, [0.06, 0.46, 0.43]);
+      y -= 28;
+      addText(p1, margin + 6, y, `Tests Attempted: ${totalTests}   |   Best Marks: ${best ? `${best.netScore}/${best.maxMarks} (${best.title})` : '0/0'}   |   Latest: ${latest ? `${latest.netScore}/${latest.maxMarks} (${latest.accuracy}% Acc)` : '0/0'}`, 8.5, true);
+      y -= 14;
+      addText(p1, margin + 6, y, `Active Weak Topics: ${activeWeak}   |   Mastered: ${masteredWeak}   |   Unsolved Wrong Qs: ${totalWrongQs}`, 8.5, false);
+      y -= 24;
+
+      addRect(p1, margin, y - 16, pageW - margin * 2, 18, [0.94, 0.99, 0.98]);
+      addText(p1, margin + 8, y - 11, '2. OBTAINED MARKS VS EACH TEST', 9.5, true, [0.06, 0.46, 0.43]);
+      y -= 28;
+      if (!marksEntries.length) {
+        addText(p1, margin + 6, y, 'No completed tests yet.', 8.5, false, [0.4, 0.45, 0.5]);
+        y -= 16;
+      } else {
+        marksEntries.slice(-8).forEach((m, idx) => {
+          addText(p1, margin + 6, y, `T${idx + 1} | ${m.title} | Marks: ${m.netScore}/${m.maxMarks} (${m.pct}%) | Acc: ${m.accuracy}% | ${m.date}`, 8, false);
+          y -= 13;
+        });
+      }
+      y -= 12;
+
+      addRect(p1, margin, y - 16, pageW - margin * 2, 18, [1.0, 0.95, 0.96]);
+      addText(p1, margin + 8, y - 11, '3. WEAK CHAPTERS, TOPICS & SPECIFIC SUB-TOPICS TO REVISE', 9.5, true, [0.74, 0.07, 0.25]);
+      y -= 28;
+
+      const activeList = weakItems.filter(w => !w.mastered);
+      if (!activeList.length) {
+        addText(p1, margin + 6, y, 'No active weak sub-topics recorded.', 8.5, false, [0.4, 0.45, 0.5]);
+      } else {
+        activeList.forEach((w, idx) => {
+          const tax = classifyQuestionTaxonomy(`${w.chapter || ''} ${w.topic || ''} ${w.subTopic || ''}`, 1, w.subject);
+          const chap = w.chapter || tax.chapter;
+          const top = w.topic || tax.topic;
+          const subTop = w.subTopic || tax.subTopic;
+          const lines = [
+            `${idx + 1}. [${w.subject} · ${w.wrongCount || 1} Wrong Qs] Sub-Topic: ${subTop}`,
+            `    Chapter: ${chap}   |   Topic: ${top}`
+          ];
+          const neededH = lines.length * 12 + 10;
+          if (y - neededH < margin + 16) {
+            p1 = newPage();
+            y = pageH - margin - 14;
+            addText(p1, margin, y, '3. WEAK CHAPTERS, TOPICS & SPECIFIC SUB-TOPICS (CONTINUED)', 9.5, true, [0.74, 0.07, 0.25]);
+            y -= 20;
+          }
+          lines.forEach((ln, lIdx) => {
+            addText(p1, margin + 6, y - lIdx * 12, ln, lIdx === 0 ? 8.5 : 8, lIdx === 0, lIdx === 0 ? [0.53, 0.07, 0.20] : [0.15, 0.20, 0.28]);
+          });
+          y -= neededH;
+        });
+      }
+
+      // Part 2: Unsolved 2-Column Practice Booklet
+      const unsolvedPool = [];
+      wrongTests.forEach(t => {
+        (t.questions || []).forEach((rq, idx) => {
+          unsolvedPool.push({ testTitle: t.title, q: enrichQuestionObj(rq, idx) });
+        });
+      });
+
+      if (unsolvedPool.length) {
+        let bPage = newPage();
+        const colGap = 16;
+        const colW = (pageW - margin * 2 - colGap) / 2;
+        const leftX = margin;
+        const rightX = margin + colW + colGap;
+        const centerX = margin + colW + colGap / 2;
+        const topY = pageH - margin - 26;
+        const botY = margin + 18;
+        let bCol = 0;
+        let bY = topY;
+
+        const drawBookletHeader = (pg) => {
+          addText(pg, margin, pageH - margin - 6, `4. WRONG / WEAK QUESTION BANK (UNSOLVED PRACTICE BOOKLET) · ${appName}`, 9.5, true, [0.06, 0.46, 0.43]);
+          addLine(pg, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
+          addLine(pg, centerX, botY, centerX, pageH - margin - 14, [0.72, 0.76, 0.82], 0.7);
+        };
+        drawBookletHeader(bPage);
+
+        unsolvedPool.forEach((item) => {
+          const q = item.q;
+          const qCropUrl = getQuestionImageUrl(q);
+          const pdfImg = qCropUrl ? registerPdfJpeg(qCropUrl) : null;
+
+          if (pdfImg) {
+            const drawW = colW - 4;
+            const drawH = Math.min(230, Math.max(42, drawW * (pdfImg.height / Math.max(1, pdfImg.width))));
+            const blockH = drawH + 22;
+
+            if (bY - blockH < botY) {
+              if (bCol === 0) { bCol = 1; bY = topY; }
+              else { bPage = newPage(); drawBookletHeader(bPage); bCol = 0; bY = topY; }
+            }
+
+            const xBase = bCol === 0 ? leftX : rightX;
+            addText(bPage, xBase, bY - 9, `Q${q.num} (${q.subject} · ${q.subTopic})`, 7.8, true, [0.06, 0.46, 0.43]);
+            addImage(bPage, pdfImg, xBase + 2, bY - 14 - drawH, drawW, drawH);
+            addLine(bPage, xBase, bY - 18 - drawH, xBase + colW, bY - 18 - drawH, [0.88, 0.90, 0.93], 0.4);
+            bY -= (blockH + 4);
+            return;
+          }
+
+          const stemLines = wrapPdfText(`Q${q.num} (${q.subject} · ${q.subTopic}): ${q.text}`, 46);
+          const optPairs = [
+            [`(1) ${q.options[0]}`, `(2) ${q.options[1]}`],
+            [`(3) ${q.options[2]}`, `(4) ${q.options[3]}`]
+          ];
+          const wrappedPairs = optPairs.map(([a, b]) => [wrapPdfText(a, 22), wrapPdfText(b, 22)]);
+          const optH = wrappedPairs.reduce((sum, [lA, lB]) => sum + Math.max(lA.length, lB.length) * 10 + 3, 0);
+          const blockH = stemLines.length * 10.5 + optH + 10;
+
+          if (bY - blockH < botY) {
+            if (bCol === 0) { bCol = 1; bY = topY; }
+            else { bPage = newPage(); drawBookletHeader(bPage); bCol = 0; bY = topY; }
+          }
+
+          const xBase = bCol === 0 ? leftX : rightX;
+          let curY = bY - 9;
+          stemLines.forEach(sl => {
+            addText(bPage, xBase, curY, sl, 8.2, true);
+            curY -= 10.5;
+          });
+          curY -= 2;
+          wrappedPairs.forEach(([lA, lB]) => {
+            const rowLines = Math.max(lA.length, lB.length);
+            for (let r = 0; r < rowLines; r++) {
+              if (lA[r]) addText(bPage, xBase + 2, curY - r * 10, lA[r], 7.8, false, [0.15, 0.20, 0.28]);
+              if (lB[r]) addText(bPage, xBase + colW * 0.5 + 4, curY - r * 10, lB[r], 7.8, false, [0.15, 0.20, 0.28]);
+            }
+            curY -= rowLines * 10 + 2;
+          });
+          addLine(bPage, xBase, curY - 1, xBase + colW, curY - 1, [0.88, 0.90, 0.93], 0.4);
+          bY = curY - 7;
+        });
+      }
+
+      // Part 3: Test-Wise Answer Key Sheet
+      const keyTests = wrongTests.filter(t => (t.questions || []).some(q => normalizeAnswerChoice(q.correct)));
+      if (keyTests.length) {
+        let kPage = newPage();
+        const pairCount = 4;
+        const totalW = pageW - margin * 2;
+        const pairW = totalW / pairCount;
+        const qColW = pairW * 0.52;
+        const aColW = pairW * 0.48;
+        const topK = pageH - margin - 26;
+        const botK = margin + 20;
+        const rowH = 13.5;
+
+        addText(kPage, margin, pageH - margin - 6, `5. ANSWER KEY SHEET (TEST-WISE · NEW COLUMN PER TEST)`, 10, true, [0.05, 0.58, 0.53]);
+        addLine(kPage, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
+
+        let curPair = 0;
+        let curY = topK;
+
+        const drawColumnPairHeader = (pg, pIdx, yTop, testLabel) => {
+          const x0 = margin + pIdx * pairW;
+          addRect(pg, x0, yTop - 14, pairW - 2, 14, [0.05, 0.58, 0.53], [0.04, 0.46, 0.42], 0.5);
+          addText(pg, x0 + 4, yTop - 10, testLabel.slice(0, 24), 7.5, true, [1, 1, 1]);
+          addRect(pg, x0, yTop - 27, qColW, 13, [0.94, 0.99, 0.98], [0.75, 0.82, 0.85], 0.5);
+          addRect(pg, x0 + qColW, yTop - 27, aColW - 2, 13, [0.94, 0.99, 0.98], [0.75, 0.82, 0.85], 0.5);
+          addText(pg, x0 + 4, yTop - 23, 'Q. No.', 7.2, true, [0.06, 0.46, 0.43]);
+          addText(pg, x0 + qColW + 4, yTop - 23, 'Answer', 7.2, true, [0.06, 0.46, 0.43]);
+          return yTop - 27;
+        };
+
+        keyTests.forEach((t, tIdx) => {
+          const validQs = (t.questions || []).filter(q => normalizeAnswerChoice(q.correct));
+          if (!validQs.length) return;
+
+          if (curY !== topK) {
+            curPair += 1;
+            if (curPair >= pairCount) {
+              kPage = newPage();
+              addText(kPage, margin, pageH - margin - 6, `5. ANSWER KEY SHEET (TEST-WISE · CONTINUED)`, 10, true, [0.05, 0.58, 0.53]);
+              addLine(kPage, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
+              curPair = 0;
+            }
+            curY = topK;
+          }
+
+          let yCursor = drawColumnPairHeader(kPage, curPair, curY, `${t.title || ('Test ' + (tIdx + 1))}`);
+
+          validQs.forEach((rq, qIdx) => {
+            if (yCursor - rowH < botK) {
+              curPair += 1;
+              if (curPair >= pairCount) {
+                kPage = newPage();
+                addText(kPage, margin, pageH - margin - 6, `5. ANSWER KEY SHEET (TEST-WISE · CONTINUED)`, 10, true, [0.05, 0.58, 0.53]);
+                addLine(kPage, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
+                curPair = 0;
+              }
+              yCursor = drawColumnPairHeader(kPage, curPair, topK, `${t.title || ('Test ' + (tIdx + 1))} (Contd.)`);
+            }
+
+            const x0 = margin + curPair * pairW;
+            const qNum = rq.num || (qIdx + 1);
+            const ansDisp = formatAnswerChoiceDisplay(rq.correct);
+            addRect(kPage, x0, yCursor - rowH, qColW, rowH, null, [0.85, 0.88, 0.91], 0.4);
+            addRect(kPage, x0 + qColW, yCursor - rowH, aColW - 2, rowH, null, [0.85, 0.88, 0.91], 0.4);
+            addText(kPage, x0 + 5, yCursor - rowH + 4, `Q${qNum}`, 7.5, true);
+            addText(kPage, x0 + qColW + 5, yCursor - rowH + 4, ansDisp, 7.5, true, [0.05, 0.58, 0.53]);
+            yCursor -= rowH;
+          });
+
+          curY = yCursor;
+        });
+      }
+
+      const enc = new TextEncoder();
+      const chunks = [];
+      let byteLen = 0;
+      const pushStr = (s) => { const b = enc.encode(s); chunks.push(b); byteLen += b.length; };
+      const pushBytes = (b) => { chunks.push(b); byteLen += b.length; };
+
+      const offsets = [0];
+      let nextObjId = 1;
+      const allocId = () => nextObjId++;
+
+      const catalogId = allocId();
+      const pagesId = allocId();
+      const f1Id = allocId();
+      const f2Id = allocId();
+      pdfImages.forEach(im => { im.objId = allocId(); });
+      const pageMeta = pages.map(() => ({ contentId: allocId(), pageId: allocId() }));
+
+      pushStr('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+
+      const writeObj = (id, headerStr, streamBytes = null) => {
+        offsets[id] = byteLen;
+        pushStr(`${id} 0 obj\n${headerStr}\n`);
+        if (streamBytes) {
+          pushStr('stream\n');
+          pushBytes(streamBytes);
+          pushStr('\nendstream\n');
+        }
+        pushStr('endobj\n');
+      };
+
+      writeObj(catalogId, `<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+      writeObj(pagesId, `<< /Type /Pages /Kids [${pageMeta.map(m => `${m.pageId} 0 R`).join(' ')}] /Count ${pageMeta.length} >>`);
+      writeObj(f1Id, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+      writeObj(f2Id, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>');
+
+      pdfImages.forEach(im => {
+        writeObj(im.objId, `<< /Type /XObject /Subtype /Image /Width ${im.width} /Height ${im.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.bytes.length} >>`, im.bytes);
+      });
+
+      pages.forEach((pg, idx) => {
+        const meta = pageMeta[idx];
+        const streamBytes = enc.encode(pg.cmds.join('\n'));
+        writeObj(meta.contentId, `<< /Length ${streamBytes.length} >>`, streamBytes);
+        const xObjEntries = Object.values(pg.xObjs).map(im => `${im.name} ${im.objId} 0 R`).join(' ');
+        const xObjDict = xObjEntries ? `/XObject << ${xObjEntries} >>` : '';
+        writeObj(meta.pageId, `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pageW.toFixed(2)} ${pageH.toFixed(2)}] /Resources << /Font << /F1 ${f1Id} 0 R /F2 ${f2Id} 0 R >> ${xObjDict} >> /Contents ${meta.contentId} 0 R >>`);
+      });
+
+      const xrefPos = byteLen;
+      pushStr(`xref\n0 ${nextObjId}\n0000000000 65535 f \n`);
+      for (let i = 1; i < nextObjId; i++) {
+        pushStr(`${String(offsets[i]).padStart(10, '0')} 00000 n \n`);
+      }
+      pushStr(`trailer\n<< /Size ${nextObjId} /Root ${catalogId} 0 R >>\nstartxref\n${xrefPos}\n%%EOF`);
+      return new Blob(chunks, { type: 'application/pdf' });
+    }
+
+    function exportFullReportPdf() {
+      const blob = buildNativeReportPdfBytes();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `NURA2_Report_${new Date().toISOString().slice(0, 10)}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+
+    function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/<\/g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      applyCustomAppNameToUI();
+      await hydrateAllSavedQuestionImages();
+      setupFileDropzone();
+      updateHeaderBadges();
+      renderQuestionBank();
+      renderMarksBarGraphInto('resultMarksGraphMount');
+    });
+  </script>
+</body>
+</html>
+```
+eof
+
+
+I have generated the complete, self-contained **NURA-2 · NEET CBT & Weak Topic Tracker** application in `index.html` with strict single-question visual image cropping, cross-column and cross-page vertical stitching (`extractLeadingContinuationBeforeFirstMarker` + `stitchTwoDataUrlImagesVertically`), strict serial question numbering (`1, 2, 3, ...`), IndexedDB image storage (`nura2_cropped_images_db_v1`), inline editable App Name with Save button, multi-image Answer Key OCR, CBT simulator with `(1)–(4)` option buttons, vertical Y-axis **Obtained Marks vs Each Test** bar graph, **Master Weak Chapter/Topic/Sub-Topic** tracker, **Test-Wise Wrong Questions** bank, JSON backup/restore, and PDF report export.
