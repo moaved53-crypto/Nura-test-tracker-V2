@@ -322,21 +322,50 @@
     .scroll-box { max-height: 480px; overflow-y: auto; padding-right: 4px; }
     .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; max-height: 300px; overflow-y: auto; padding: 4px; }
 
-    /* Vertical Y-Axis Bar Graph */
+    /* Colourful Vertical Y-Axis & Horizontal X-Axis Bar Graph */
+    .graph-outer-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 1.5px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 16px 16px 14px 12px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+    .graph-legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed #cbd5e1;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .graph-legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 4px;
+    }
     .graph-shell {
       display: flex;
       align-items: stretch;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 12px 10px 8px;
       overflow-x: auto;
+      padding-top: 8px;
     }
     .y-axis-title-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 22px;
+      width: 26px;
       flex-shrink: 0;
     }
     .y-axis-title {
@@ -344,43 +373,74 @@
       transform: rotate(180deg);
       font-size: 11px;
       font-weight: 900;
-      color: var(--primary-dark);
-      letter-spacing: 0.04em;
+      color: #0f766e;
+      background: #ccfbf1;
+      padding: 6px 4px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       white-space: nowrap;
     }
     .y-axis-ticks {
+      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 185px;
+      height: 220px;
       padding-right: 8px;
-      border-right: 2px solid #475569;
+      border-right: 2.5px solid #0f172a;
       flex-shrink: 0;
-      min-width: 42px;
+      min-width: 48px;
       text-align: right;
     }
-    .y-tick-lbl {
+    .y-axis-ticks::before {
+      content: '▲';
+      position: absolute;
+      top: -11px;
+      right: -6.5px;
       font-size: 10px;
-      font-weight: 800;
-      color: #334155;
+      color: #0f172a;
+      line-height: 1;
+    }
+    .y-tick-lbl {
+      position: relative;
+      font-size: 10.5px;
+      font-weight: 900;
+      color: #0f172a;
       line-height: 1;
       transform: translateY(-4px);
+    }
+    .y-tick-lbl::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 4px;
+      width: 5px;
+      height: 2px;
+      background: #0f172a;
     }
     .plot-area {
       position: relative;
       flex: 1;
-      min-width: 260px;
-      padding-left: 10px;
+      min-width: 280px;
     }
     .gridlines-layer {
       position: relative;
-      height: 185px;
-      border-bottom: 2px solid #475569;
+      height: 220px;
+      border-bottom: 2.5px solid #0f172a;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       pointer-events: none;
+    }
+    .gridlines-layer::after {
+      content: '▶';
+      position: absolute;
+      bottom: -6.5px;
+      right: -4px;
+      font-size: 10px;
+      color: #0f172a;
+      line-height: 1;
     }
     .gridline-row {
       width: 100%;
@@ -391,14 +451,13 @@
     .bars-layer {
       position: absolute;
       top: 0;
-      left: 10px;
-      right: 0;
-      height: 185px;
+      left: 0;
+      right: 12px;
+      height: 220px;
       display: flex;
       align-items: flex-end;
-      gap: 14px;
-      padding: 0 10px;
-      box-sizing: border-box;
+      gap: 16px;
+      padding: 0 14px;
     }
     .bar-col {
       display: flex;
@@ -406,40 +465,96 @@
       align-items: center;
       justify-content: flex-end;
       height: 100%;
-      min-width: 68px;
+      min-width: 76px;
       flex: 1;
-      max-width: 120px;
+      max-width: 128px;
     }
-    .bar-val-lbl {
-      font-size: 10px;
+    .bar-val-pill {
+      font-size: 10.5px;
       font-weight: 900;
-      color: #0f172a;
-      margin-bottom: 4px;
+      color: #ffffff;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-bottom: 5px;
       white-space: nowrap;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.14);
     }
     .bar-rect {
-      width: 38px;
-      border-radius: 8px 8px 0 0;
-      background: linear-gradient(180deg, #0d9488 0%, #059669 100%);
-      min-height: 4px;
-      transition: height 0.25s ease;
+      width: 44px;
+      border-radius: 10px 10px 0 0;
+      min-height: 6px;
+      transition: height 0.3s ease, transform 0.15s ease;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.14);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 5px;
+    }
+    .bar-rect:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .bar-pct-inside {
+      font-size: 9.5px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
     }
     .x-axis-labels {
       display: flex;
-      gap: 14px;
-      padding: 6px 10px 0 10px;
+      gap: 16px;
+      padding: 8px 26px 0 14px;
     }
     .x-lbl-cell {
-      min-width: 68px;
+      position: relative;
+      min-width: 76px;
       flex: 1;
-      max-width: 120px;
+      max-width: 128px;
       text-align: center;
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 800;
-      color: #334155;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+    .x-lbl-cell::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 5px;
+      background: #0f172a;
+    }
+    .x-lbl-tag {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .x-lbl-name {
+      display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      color: #334155;
+      font-size: 10px;
+    }
+    .x-axis-title-wrap {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .x-axis-title {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      color: #1d4ed8;
+      background: #dbeafe;
+      padding: 4px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
     .q-crop-frame {
       background: #ffffff;
@@ -516,14 +631,14 @@
             <span style="width:26px;height:26px;border-radius:8px;background:#ccfbf1;color:#0f766e;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;">1</span>
             <h2 style="margin:0;font-size:16px;font-weight:900;">Upload Practice Sheet (PDF, Screenshots, Text)</h2>
           </div>
-          <span class="pill pill-teal">Zero-Cut Serial Cropper + OCR</span>
+          <span class="pill pill-teal">Zero-Cut Single-Q Cropper + OCR</span>
         </div>
 
         <div id="dropZone" class="dropzone">
           <div style="width:44px;height:44px;margin:0 auto 10px;border-radius:14px;background:#ccfbf1;color:#0d9488;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;">↑</div>
           <div style="font-size:14px;font-weight:900;color:#0f172a;">Tap or Drop PW DPP PDF, JPG/PNG Screenshots, CSV, JSON or TXT</div>
           <div style="font-size:12px;color:#475569;margin-top:4px;max-width:540px;margin-left:auto;margin-right:auto;">
-            Crops each complete question (stem + formulas/diagrams + all 4 options) in strict serial order (1, 2, 3, ...), including cross-column &amp; cross-page stitching.
+            Crops each question individually (1 complete question + its 4 options per cut, strictly isolating left &amp; right columns) so zero formulas or options ever get cut off.
           </div>
 
           <div style="margin-top:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;">
@@ -534,13 +649,13 @@
           </div>
 
           <div style="margin-top:10px;">
-            <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" onchange="window.__onFileInputChanged(this, false)" oninput="window.__onFileInputChanged(this, false)" style="font-size:12px;color:#475569;" />
+            <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" style="font-size:12px;color:#475569;" />
           </div>
 
           <div style="margin-top:12px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;font-size:11px;font-weight:700;">
             <label style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;padding:6px 10px;border-radius:8px;border:1px solid #a7f3d0;cursor:pointer;color:#065f46;">
               <input id="autoCropQuestionsToggle" type="checkbox" checked style="accent-color:#059669;" />
-              <span>Auto Question Image Cropper (Zero-Cut Visual Snipping)</span>
+              <span>Auto Question Image Cropper (1 Complete Q + 4 Options per Cut)</span>
             </label>
             <label style="display:inline-flex;align-items:center;gap:6px;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--border);cursor:pointer;">
               <input id="forcePdfOcrToggle" type="checkbox" style="accent-color:#0d9488;" />
@@ -1055,6 +1170,7 @@
   </div>
 
   <script>
+    // Register offline service worker for PWA support
     (function registerNura2ServiceWorker() {
       if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
         navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function() {});
@@ -1177,59 +1293,25 @@
       return copy;
     }
 
-    function isPureAnswerKeyOnlyPage(text) {
+    function isAnswerKeyGridOrPage(text) {
       const clean = sanitizeExtractedMathText(text || '');
       if (!clean) return false;
-      const hasOptionText = /\(\s*[1-4A-Da-d]\s*\)\s+[A-Za-z0-9\\+\-\=\(\[\^]/.test(clean);
-      if (hasOptionText && clean.length > 350) return false;
-      const hasKeyHeading = /\b(?:Answer\s*Key|Ans\.?\s*Key|Correct\s*Answer)\b/i.test(clean);
+      const hasKeyHeading = /\b(?:Answer\s*Key|Ans\.?\s*Key|Correct\s*Answer|Solutions?\s*Key)\b/i.test(clean);
       const keyPairs = clean.match(/(?:Q\.?\s*\d{1,3}|\b\d{1,3})\s*[\.\-\:\)]?\s*\(?[A-Da-d1-4]\)?/gi) || [];
-      return (hasKeyHeading && keyPairs.length >= 4 && !hasOptionText) || (!hasOptionText && keyPairs.length >= 10 && clean.length < 900);
+      const hasOptionChoices = /\(\s*[1-4A-Da-d]\s*\)\s+[A-Za-z0-9\\+\-\\(\[]/i.test(clean) && clean.length > 260;
+      if (hasKeyHeading && !hasOptionChoices) return true;
+      if (!hasOptionChoices && keyPairs.length >= 6 && clean.length < 700) return true;
+      return false;
     }
 
-    function stitchTwoDataUrlImagesVertically(topDataUrl, botDataUrl, quality = 0.90) {
-      return new Promise((resolve) => {
-        if (!topDataUrl) { resolve(botDataUrl || ''); return; }
-        if (!botDataUrl) { resolve(topDataUrl || ''); return; }
-        const img1 = new Image();
-        const img2 = new Image();
-        let loaded = 0;
-        const finish = () => {
-          loaded++;
-          if (loaded < 2) return;
-          try {
-            const w = Math.max(img1.width || 1, img2.width || 1);
-            const gap = 4;
-            const h = (img1.height || 1) + gap + (img2.height || 1);
-            const c = document.createElement('canvas');
-            c.width = w;
-            c.height = h;
-            const ctx = c.getContext('2d');
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, w, h);
-            ctx.drawImage(img1, 0, 0);
-            ctx.drawImage(img2, 0, (img1.height || 1) + gap);
-            resolve(c.toDataURL('image/jpeg', quality));
-          } catch (e) {
-            resolve(topDataUrl || botDataUrl);
-          }
-        };
-        img1.onload = finish;
-        img1.onerror = finish;
-        img2.onload = finish;
-        img2.onerror = finish;
-        img1.src = topDataUrl;
-        img2.src = botDataUrl;
-      });
-    }
-
-    function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.88) {
-      const padX = 10, padTop = 7, padBot = 9;
+    // Slice a crisp JPEG data URL from a rendered canvas, trimming excess whitespace
+    function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.89) {
+      const padX = 8, padTop = 6, padBot = 6;
       const sx = Math.max(0, Math.floor(x0 - padX));
       const sy = Math.max(0, Math.floor(y0 - padTop));
       const sw = Math.min(srcCanvas.width - sx, Math.ceil((x1 - x0) + padX * 2));
       const sh = Math.min(srcCanvas.height - sy, Math.ceil((y1 - y0) + padTop + padBot));
-      if (sw < 45 || sh < 26) return '';
+      if (sw < 36 || sh < 22) return '';
 
       const tmp = document.createElement('canvas');
       tmp.width = sw;
@@ -1242,10 +1324,10 @@
       try {
         const imgData = tctx.getImageData(0, 0, sw, sh).data;
         let minX = sw, minY = sh, maxX = 0, maxY = 0, foundDark = false;
-        for (let py = 0; py < sh; py += 4) {
-          for (let px = 0; px < sw; px += 4) {
+        for (let py = 0; py < sh; py += 2) {
+          for (let px = 0; px < sw; px += 2) {
             const idx = (py * sw + px) * 4;
-            if (imgData[idx] < 240 || imgData[idx + 1] < 240 || imgData[idx + 2] < 240) {
+            if (imgData[idx] < 242 || imgData[idx + 1] < 242 || imgData[idx + 2] < 242) {
               foundDark = true;
               if (px < minX) minX = px;
               if (px > maxX) maxX = px;
@@ -1255,12 +1337,12 @@
           }
         }
         if (foundDark && maxX > minX && maxY > minY) {
-          const trimPad = 10;
+          const trimPad = 8;
           const tx0 = Math.max(0, minX - trimPad);
           const ty0 = Math.max(0, minY - trimPad);
           const tw = Math.min(sw - tx0, (maxX - minX) + trimPad * 2);
           const th = Math.min(sh - ty0, (maxY - minY) + trimPad * 2);
-          if (tw > 45 && th > 22) {
+          if (tw > 36 && th > 18) {
             const trimmed = document.createElement('canvas');
             trimmed.width = tw;
             trimmed.height = th;
@@ -1275,63 +1357,39 @@
       return tmp.toDataURL('image/jpeg', quality);
     }
 
-    function detectTwoColumnSplitX(mappedItems, canvasWidth) {
-      const midX = canvasWidth * 0.49;
-      const leftItems = mappedItems.filter(it => it.xCanvas < midX);
-      const rightItems = mappedItems.filter(it => it.xCanvas >= midX);
-      const qMarkerRx = /^(?:Q\.?\s*\d{1,3}|\d{1,3}[\.\)])(?:\s|$)/i;
-      const leftHasQ = leftItems.some(it => qMarkerRx.test(it.str));
-      const rightHasQ = rightItems.some(it => qMarkerRx.test(it.str));
-      if ((leftHasQ && rightHasQ) || (leftItems.length > 8 && rightItems.length > 8 && (leftHasQ || rightHasQ))) {
-        const maxLeftX = leftItems.reduce((m, it) => Math.max(m, it.xRight || it.xCanvas), canvasWidth * 0.42);
-        const minRightX = rightItems.reduce((m, it) => Math.min(m, it.xCanvas), canvasWidth * 0.52);
-        if (minRightX > maxLeftX + 10) {
-          return Math.round((maxLeftX + minRightX) / 2);
-        }
-        return Math.round(midX);
-      }
-      return 0;
-    }
-
-    // Merge adjacent small tokens on the same baseline (e.g. "Q" + "1" or "12" + ".") so question markers never split
-    function coalesceBaselineMarkers(items) {
-      const sorted = [...items].sort((a, b) => (Math.abs(a.topY - b.topY) > 7 ? a.topY - b.topY : a.xCanvas - b.xCanvas));
-      const merged = [];
-      for (let i = 0; i < sorted.length; i++) {
-        const cur = sorted[i];
-        let combinedStr = cur.str;
-        let xRight = cur.xRight || cur.xCanvas;
-        let j = i + 1;
-        while (j < sorted.length && Math.abs(sorted[j].topY - cur.topY) <= 7 && (sorted[j].xCanvas - xRight) < 28 && combinedStr.length < 8) {
-          combinedStr = (combinedStr + (sorted[j].str.startsWith('.') || sorted[j].str.startsWith(')') ? '' : ' ') + sorted[j].str).trim();
-          xRight = Math.max(xRight, sorted[j].xRight || sorted[j].xCanvas);
-          j++;
-        }
-        merged.push({ str: combinedStr, xCanvas: cur.xCanvas, xRight, topY: cur.topY });
-        i = j - 1;
-      }
-      return merged;
-    }
-
-    function sliceSingleColumnQuestions(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas, pageTag, outMap, serialCursor = { next: 1 }) {
-      const coalesced = coalesceBaselineMarkers(colItems);
+    // Strict horizontal 2-column split detector so left & right columns never bleed into each other
+    function detectTwoColumnSplitX(canvas, items) {
+      const w = canvas.width;
       const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+      const leftQs = items.filter(it => it.x < w * 0.45 && qMarkerRx.test(it.str));
+      const rightQs = items.filter(it => it.x >= w * 0.46 && it.x <= w * 0.65 && qMarkerRx.test(it.str));
+      if (!leftQs.length || !rightQs.length) return null;
+
+      const sortedRightX = rightQs.map(r => r.x).sort((a, b) => a - b);
+      const rightStartX = sortedRightX[Math.floor(sortedRightX.length / 2)];
+      return Math.max(w * 0.46, Math.min(w * 0.56, rightStartX - 10));
+    }
+
+    // Slice single-column questions strictly from Q# top down to option (4) / above next Q#
+    function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix) {
+      const crops = {};
+      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+      const opt4Rx = /^(?:\([4Dd]\)|[4Dd][\.\)])(?:\s|$)/;
       const markers = [];
       let stopY = footerCutoffY;
 
-      coalesced.forEach(it => {
+      colItems.forEach(it => {
         if (it.topY < headerCutoffY || it.topY > footerCutoffY) return;
         if (/^(?:Hints\s*&?\s*Solutions|Answer\s*Key|Video\s*Solution|Text\s*Solution)/i.test(it.str)) {
-          if (it.topY < stopY) stopY = it.topY - 8;
+          if (it.topY < stopY) stopY = it.topY - 6;
           return;
         }
         const m = it.str.match(qMarkerRx);
         if (m) {
-          const hasQPrefix = /^Q\.?\s*\d/i.test(it.str);
-          const rawNum = parseInt(m[1] || m[2], 10);
-          if (rawNum >= 1 && rawNum <= 300) {
-            const dup = markers.find(mk => Math.abs(mk.y - it.topY) < 22);
-            if (!dup) markers.push({ rawNum, hasQPrefix, y: it.topY });
+          const qNum = parseInt(m[1] || m[2], 10);
+          if (qNum >= 1 && qNum <= 300) {
+            const dup = markers.find(mk => mk.qNum === qNum && Math.abs(mk.y - it.topY) < 18);
+            if (!dup) markers.push({ qNum, y: it.topY });
           }
         }
       });
@@ -1339,110 +1397,69 @@
       markers.sort((a, b) => a.y - b.y);
       for (let i = 0; i < markers.length; i++) {
         const cur = markers[i];
-        const serialNum = serialCursor.next++;
-        const nextY = (i + 1 < markers.length) ? (markers[i + 1].y - 10) : stopY;
-        if (nextY - cur.y >= 26) {
-          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, nextY, 0.88);
+        const hardCeilNextY = (i + 1 < markers.length) ? (markers[i + 1].y - 8) : stopY;
+        let tightBottomY = hardCeilNextY;
+
+        const qItems = colItems.filter(it => it.topY >= cur.y - 2 && it.botY <= hardCeilNextY);
+        const opt4Items = qItems.filter(it => opt4Rx.test(it.str));
+        if (opt4Items.length) {
+          const lastOpt4 = opt4Items[opt4Items.length - 1];
+          const postOpt4Items = qItems.filter(it => it.topY >= lastOpt4.topY - 4 && it.botY <= hardCeilNextY);
+          const maxBotAfterOpt4 = postOpt4Items.reduce((mx, it) => Math.max(mx, it.botY), lastOpt4.botY);
+          tightBottomY = Math.min(hardCeilNextY, maxBotAfterOpt4 + 10);
+        }
+
+        if (tightBottomY - cur.y >= 26) {
+          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, tightBottomY, 0.89);
           if (dataUrl) {
-            outMap[serialNum] = {
-              imageKey: `qimg_${Date.now()}_${pageTag}_q${serialNum}_${Math.random().toString(36).slice(2, 6)}`,
+            crops[cur.qNum] = {
+              imageKey: `${keyPrefix}_q${cur.qNum}_${Math.random().toString(36).slice(2, 6)}`,
               imageDataUrl: dataUrl
             };
           }
         }
       }
+      return crops;
     }
 
-    function extractLeadingContinuationBeforeFirstMarker(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas) {
-      const coalesced = coalesceBaselineMarkers(colItems).filter(it => it.topY >= headerCutoffY && it.topY <= footerCutoffY);
-      if (!coalesced.length) return '';
-      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
-      let firstMarkerY = footerCutoffY;
-      for (const it of coalesced) {
-        if (/^(?:Hints\s*&?\s*Solutions|Answer\s*Key|Video\s*Solution|Text\s*Solution)/i.test(it.str)) {
-          firstMarkerY = Math.min(firstMarkerY, it.topY - 8);
-          break;
-        }
-        if (qMarkerRx.test(it.str)) {
-          firstMarkerY = it.topY - 8;
-          break;
-        }
-      }
-      if (firstMarkerY - headerCutoffY >= 24) {
-        const hasContinuationCue = coalesced
-          .filter(it => it.topY < firstMarkerY)
-          .some(it => /(?:\([1-4A-Da-d]\)|sqrt|integral|theta|->|=|\d+\s*[A-Za-z%])/i.test(it.str));
-        if (hasContinuationCue) {
-          return sliceQuestionCropFromCanvas(canvas, x0, headerCutoffY, x1, firstMarkerY, 0.90);
-        }
-      }
-      return '';
-    }
-
+    // Crop every question (stem + diagrams + all 4 options) strictly 1-by-1 from a rendered PDF page
     function cropQuestionsFromRenderedPageCanvas(canvas, textItems, pdfWidth, pdfHeight, scale, pageIndex) {
-      const cropsByQNum = {};
-      const pendingCont = window.__nura2PendingContinuation || (window.__nura2PendingContinuation = { dataUrl: '' });
-      if (!textItems || !textItems.length) return cropsByQNum;
+      if (!textItems || !textItems.length) return {};
 
       const mapped = textItems.map(it => {
         const xPdf = it.transform[4];
         const yPdfBottom = it.transform[5];
-        const wPdf = Math.abs(it.width || 0);
         const hPdf = Math.abs(it.height || it.transform[3] || 11);
         const topCanvasY = (pdfHeight - (yPdfBottom + hPdf)) * scale;
+        const botCanvasY = (pdfHeight - yPdfBottom) * scale;
         return {
           str: sanitizeExtractedMathText(it.str || ''),
-          xCanvas: xPdf * scale,
-          xRight: (xPdf + wPdf) * scale,
-          topY: topCanvasY
+          x: xPdf * scale,
+          topY: topCanvasY,
+          botY: botCanvasY
         };
       }).filter(it => it.str && !/^(Android App|iOS App|PW Website|CUSTOMER|SPACE FOR ROUGH WORK)$/i.test(it.str));
 
-      if (isPureAnswerKeyOnlyPage(mapped.map(m => m.str).join(' '))) return cropsByQNum;
+      const fullRaw = mapped.map(m => m.str).join(' ');
+      if (isAnswerKeyGridOrPage(fullRaw)) return {};
 
-      const splitX = detectTwoColumnSplitX(mapped, canvas.width);
-      const headerCutoffY = canvas.height * 0.035;
-      const footerCutoffY = canvas.height * 0.965;
-      const cursor = window.__nura2SerialCursor || (window.__nura2SerialCursor = { next: 1 });
+      const headerCutoffY = canvas.height * 0.045;
+      const footerCutoffY = canvas.height * 0.96;
+      const splitX = detectTwoColumnSplitX(canvas, mapped);
 
-      const processColSequence = (colItems, x0, x1, tag) => {
-        const leadCont = extractLeadingContinuationBeforeFirstMarker(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas);
-        if (pendingCont.dataUrl && leadCont) {
-          cropsByQNum.__stitchPrev = { topUrl: pendingCont.dataUrl, botUrl: leadCont };
-          pendingCont.dataUrl = '';
-        }
-        const beforeCount = Object.keys(cropsByQNum).length;
-        sliceSingleColumnQuestions(colItems, x0, x1, headerCutoffY, footerCutoffY, canvas, tag, cropsByQNum, cursor);
-
-        // Check if last marker in this column reaches near footer (likely split across next column/page)
-        const coalesced = coalesceBaselineMarkers(colItems).filter(it => it.topY >= headerCutoffY && it.topY <= footerCutoffY);
-        const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
-        const markers = coalesced.filter(it => qMarkerRx.test(it.str)).sort((a, b) => a.y - b.y);
-        if (markers.length && Object.keys(cropsByQNum).length > beforeCount) {
-          const lastM = markers[markers.length - 1];
-          const lastSerialKey = Math.max(...Object.keys(cropsByQNum).filter(k => k !== '__stitchPrev').map(Number));
-          if (footerCutoffY - lastM.y >= 26 && cropsByQNum[lastSerialKey]?.imageDataUrl) {
-            pendingCont.dataUrl = cropsByQNum[lastSerialKey].imageDataUrl;
-            pendingCont.targetKey = lastSerialKey;
-          }
-        }
-      };
-
-      if (splitX > 0) {
-        const leftItems = mapped.filter(it => it.xCanvas < splitX);
-        const rightItems = mapped.filter(it => it.xCanvas >= splitX);
-        processColSequence(leftItems, 8, splitX - 6, `p${pageIndex}L`);
-        processColSequence(rightItems, splitX + 6, canvas.width - 8, `p${pageIndex}R`);
-      } else {
-        processColSequence(mapped, 8, canvas.width - 8, `p${pageIndex}S`);
+      if (splitX !== null) {
+        const leftItems = mapped.filter(it => it.x < splitX - 4);
+        const rightItems = mapped.filter(it => it.x >= splitX + 4);
+        const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 10, splitX - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_L`);
+        const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_R`);
+        return { ...leftCrops, ...rightCrops };
       }
 
-      return cropsByQNum;
+      return sliceSingleColumnQuestions(canvas, mapped, 10, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_S`);
     }
 
-    async function cropAndOcrImageFast(dataUrl, fileIndex = 0) {
-      const cropsByQNum = {};
-      let text = '';
+    // Crop questions from an uploaded PNG/JPG screenshot using OCR bounding boxes + 2-column detection
+    async function cropQuestionsFromImageDataUrl(dataUrl, fileIndex = 0) {
       try {
         const img = await new Promise((res, rej) => {
           const im = new Image();
@@ -1450,7 +1467,7 @@
           im.onerror = rej;
           im.src = dataUrl;
         });
-        const scale = img.width < 950 ? 1.25 : 1.0;
+        const scale = img.width < 1100 ? 1.5 : 1.0;
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(img.width * scale);
         canvas.height = Math.round(img.height * scale);
@@ -1459,43 +1476,49 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        const worker = await getSharedOcrWorker();
-        const ocrRes = await worker.recognize(canvas.toDataURL('image/jpeg', 0.84));
-        text = sanitizeExtractedMathText(ocrRes?.data?.text || '');
-        const lines = ocrRes?.data?.lines || [];
-        const mappedLines = lines.map(ln => {
-          const bbox = ln.bbox || { x0: 0, y0: 0, x1: canvas.width, y1: 20 };
+        const worker = await Promise.race([
+          getSharedOcrWorker(),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 12000))
+        ]);
+        const ocrRes = await worker.recognize(canvas.toDataURL('image/jpeg', 0.90));
+        const ocrFullText = ocrRes?.data?.text || '';
+        if (isAnswerKeyGridOrPage(ocrFullText)) return {};
+
+        const words = ocrRes?.data?.words || [];
+        const mapped = words.map(w => ({
+          str: sanitizeExtractedMathText(w.text || ''),
+          x: (w.bbox?.x0 || 0),
+          topY: (w.bbox?.y0 || 0),
+          botY: (w.bbox?.y1 || 20)
+        })).filter(it => it.str);
+
+        const splitX = detectTwoColumnSplitX(canvas, mapped);
+        if (splitX !== null) {
+          const leftItems = mapped.filter(it => it.x < splitX - 4);
+          const rightItems = mapped.filter(it => it.x >= splitX + 4);
+          const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 8, splitX - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_L`);
+          const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_R`);
+          const combined = { ...leftCrops, ...rightCrops };
+          if (Object.keys(combined).length > 0) return combined;
+        }
+
+        const singleCrops = sliceSingleColumnQuestions(canvas, mapped, 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_S`);
+        if (Object.keys(singleCrops).length > 0) return singleCrops;
+
+        const fallbackQNum = fileIndex + 1;
+        const fullUrl = sliceQuestionCropFromCanvas(canvas, 4, 4, canvas.width - 4, canvas.height - 4, 0.90);
+        if (fullUrl) {
           return {
-            str: sanitizeExtractedMathText(ln.text || ''),
-            xCanvas: bbox.x0,
-            xRight: bbox.x1,
-            topY: bbox.y0
+            [fallbackQNum]: {
+              imageKey: `qimg_${Date.now()}_img${fileIndex}_full_${Math.random().toString(36).slice(2, 6)}`,
+              imageDataUrl: fullUrl
+            }
           };
-        }).filter(it => it.str);
-
-        if (isPureAnswerKeyOnlyPage(text)) return { crops: cropsByQNum, text };
-
-        const splitX = detectTwoColumnSplitX(mappedLines, canvas.width);
-        const cursor = window.__nura2SerialCursor || (window.__nura2SerialCursor = { next: 1 });
-        if (splitX > 0) {
-          sliceSingleColumnQuestions(mappedLines.filter(l => l.xCanvas < splitX), 8, splitX - 8, 6, canvas.height - 6, canvas, `img${fileIndex}L`, cropsByQNum, cursor);
-          sliceSingleColumnQuestions(mappedLines.filter(l => l.xCanvas >= splitX), splitX + 8, canvas.width - 8, 6, canvas.height - 6, canvas, `img${fileIndex}R`, cropsByQNum, cursor);
-        } else {
-          sliceSingleColumnQuestions(mappedLines, 8, canvas.width - 8, 6, canvas.height - 6, canvas, `img${fileIndex}S`, cropsByQNum, cursor);
         }
-
-        if (!Object.keys(cropsByQNum).length) {
-          const singleCrop = sliceQuestionCropFromCanvas(canvas, 8, 8, canvas.width - 8, canvas.height - 8, 0.86);
-          if (singleCrop) {
-            const sNum = cursor.next++;
-            cropsByQNum[sNum] = {
-              imageKey: `qimg_${Date.now()}_img${fileIndex}_q${sNum}_${Math.random().toString(36).slice(2, 6)}`,
-              imageDataUrl: singleCrop
-            };
-          }
-        }
-      } catch (e) {}
-      return { crops: cropsByQNum, text };
+        return {};
+      } catch (e) {
+        return {};
+      }
     }
 
     function removeQuestionCroppedImage(idx) {
@@ -1633,18 +1656,6 @@
         return Array.from(files).map(f => `${f.name}:${f.size}:${f.lastModified}`).join('|');
       };
 
-      const runWithUploadTimeout = (promise, ms = 45000) => {
-        let timerId = null;
-        const timeoutPromise = new Promise((_, reject) => {
-          timerId = setTimeout(() => {
-            reject(new Error('File processing took too long. Uncheck "Auto Question Image Cropper" or paste text in Raw Sheet Text box.'));
-          }, ms);
-        });
-        return Promise.race([promise, timeoutPromise]).finally(() => {
-          if (timerId) clearTimeout(timerId);
-        });
-      };
-
       const startProcessingSelectedFiles = (files, force = false) => {
         if (!files || !files.length) {
           setParseStatus(true, 'No File Selected', 'Tap "Select Files from Device" first to choose a PDF, image, JSON, CSV, or TXT file.', true);
@@ -1662,25 +1673,23 @@
           titleInput.value = primary.name.replace(/\.[^/.]+$/, '');
         }
 
-        setParseStatus(true, `Reading: ${primary.name}`, 'Extracting questions, chapters, sub-topics & answer keys...', false, 10, meta);
-        runWithUploadTimeout(handleUploadedFiles(Array.from(files)))
+        setParseStatus(true, `Reading: ${primary.name}`, 'Snipping each question individually, detecting chapters, sub-topics & answer keys...', false, 10, meta);
+        handleUploadedFiles(Array.from(files))
           .catch(err => {
-            setParseStatus(true, 'Extraction Error', err?.message || 'Could not process file.', true, null, meta);
+            lastProcessedSignature = '';
+            setParseStatus(true, 'Extraction Error', err?.message || 'Could not process file. Tap "Process Selected File Now" to retry.', true, null, meta);
           })
-          .finally(() => {
-            busy = false;
-          });
+          .finally(() => { busy = false; });
       };
 
       window.__onFileInputChanged = (el, force = false) => {
-        const target = el || fileInput;
-        const files = target?.files ? Array.from(target.files) : [];
+        const files = el?.files ? Array.from(el.files) : [];
         startProcessingSelectedFiles(files, force);
       };
 
       if (fileInput) {
-        fileInput.addEventListener('change', () => window.__onFileInputChanged(fileInput, true));
-        fileInput.addEventListener('input', () => window.__onFileInputChanged(fileInput, true));
+        fileInput.addEventListener('change', () => startProcessingSelectedFiles(Array.from(fileInput.files || []), false));
+        fileInput.addEventListener('input', () => startProcessingSelectedFiles(Array.from(fileInput.files || []), false));
       }
 
       setInterval(() => {
@@ -1690,7 +1699,7 @@
             startProcessingSelectedFiles(Array.from(fileInput.files), false);
           }
         }
-      }, 350);
+      }, 300);
 
       ['dragenter', 'dragover'].forEach(evt => {
         dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.add('dragover'); });
@@ -1701,6 +1710,19 @@
       dropZone.addEventListener('drop', e => {
         if (e.dataTransfer?.files?.length) startProcessingSelectedFiles(Array.from(e.dataTransfer.files), true);
       });
+
+      const bulkKeyDrop = document.getElementById('bulkKeyDropZone');
+      if (bulkKeyDrop) {
+        ['dragenter', 'dragover'].forEach(evt => {
+          bulkKeyDrop.addEventListener(evt, e => { e.preventDefault(); bulkKeyDrop.classList.add('dragover'); });
+        });
+        ['dragleave', 'drop'].forEach(evt => {
+          bulkKeyDrop.addEventListener(evt, e => { e.preventDefault(); bulkKeyDrop.classList.remove('dragover'); });
+        });
+        bulkKeyDrop.addEventListener('drop', e => {
+          if (e.dataTransfer?.files?.length) processAnswerKeyFiles(Array.from(e.dataTransfer.files));
+        });
+      }
     }
 
     async function readFileAsArrayBufferSafe(file) {
@@ -1784,38 +1806,42 @@
         .replace(/PW\s*Web\/?App\s*-\s*https?:\/\/\S+/gi, ' ')
         .replace(/Library-\s*https?:\/\/\S+/gi, ' ')
         .replace(/SPACE\s*FOR\s*ROUGH\s*WORK/gi, ' ')
-        .replace(/ (?:Android App|iOS App|PW Website|CUSTOMER) /gi, ' ')
-        .replace(/[-]/g, ' ')
-        .replace(/[‘’ʼ]/g, "'")
-        .replace(/[“”]/g, '"')
-        .replace(/√/g, ' sqrt ')
-        .replace(/θ/g, ' theta ')
-        .replace(/→/g, ' -> ')
-        .replace(/×/g, ' x ')
-        .replace(/[·⋅]/g, ' . ')
-        .replace(/≤/g, ' <= ')
-        .replace(/≥/g, ' >= ')
-        .replace(/≠/g, ' != ')
-        .replace(/∫/g, ' integral ')
-        .replace(/∞/g, ' infinity ')
-        .replace(/([ijk])\s*[\^ˆ]/g, '$1_hat')
-        .replace(/([A-Za-z])\s*[⃗]/g, 'vec($1)')
+        .replace(/\b(?:Android App|iOS App|PW Website|CUSTOMER)\b/gi, ' ')
+        .replace(/[\uF000-\uF8FF]/g, ' ')
+        .replace(/[\u2018\u2019\u02BC]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/\u221A/g, ' sqrt ')
+        .replace(/\u03B8/g, ' theta ')
+        .replace(/\u2192/g, ' -> ')
+        .replace(/\u00D7/g, ' x ')
+        .replace(/[\u00B7\u22C5]/g, ' . ')
+        .replace(/\u2264/g, ' <= ')
+        .replace(/\u2265/g, ' >= ')
+        .replace(/\u2260/g, ' != ')
+        .replace(/\u222B/g, ' integral ')
+        .replace(/\u221E/g, ' infinity ')
+        .replace(/([ijk])\s*[\^\u02C6]/g, '$1_hat')
+        .replace(/([A-Za-z])\s*[\u20D7]/g, 'vec($1)')
         .replace(/[^\x20-\x7E\n]/g, ' ')
-        .replace(/ simpli\s*fi\s*cation /gi, 'simplification')
-        .replace(/ fi\s*gure /gi, 'figure')
+        .replace(/\bsimpli\s*fi\s*cation\b/gi, 'simplification')
+        .replace(/\bfi\s*gure\b/gi, 'figure')
         .replace(/([A-Za-z0-9\)\]])\s+(?:->\s*){2,}([A-Za-z0-9\(\[])/g, '$1 -> $2')
         .replace(/(?:->\s*){2,}/g, ' -> ')
-        .replace(/[ 	]{2,}/g, ' ')
+        .replace(/[ \t]{2,}/g, ' ')
         .trim();
     }
 
     function splitInlineNumberedOrLetteredOptions(rawQText, existingOptions = null) {
       const cleanRaw = sanitizeExtractedMathText(rawQText || '');
-      const hasValidExisting = Array.isArray(existingOptions) && existingOptions.length === 4 &&
-        existingOptions.every(o => {
-          const s = sanitizeExtractedMathText(o);
-          return s && !/^Option\s*[A-D1-4]$/i.test(s);
-        });
+      const cleanExisting = Array.isArray(existingOptions) && existingOptions.length === 4
+        ? existingOptions.map(o => sanitizeExtractedMathText(o).replace(/^\(?[1-4A-Da-d]\)?[\.\)]?\s*/, '').trim())
+        : [];
+      const hasValidExisting = cleanExisting.length === 4 &&
+        cleanExisting.every(s => s && !/^Option\s*[A-D1-4]$/i.test(s) && !/^Choice\s*\(?[1-4]\)?$/i.test(s));
+
+      if (hasValidExisting) {
+        return { text: cleanRaw, options: cleanExisting };
+      }
 
       const splitTokens = (markerList) => {
         const positions = [];
@@ -1826,7 +1852,7 @@
           let found = null;
           let m;
           while ((m = rx.exec(cleanRaw)) !== null) {
-            if (m.index < cleanRaw.length * 0.12) continue;
+            if (m.index < 3) continue;
             if (found === null) found = { index: m.index, fullLen: m[0].trim().length };
           }
           if (!found) return null;
@@ -1846,15 +1872,12 @@
         return null;
       };
 
-      const numSplit = splitTokens(['\(1\)', '\(2\)', '\(3\)', '\(4\)']);
+      const numSplit = splitTokens(['\\(1\\)', '\\(2\\)', '\\(3\\)', '\\(4\\)']);
       if (numSplit) return numSplit;
 
-      const letSplit = splitTokens(['\([Aa]\)', '\([Bb]\)', '\([Cc]\)', '\([Dd]\)']);
+      const letSplit = splitTokens(['\\([Aa]\\)', '\\([Bb]\\)', '\\([Cc]\\)', '\\([Dd]\\)']);
       if (letSplit) return letSplit;
 
-      if (hasValidExisting) {
-        return { text: cleanRaw, options: existingOptions.map(o => sanitizeExtractedMathText(o)) };
-      }
       return {
         text: cleanRaw,
         options: Array.isArray(existingOptions) && existingOptions.length === 4
@@ -1872,7 +1895,7 @@
         if (m) {
           const subj = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
           let val = m[2].replace(/\(Complete Chapter\)/gi, '').replace(/\s+\/\s+/g, ', ').trim();
-          if (i + 1 < lines.length && !/^(Physics|Chemistry|Botany|Zoology|General Instructions|OMR)/i.test(lines[i + 1]) && lines[i + 1].length < 90 && !/^Q\.?\s*\d{1,3} /i.test(lines[i + 1])) {
+          if (i + 1 < lines.length && !/^(Physics|Chemistry|Botany|Zoology|General Instructions|OMR)/i.test(lines[i + 1]) && lines[i + 1].length < 90 && !/^Q\.?\s*\d{1,3}\b/i.test(lines[i + 1])) {
             val += ' ' + lines[i + 1].replace(/\(Complete Chapter\)/gi, '').trim();
           }
           map[subj] = val.replace(/,\s*$/, '').trim();
@@ -1894,11 +1917,12 @@
       }
 
       const rules = [
-        { sub: 'Physics', rx: / (integral|definite integral|derivative|differentiate|dy\/dx|quadratic|minimum|maximum|binomial|radian|arcminute|arcsecond|slope|curve|area of.*region|y\^2\s*=|y\s*=.*x\^|log_5|sec\s*theta|cos\^2|tan\^2) /i, ch: 'Basic Maths & Calculus (Mathematical Tools)', tp: 'Calculus, Trigonometry & Graphs', st: / (integral|definite integral) /i.test(lower) ? 'Definite & Indefinite Integration' : (/ (derivative|differentiate|dy\/dx|rate of increase|slope|minimum|maximum) /i.test(lower) ? 'Differentiation & Rate of Change' : (/ (radian|arcminute|arcsecond|cos\^2|sec\s*theta|tan\^2) /i.test(lower) ? 'Trigonometry & Angle Units' : 'Graphs, Logarithms & Area Under Curve')) },
-        { sub: 'Physics', rx: / (vector|unit vector|resultant|perpendicular|dot product|cross product|i_hat|j_hat|k_hat|body diagonal|angle between) /i, ch: 'Vectors', tp: 'Vector Algebra, Resolution & Products', st: / (cross product|dot product|p\s*x\s*q|r\s*\.\s*p) /i.test(lower) ? 'Dot & Cross Product Properties' : (/ (unit vector|perpendicular|body diagonal) /i.test(lower) ? 'Unit Vectors, Components & Projections' : 'Resultant & Angle Between Vectors') },
-        { sub: 'Chemistry', rx: / (molarity|molality|ppm|mole fraction|limiting reagent|stoichiometry|empirical formula|molecular formula|significant figures|vapour density|avogadro|s\.i\. prefixes|s\.i\. base|mass %|combustion|moles of electrons|h\+\s*ions) /i, ch: 'Some Basic Concepts of Chemistry', tp: 'Mole Concept, Stoichiometry & Concentration', st: / (limiting reagent|unreacted|moles of.*formed|mass of.*required) /i.test(lower) ? 'Limiting Reagent & Reaction Stoichiometry' : (/ (molarity|molality|ppm|mole fraction) /i.test(lower) ? 'Molarity, Molality, Mole Fraction & ppm' : (/ (empirical formula|molecular formula|combustion|mass %) /i.test(lower) ? 'Empirical/Molecular Formula & Combustion' : 'Mole Calculation, Significant Figures & Laws')) },
-        { sub: 'Botany', rx: / (cell theory|schleiden|schwann|virchow|organelle|mitochondria|chloroplast|ribosome|70s|80s|polysome|golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast|plasma membrane|phospholipid|fluid mosaic|centrosome|centriole|cilium|axoneme|nucleus|chromatin|nucleolus|chromosome|metacentric|telocentric|mesosome|cell envelope|glycocalyx|plasmid|chromatophore|leucoplast|chromoplast|mycoplasma|prokaryotic|sieve cell) /i, ch: 'Cell - The Unit of Life', tp: 'Cell Theory, Membrane & Cell Organelles', st: / (mitochondria|chloroplast|thylakoid|stroma|70s|80s|ribosome|polysome) /i.test(lower) ? 'Mitochondria, Chloroplast & Ribosomes' : (/ (golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast) /i.test(lower) ? 'Endomembrane System (ER, Golgi, Lysosome, Vacuole)' : (/ (plasma membrane|phospholipid|fluid mosaic|cell wall|calcium pectate) /i.test(lower) ? 'Plasma Membrane & Cell Wall' : (/ (nucleus|chromatin|chromosome|metacentric|telocentric|centriole|axoneme) /i.test(lower) ? 'Nucleus, Chromosomes & Cytoskeleton/Centriole' : 'Prokaryotic Cell, Envelope & Cell Overview'))) },
-        { sub: 'Zoology', rx: / (cockroach|periplaneta|ommatidia|tergite|sternite|haemolymph|haemocoel|ostia|malpighian|ootheca|spermatheca|phallomere|gonopore|spermatophore|ovariole|anal cerci|anal styles|spiracle|mandible|crop|gizzard|hindgut|frog|rana|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation|epithelium|connective tissue|areolar|adipose|cartilage|bone|osteocyte|chondrocyte|intercalated discs|cardiac muscle|skeletal muscle|smooth muscle|exocrine|endocrine|neuron|nerve impulse) /i, ch: 'Structural Organisation in Animals', tp: 'Animal Tissues, Cockroach & Frog', st: / (cockroach|ommatidia|tergite|sternite|haemolymph|malpighian|ootheca|spermatheca|phallomere|anal cerci|spiracle) /i.test(lower) ? 'Cockroach Morphology & Organ Systems' : (/ (frog|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation) /i.test(lower) ? 'Frog Morphology & Organ Systems' : 'Epithelial, Connective, Muscular & Neural Tissues') }
+        { sub: 'Physics', rx: /\b(integral|definite integral|derivative|differentiate|dy\/dx|quadratic|minimum|maximum|binomial|radian|arcminute|arcsecond|slope|curve|area of.*region|y\^2\s*=|y\s*=.*x\^|log_5|sec\s*theta|cos\^2|tan\^2)\b/i, ch: 'Basic Maths & Calculus (Mathematical Tools)', tp: 'Calculus, Trigonometry & Graphs', st: /\b(integral|definite integral)\b/i.test(lower) ? 'Definite & Indefinite Integration' : (/\b(derivative|differentiate|dy\/dx|rate of increase|slope|minimum|maximum)\b/i.test(lower) ? 'Differentiation & Rate of Change' : (/\b(radian|arcminute|arcsecond|cos\^2|sec\s*theta|tan\^2)\b/i.test(lower) ? 'Trigonometry & Angle Units' : 'Graphs, Logarithms & Area Under Curve')) },
+        { sub: 'Physics', rx: /\b(vector|unit vector|resultant|perpendicular|dot product|cross product|i_hat|j_hat|k_hat|body diagonal|angle between)\b/i, ch: 'Vectors', tp: 'Vector Algebra, Resolution & Products', st: /\b(cross product|dot product|p\s*x\s*q|r\s*\.\s*p)\b/i.test(lower) ? 'Dot & Cross Product Properties' : (/\b(unit vector|perpendicular|body diagonal)\b/i.test(lower) ? 'Unit Vectors, Components & Projections' : 'Resultant & Angle Between Vectors') },
+        { sub: 'Physics', rx: /\b(stress|strain|young'?s modulus|bulk modulus|shear modulus|poisson|elastic|plastic|hooke|wire|elongation|tensile|gravity|gravitation|escape velocity|orbital|kepler|satellite)\b/i, ch: 'Properties of Solids & Gravitation', tp: 'Elasticity & Gravitation', st: /\b(stress|strain|young|modulus|elastic|tensile|wire)\b/i.test(lower) ? 'Stress, Strain & Youngs Modulus' : 'Acceleration Due to Gravity & Satellites' },
+        { sub: 'Chemistry', rx: /\b(molarity|molality|ppm|mole fraction|limiting reagent|stoichiometry|empirical formula|molecular formula|significant figures|vapour density|avogadro|s\.i\. prefixes|s\.i\. base|mass %|combustion|moles of electrons|h\+\s*ions)\b/i, ch: 'Some Basic Concepts of Chemistry', tp: 'Mole Concept, Stoichiometry & Concentration', st: /\b(limiting reagent|unreacted|moles of.*formed|mass of.*required)\b/i.test(lower) ? 'Limiting Reagent & Reaction Stoichiometry' : (/\b(molarity|molality|ppm|mole fraction)\b/i.test(lower) ? 'Molarity, Molality, Mole Fraction & ppm' : (/\b(empirical formula|molecular formula|combustion|mass %)\b/i.test(lower) ? 'Empirical/Molecular Formula & Combustion' : 'Mole Calculation, Significant Figures & Laws')) },
+        { sub: 'Botany', rx: /\b(cell theory|schleiden|schwann|virchow|organelle|mitochondria|chloroplast|ribosome|70s|80s|polysome|golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast|plasma membrane|phospholipid|fluid mosaic|centrosome|centriole|cilium|axoneme|nucleus|chromatin|nucleolus|chromosome|metacentric|telocentric|mesosome|cell envelope|glycocalyx|plasmid|chromatophore|leucoplast|chromoplast|mycoplasma|prokaryotic|sieve cell)\b/i, ch: 'Cell - The Unit of Life', tp: 'Cell Theory, Membrane & Cell Organelles', st: /\b(mitochondria|chloroplast|thylakoid|stroma|70s|80s|ribosome|polysome)\b/i.test(lower) ? 'Mitochondria, Chloroplast & Ribosomes' : (/\b(golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast)\b/i.test(lower) ? 'Endomembrane System (ER, Golgi, Lysosome, Vacuole)' : (/\b(plasma membrane|phospholipid|fluid mosaic|cell wall|calcium pectate)\b/i.test(lower) ? 'Plasma Membrane & Cell Wall' : (/\b(nucleus|chromatin|chromosome|metacentric|telocentric|centriole|axoneme)\b/i.test(lower) ? 'Nucleus, Chromosomes & Cytoskeleton/Centriole' : 'Prokaryotic Cell, Envelope & Cell Overview'))) },
+        { sub: 'Zoology', rx: /\b(cockroach|periplaneta|ommatidia|tergite|sternite|haemolymph|haemocoel|ostia|malpighian|ootheca|spermatheca|phallomere|gonopore|spermatophore|ovariole|anal cerci|anal styles|spiracle|mandible|crop|gizzard|hindgut|frog|rana|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation|epithelium|connective tissue|areolar|adipose|cartilage|bone|osteocyte|chondrocyte|intercalated discs|cardiac muscle|skeletal muscle|smooth muscle|exocrine|endocrine|neuron|nerve impulse)\b/i, ch: 'Structural Organisation in Animals', tp: 'Animal Tissues, Cockroach & Frog', st: /\b(cockroach|ommatidia|tergite|sternite|haemolymph|malpighian|ootheca|spermatheca|phallomere|anal cerci|spiracle)\b/i.test(lower) ? 'Cockroach Morphology & Organ Systems' : (/\b(frog|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation)\b/i.test(lower) ? 'Frog Morphology & Organ Systems' : 'Epithelial, Connective, Muscular & Neural Tissues') }
       ];
 
       for (const r of rules) {
@@ -1911,12 +1935,12 @@
       }
 
       const coverCh = coverSyllabusMap[sub] || '';
-      const defaultChapter = coverCh || (sub === 'Physics' ? 'Mathematical Tools & Vectors' : sub === 'Chemistry' ? 'Some Basic Concepts of Chemistry' : sub === 'Botany' ? 'Cell - The Unit of Life' : 'Structural Organisation in Animals');
+      const defaultChapter = coverCh || (sub === 'Physics' ? 'Physics Practice Sheet' : sub === 'Chemistry' ? 'Chemistry Practice Sheet' : sub === 'Botany' ? 'Botany Practice Sheet' : 'Zoology Practice Sheet');
       return {
         subject: sub,
         chapter: defaultChapter,
-        topic: sub === 'Physics' ? 'Mechanics & Mathematical Physics' : sub === 'Chemistry' ? 'Physical & General Chemistry' : sub === 'Botany' ? 'Cell Biology' : 'Animal Structure & Physiology',
-        subTopic: 'Core Concept Application'
+        topic: sub === 'Physics' ? 'Core Physics Concepts' : sub === 'Chemistry' ? 'Core Chemistry Concepts' : sub === 'Botany' ? 'Core Botany Concepts' : 'Core Zoology Concepts',
+        subTopic: 'Concept & Numerical Application'
       };
     }
 
@@ -1945,53 +1969,61 @@
       };
     }
 
-    async function detectFileKind(file) {
-      const name = (file?.name || '').toLowerCase();
-      const mime = (file?.type || '').toLowerCase();
-      if (name.endsWith('.json') || mime.includes('json')) return 'json';
-      if (name.endsWith('.pdf') || mime === 'application/pdf') return 'pdf';
-      if (mime.startsWith('image/') || /\.(png|jpe?g|webp|gif|bmp)$/i.test(name)) return 'image';
-      try {
-        const buf = await readFileAsArrayBufferSafe(file);
-        const u8 = new Uint8Array(buf.slice(0, 8));
-        const hdr = String.fromCharCode.apply(null, u8);
-        if (hdr.startsWith('%PDF-')) return 'pdf';
-        if (u8[0] === 0xFF && u8[1] === 0xD8 && u8[2] === 0xFF) return 'image';
-        if (u8[0] === 0x89 && u8[1] === 0x50 && u8[2] === 0x4E && u8[3] === 0x47) return 'image';
-      } catch (e) {}
-      return 'text';
-    }
-
     async function handleUploadedFiles(files) {
-      window.__nura2SerialCursor = { next: 1 };
-      window.__nura2PendingContinuation = { dataUrl: '', targetKey: null };
       let combinedText = '';
-      const fileKinds = [];
+      const enableAutoCrop = document.getElementById('autoCropQuestionsToggle')?.checked !== false;
+      const allCropsByQNum = {};
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const kind = await detectFileKind(file);
-        fileKinds.push({ file, kind });
+        const name = file.name.toLowerCase();
         const basePct = Math.round((i / files.length) * 85) + 10;
 
-        if (kind === 'json') {
+        if (name.endsWith('.json')) {
           const txt = await readFileAsTextSafe(file);
           const parsed = JSON.parse(txt);
           const arr = Array.isArray(parsed) ? parsed : (parsed.questions || []);
           if (arr.length) {
+            for (let idx = 0; idx < arr.length; idx++) {
+              if (arr[idx].imageDataUrl && arr[idx].imageKey) {
+                await idbPutImage(arr[idx].imageKey, arr[idx].imageDataUrl);
+              }
+            }
             questions = arr.map((q, idx) => enrichQuestionObj(q, idx));
             renderQuestionBank();
             setParseStatus(true, `Loaded ${questions.length} Questions from JSON`, file.name, false, 100, `${questions.length} Qs`);
             return;
           }
-        } else if (kind === 'pdf') {
-          const pdfTxt = await extractTextFromPdfFile(file, basePct);
-          combinedText += '\n' + pdfTxt;
-        } else if (kind === 'image') {
-          setParseStatus(true, `Scanning Image ${i + 1}/${files.length}`, file.name, false, basePct);
+        } else if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+          const pdfRes = await extractTextFromPdfFile(file, basePct, enableAutoCrop);
+          combinedText += '\n' + pdfRes.text;
+          Object.assign(allCropsByQNum, pdfRes.cropsByQNum);
+        } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
+          setParseStatus(true, `Snipping & Scanning Image ${i + 1}/${files.length}`, file.name, false, basePct);
           const dataUrl = await readFileAsDataURLSafe(file);
-          const ocrTxt = await runFastImageOCR(dataUrl, 1.4);
+          let ocrTxt = '';
+          try {
+            ocrTxt = await Promise.race([
+              runFastImageOCR(dataUrl, 1.5),
+              new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 12000))
+            ]);
+          } catch (ocrErr) {
+            ocrTxt = '';
+          }
           combinedText += '\n' + ocrTxt;
+          if (enableAutoCrop && !isAnswerKeyGridOrPage(ocrTxt)) {
+            const imgCrops = await cropQuestionsFromImageDataUrl(dataUrl, i);
+            if (Object.keys(imgCrops).length > 0) {
+              for (const [k, cObj] of Object.entries(imgCrops)) {
+                await idbPutImage(cObj.imageKey, cObj.imageDataUrl);
+                allCropsByQNum[k] = cObj;
+              }
+            } else {
+              const fallbackKey = `qimg_${Date.now()}_img${i}_raw_${Math.random().toString(36).slice(2, 6)}`;
+              await idbPutImage(fallbackKey, dataUrl);
+              allCropsByQNum[i + 1] = { imageKey: fallbackKey, imageDataUrl: dataUrl };
+            }
+          }
         } else {
           const txt = await readFileAsTextSafe(file);
           if (isRawPdfSyntax(txt)) throw new Error('Raw PDF binary detected.');
@@ -2000,76 +2032,51 @@
       }
 
       const cleanText = truncateBeforeSolutions(combinedText.trim());
-      if (!cleanText || isRawPdfSyntax(cleanText)) {
-        throw new Error('No readable text found. Try enabling "Force High-Accuracy OCR".');
+      if (isRawPdfSyntax(cleanText)) {
+        throw new Error('Raw PDF binary detected. Please select a valid PDF or image file.');
       }
 
       document.getElementById('rawTextInput').value = cleanText;
-      const extracted = parsePracticeSheetText(cleanText);
-      if (!extracted.length) {
-        setParseStatus(true, 'Text Extracted — Check Formatting', 'Tick "Force High-Accuracy OCR" if this is a custom-font PW PDF.', true);
+      const extracted = cleanText ? parsePracticeSheetText(cleanText) : [];
+      const cropKeys = Object.keys(allCropsByQNum).map(Number).sort((a, b) => a - b);
+
+      if (!extracted.length && !cropKeys.length) {
+        setParseStatus(true, 'No Readable Text Found', 'Enable "Auto Question Image Cropper" or "Force High-Accuracy OCR" and tap "Process Selected File Now".', true);
         return;
       }
 
-      const autoCropEnabled = document.getElementById('autoCropQuestionsToggle')?.checked !== false;
-      const allCroppedImagesByQNum = {};
-      if (autoCropEnabled) {
-        for (let i = 0; i < fileKinds.length; i++) {
-          const { file, kind } = fileKinds[i];
-          try {
-            if (kind === 'pdf') {
-              await extractTextFromPdfFile(file, 10, allCroppedImagesByQNum);
-            } else if (kind === 'image') {
-              const dataUrl = await readFileAsDataURLSafe(file);
-              const imgRes = await cropAndOcrImageFast(dataUrl, i);
-              Object.assign(allCroppedImagesByQNum, imgRes.crops || {});
-            }
-          } catch (e) {}
+      const keyMapFromText = extractAnswerKeyMap(cleanText);
+      const qByNum = {};
+      extracted.forEach(q => { qByNum[q.num] = q; });
+
+      cropKeys.forEach(qNum => {
+        const cropObj = allCropsByQNum[qNum];
+        if (qByNum[qNum]) {
+          qByNum[qNum].imageKey = cropObj.imageKey;
+          qByNum[qNum].imageDataUrl = cropObj.imageDataUrl;
+        } else {
+          qByNum[qNum] = enrichQuestionObj({
+            id: 'q_' + Date.now() + '_' + qNum,
+            num: qNum,
+            text: `Visual Question Q${qNum} (Cropped from Sheet)`,
+            options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'],
+            imageKey: cropObj.imageKey,
+            imageDataUrl: cropObj.imageDataUrl,
+            correct: keyMapFromText[qNum] || ''
+          }, qNum - 1);
         }
-      }
+      });
 
-      if (allCroppedImagesByQNum.__stitchPrev) {
-        const { topUrl, botUrl } = allCroppedImagesByQNum.__stitchPrev;
-        const stitchedUrl = await stitchTwoDataUrlImagesVertically(topUrl, botUrl, 0.90);
-        const prevKey = window.__nura2PendingContinuation?.targetKey;
-        if (stitchedUrl && prevKey && allCroppedImagesByQNum[prevKey]) {
-          allCroppedImagesByQNum[prevKey].imageDataUrl = stitchedUrl;
-        }
-        delete allCroppedImagesByQNum.__stitchPrev;
-      }
+      const finalQuestions = Object.values(qByNum).sort((a, b) => a.num - b.num);
+      const matchedKeys = finalQuestions.filter(q => q.correct).length;
+      const croppedCount = finalQuestions.filter(q => getQuestionImageUrl(q)).length;
 
-      const cropEntries = Object.entries(allCroppedImagesByQNum)
-        .map(([k, v]) => [parseInt(k, 10), v])
-        .filter(([k, v]) => Number.isFinite(k) && v && v.imageDataUrl)
-        .sort((a, b) => a[0] - b[0]);
-
-      if (cropEntries.length > extracted.length && extracted.length > 0) {
-        const targetCount = Math.max(extracted.length, cropEntries.length);
-        while (extracted.length < targetCount) {
-          const n = extracted.length + 1;
-          extracted.push(enrichQuestionObj({ num: n, text: `Q${n}`, options: ['(1)', '(2)', '(3)', '(4)'] }, n - 1));
-        }
-      }
-
-      let croppedAttached = 0;
-      for (let i = 0; i < extracted.length; i++) {
-        extracted[i].num = i + 1;
-        const cropEntry = cropEntries[i];
-        if (cropEntry && cropEntry[1] && cropEntry[1].imageDataUrl) {
-          extracted[i].imageKey = cropEntry[1].imageKey;
-          extracted[i].imageDataUrl = cropEntry[1].imageDataUrl;
-          croppedAttached++;
-          await idbPutImage(cropEntry[1].imageKey, cropEntry[1].imageDataUrl);
-        }
-      }
-
-      const matchedKeys = extracted.filter(q => q.correct).length;
-      questions = extracted;
+      questions = finalQuestions;
       renderQuestionBank();
       setParseStatus(
         true,
-        `Ready: ${questions.length} Questions (${croppedAttached} Cropped · ${matchedKeys}/${questions.length} Keys Matched)`,
-        'Single-question serial cropping & cross-page stitching active (1..N).',
+        `Ready: ${questions.length} Questions (${croppedCount} Cropped Visual Qs · ${matchedKeys}/${questions.length} Answer Keys Matched)`,
+        croppedCount > 0 ? 'Each question is individually snipped (1 Q + 4 options per card). Ready for CBT!' : 'Chapter, Topic & Specific Sub-Topic auto-tagged.',
         false,
         100,
         `${questions.length} Qs`
@@ -2092,7 +2099,7 @@
       return printableRatio > 0.72 && (hasQuestionPattern || hasAnswerKeyPattern);
     }
 
-    async function extractTextFromPdfFile(file, startPct = 10, cropCollector = null) {
+    async function extractTextFromPdfFile(file, startPct = 10, enableAutoCrop = true) {
       const buf = await readFileAsArrayBufferSafe(file);
       if (!buf || buf.byteLength === 0) throw new Error('Empty 0-byte PDF stream.');
       const pdf = await loadPdfDocumentResilient(buf);
@@ -2102,32 +2109,39 @@
       let fullOut = '';
       let sawQuestions = false;
       let sawAnswerKey = false;
+      const cropsByQNum = {};
 
       for (let p = 1; p <= pdf.numPages; p++) {
         const pct = Math.min(92, startPct + Math.round((p / pdf.numPages) * 75));
-        setParseStatus(true, `Processing Page ${p} of ${pdf.numPages}`, file.name, false, pct);
+        setParseStatus(true, `Processing & Cropping Page ${p} of ${pdf.numPages}`, file.name, false, pct);
 
         const page = await pdf.getPage(p);
         const viewport = page.getViewport({ scale: 1.0 });
         const textContent = await page.getTextContent();
         let pageText = reconstructColumnAwareText(textContent.items, viewport.width, viewport.height);
-        if (cropCollector && !isPureAnswerKeyOnlyPage(pageText)) {
-          try {
-            const cScale = 1.4;
-            const cVp = page.getViewport({ scale: cScale });
-            const cCanvas = document.createElement('canvas');
-            cCanvas.width = Math.round(cVp.width);
-            cCanvas.height = Math.round(cVp.height);
-            const cCtx = cCanvas.getContext('2d');
-            cCtx.fillStyle = '#ffffff';
-            cCtx.fillRect(0, 0, cCanvas.width, cCanvas.height);
-            await page.render({ canvasContext: cCtx, viewport: cVp }).promise;
-            const pCrops = cropQuestionsFromRenderedPageCanvas(cCanvas, textContent.items, viewport.width, viewport.height, cScale, p);
-            Object.assign(cropCollector, pCrops);
-          } catch (e) {}
-        }
 
-        if (skipSolutions && /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText)) break;
+        const isHintsPage = /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText);
+        if (skipSolutions && isHintsPage) break;
+
+        const isKeyOnlyPage = isAnswerKeyGridOrPage(pageText);
+
+        if (enableAutoCrop && !isKeyOnlyPage && !isHintsPage) {
+          const cropScale = 1.9;
+          const cropVp = page.getViewport({ scale: cropScale });
+          const cropCanvas = document.createElement('canvas');
+          cropCanvas.width = cropVp.width;
+          cropCanvas.height = cropVp.height;
+          const cropCtx = cropCanvas.getContext('2d');
+          cropCtx.fillStyle = '#ffffff';
+          cropCtx.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
+          await page.render({ canvasContext: cropCtx, viewport: cropVp }).promise;
+
+          const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, cropScale, p);
+          for (const [k, cObj] of Object.entries(pageCrops)) {
+            await idbPutImage(cObj.imageKey, cObj.imageDataUrl);
+            cropsByQNum[k] = cObj;
+          }
+        }
 
         if (forceOcr || !isExtractedPageTextUsable(pageText)) {
           setParseStatus(true, `Fast OCR Page ${p}/${pdf.numPages}`, file.name, false, pct);
@@ -2141,7 +2155,16 @@
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.filter = 'contrast(1.35) grayscale(1)';
           await page.render({ canvasContext: ctx, viewport: hiVp }).promise;
-          pageText = await runFastImageOCR(canvas.toDataURL('image/jpeg', 0.86));
+          const pageDataUrl = canvas.toDataURL('image/jpeg', 0.88);
+          pageText = await runFastImageOCR(pageDataUrl);
+
+          if (enableAutoCrop && !Object.keys(cropsByQNum).length && !isAnswerKeyGridOrPage(pageText)) {
+            const ocrCrops = await cropQuestionsFromImageDataUrl(pageDataUrl, p);
+            for (const [k, cObj] of Object.entries(ocrCrops)) {
+              await idbPutImage(cObj.imageKey, cObj.imageDataUrl);
+              cropsByQNum[k] = cObj;
+            }
+          }
         }
 
         if (skipSolutions && /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText)) {
@@ -2155,7 +2178,7 @@
         if (/Answer\s*Key/i.test(pageText)) sawAnswerKey = true;
         if (skipSolutions && sawQuestions && sawAnswerKey) break;
       }
-      return fullOut;
+      return { text: fullOut, cropsByQNum };
     }
 
     function mergeStackedFractions(rawLines) {
@@ -2185,10 +2208,10 @@
         .filter(it => it.str && !/^(Android App|iOS App|PW Website|CUSTOMER)$/i.test(it.str));
 
       const sortLines = (arr) => {
-        arr.sort((a, b) => (Math.abs(b.y - a.y) > 5 ? b.y - a.y : a.x - b.x));
+        arr.sort((a, b) => (Math.abs(b.y - a.y) > 7 ? b.y - a.y : a.x - b.x));
         let lines = [], curY = null, curLine = [];
         arr.forEach(item => {
-          if (curY === null || Math.abs(curY - item.y) <= 5) {
+          if (curY === null || Math.abs(curY - item.y) <= 7) {
             curLine.push(item.str);
             if (curY === null) curY = item.y;
           } else {
@@ -2210,7 +2233,7 @@
       const leftStartsWithQ = leftItems.some(it => /^Q\.?\s*\d+/i.test(it.str));
       const rightStartsWithQ = rightItems.some(it => /^Q\.?\s*\d+/i.test(it.str));
 
-      if (leftStartsWithQ && rightStartsWithQ && leftItems.length > 8 && rightItems.length > 8) {
+      if (leftStartsWithQ && rightStartsWithQ && leftItems.length > 6 && rightItems.length > 6) {
         return sortLines(leftItems) + '\n' + sortLines(rightItems);
       }
       return rawSingleCol;
@@ -2243,7 +2266,7 @@
     function preNormalizeSheetText(raw) {
       let text = sanitizeExtractedMathText(truncateBeforeSolutions(raw)).replace(/\r/g, '\n');
       text = text.replace(/Android App\s*iOS App\s*PW Website/gi, '');
-      text = text.replace(/([^\n])\s+(?=(?:Q\.?\s*\d{1,3}|\d{1,3}\s*[\.\)]\s+[A-Za-z]))/g, '$1\n');
+      text = text.replace(/([^\n])\s+(?=Q\.?\s*\d{1,3}\b)/g, '$1\n');
       text = text.replace(/([^\n])\s+(?=\([A-Da-d1-4]\)\s+)/g, '$1\n');
       return text;
     }
@@ -2351,23 +2374,11 @@
       }
       flushQ();
 
-      const merged = [];
-      parsed.forEach((pq) => {
-        const looksLikeOrphanContinuation =
-          merged.length > 0 &&
-          (!pq.text || /^Q\d+$/i.test(pq.text.trim())) &&
-          pq.options.every(o => /^Choice\s*\([1-4]\)$/i.test(o));
-        if (looksLikeOrphanContinuation) {
-          return;
-        }
-        merged.push(pq);
+      parsed.sort((a, b) => a.num - b.num);
+      parsed.forEach(q => {
+        if (!q.correct && keyMap[q.num]) q.correct = keyMap[q.num];
       });
-
-      merged.forEach((pq, i) => {
-        pq.num = i + 1;
-        if (!pq.correct && keyMap[pq.num]) pq.correct = keyMap[pq.num];
-      });
-      return merged;
+      return parsed;
     }
 
     function parseFromTextarea() {
@@ -2412,7 +2423,7 @@
         return '<div style="border:1px solid var(--border);border-radius:12px;padding:12px;background:#f8fafc;">' +
           '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:8px;">' +
             '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">' +
-              '<span style="background:#0f172a;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + (idx + 1) + '<\/span>' +
+              '<span style="background:#0f172a;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + (q.num || (idx + 1)) + '<\/span>' +
               '<select onchange="updateQuestionField(' + idx + ', \'subject\', this.value)" style="width:auto;padding:4px 8px;font-size:11px;">' +
                 ['Physics', 'Chemistry', 'Botany', 'Zoology'].map(s => '<option value="' + s + '" ' + (q.subject === s ? 'selected' : '') + '>' + s + '<\/option>').join('') +
               '<\/select>' +
@@ -2432,21 +2443,22 @@
           (cropUrl ? (
             '<div class="q-crop-frame">' +
               '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
-                '<span class="pill pill-green">Zero-Cut Cropped Question Image<\/span>' +
-                '<button type="button" class="btn-outline" onclick="removeQuestionCroppedImage(' + idx + ')" style="padding:2px 8px;font-size:10px;">Use Text Only<\/button>' +
+                '<span class="pill pill-green">Single-Question Visual Cut (Includes 4 Options)<\/span>' +
+                '<button type="button" class="btn-outline" onclick="removeQuestionCroppedImage(' + idx + ')" style="padding:2px 8px;font-size:10px;">Switch to Text Mode<\/button>' +
               '<\/div>' +
-              '<img src="' + cropUrl + '" alt="Q' + (idx + 1) + '" />' +
+              '<img src="' + cropUrl + '" alt="Q' + (q.num || (idx + 1)) + '" />' +
             '<\/div>'
-          ) : '') +
-          '<textarea rows="2" onchange="updateQuestionField(' + idx + ', \'text\', this.value)" style="margin-bottom:8px;">' + escapeHtml(q.text) + '<\/textarea>' +
-          '<div class="grid-2">' +
-            ['(1)', '(2)', '(3)', '(4)'].map((lbl, oIdx) =>
-              '<div style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:4px 8px;">' +
-                '<span style="font-size:11px;font-weight:900;color:var(--muted);">' + lbl + ':<\/span>' +
-                '<input type="text" value="' + escapeHtml(q.options[oIdx]) + '" onchange="updateOptionField(' + idx + ', ' + oIdx + ', this.value)" style="border:none;padding:2px;box-shadow:none;" />' +
-              '<\/div>'
-            ).join('') +
-          '<\/div>' +
+          ) : (
+            '<textarea rows="2" onchange="updateQuestionField(' + idx + ', \'text\', this.value)" style="margin-bottom:8px;">' + escapeHtml(q.text) + '<\/textarea>' +
+            '<div class="grid-2">' +
+              ['(1)', '(2)', '(3)', '(4)'].map((lbl, oIdx) =>
+                '<div style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:4px 8px;">' +
+                  '<span style="font-size:11px;font-weight:900;color:var(--muted);">' + lbl + ':<\/span>' +
+                  '<input type="text" value="' + escapeHtml(q.options[oIdx]) + '" onchange="updateOptionField(' + idx + ', ' + oIdx + ', this.value)" style="border:none;padding:2px;box-shadow:none;" />' +
+                '<\/div>'
+              ).join('') +
+            '<\/div>'
+          )) +
         '<\/div>';
       }).join('');
 
@@ -2516,7 +2528,8 @@
         statusEl.textContent = `Scanning file ${i + 1} of ${files.length} (${file.name}) with Offline OCR...`;
         let rawText = '';
         if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
-          rawText = await extractTextFromPdfFile(file, 20);
+          const pdfRes = await extractTextFromPdfFile(file, 20, false);
+          rawText = pdfRes.text;
         } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(file.name)) {
           const dataUrl = await readFileAsDataURLSafe(file);
           rawText = await runFastImageOCR(dataUrl, 2.0);
@@ -2583,7 +2596,7 @@
           const lightQ = stripInlineImageForLocalStorage(item.q);
           return {
             ...lightQ,
-            num: item.idx + 1,
+            num: item.q.num || (item.idx + 1),
             lastUserAns: item.userAns,
             lastTimeSec: item.tSec
           };
@@ -2630,11 +2643,10 @@
             testEntry.questions.map((rawQ, qIdx) => {
               const q = enrichQuestionObj(rawQ, qIdx);
               const cropUrl = getQuestionImageUrl(q);
-              const dispNum = rawQ.num || q.num;
               return '<div style="border:1px solid var(--border);border-radius:10px;padding:10px;background:#fff1f244;">' +
                 '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;">' +
                   '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
-                    '<span style="background:#e11d48;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + dispNum + '<\/span>' +
+                    '<span style="background:#e11d48;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + q.num + '<\/span>' +
                     '<span class="pill pill-teal">' + escapeHtml(q.subject) + '<\/span>' +
                     '<span class="pill pill-amber">Ch: ' + escapeHtml(q.chapter) + '<\/span>' +
                     '<span style="font-size:11px;font-weight:700;color:#334155;">Topic: ' + escapeHtml(q.topic) + ' · Sub-Topic: ' + escapeHtml(q.subTopic) + '<\/span>' +
@@ -2642,11 +2654,11 @@
                   '<div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;">' +
                     '<span style="color:var(--danger);">Your: ' + escapeHtml(formatAnswerChoiceDisplay(rawQ.lastUserAns)) + '<\/span>' +
                     '<span style="color:var(--success);">Correct: ' + escapeHtml(formatAnswerChoiceDisplay(q.correct)) + '<\/span>' +
-                    '<button type="button" class="btn-soft" onclick="reattemptSingleWrongQuestion(\'' + testEntry.id + '\', ' + qIdx + ')" style="padding:3px 8px;font-size:11px;">Solve Q' + dispNum + '<\/button>' +
+                    '<button type="button" class="btn-soft" onclick="reattemptSingleWrongQuestion(\'' + testEntry.id + '\', ' + qIdx + ')" style="padding:3px 8px;font-size:11px;">Solve Q' + q.num + '<\/button>' +
                   '<\/div>' +
                 '<\/div>' +
                 (cropUrl ? (
-                  '<div class="q-crop-frame"><img src="' + cropUrl + '" alt="Q' + dispNum + '" /><\/div>'
+                  '<div class="q-crop-frame"><img src="' + cropUrl + '" alt="Q' + q.num + '" /><\/div>'
                 ) : (
                   '<div style="font-size:13px;font-weight:600;margin-bottom:6px;">' + escapeHtml(q.text) + '<\/div>' +
                   '<div class="grid-2" style="font-size:11px;">' +
@@ -2681,7 +2693,7 @@
       if (!entry || !entry.questions[qIdx]) return;
       activeWrongBankTestId = null;
       questions = [enrichQuestionObj(entry.questions[qIdx], 0)];
-      document.getElementById('testTitleInput').value = `${entry.title} (Q${entry.questions[qIdx].num || 1} Practice)`;
+      document.getElementById('testTitleInput').value = `${entry.title} (Q${entry.questions[qIdx].num} Practice)`;
       renderQuestionBank();
       startCBTExam(true);
     }
@@ -2755,7 +2767,7 @@
       const q = questions[qIdx];
       if (!q) return;
       cbtState.visited[qIdx] = true;
-      document.getElementById('cbtQNumberBadge').textContent = `Question ${qIdx + 1} of ${questions.length}`;
+      document.getElementById('cbtQNumberBadge').textContent = `Question ${q.num || (qIdx + 1)} of ${questions.length}`;
       document.getElementById('cbtQSubjectBadge').textContent = q.subject;
       document.getElementById('cbtQChapterBadge').textContent = q.chapter || 'Chapter';
       document.getElementById('cbtQTopicBadge').textContent = q.topic || 'Topic';
@@ -2835,7 +2847,7 @@
         else if (hasAns) cls = 'nta-btn-answered';
         else if (isVis) cls = 'nta-btn-not-answered';
         if (qIdx === curQIdx) cls += ' nta-btn-current';
-        return '<button type="button" onclick="jumpToCbtPos(' + pos + ')" class="' + cls + '" style="height:34px;font-weight:900;">' + (qIdx + 1) + '<\/button>';
+        return '<button type="button" onclick="jumpToCbtPos(' + pos + ')" class="' + cls + '" style="height:34px;font-weight:900;">' + (questions[qIdx].num || (qIdx + 1)) + '<\/button>';
       }).join('');
     }
 
@@ -2868,36 +2880,68 @@
       if (!mount) return;
       const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
       if (!entries.length) {
-        mount.innerHTML = '<div style="padding:18px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;text-align:center;font-size:12px;color:var(--muted);">Submit a test to plot Obtained Marks vs Each Test on the vertical Y-axis graph.<\/div>';
+        mount.innerHTML = '<div style="padding:18px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;text-align:center;font-size:12px;color:var(--muted);">Submit a test to plot Obtained Marks (Y-Axis) vs Each Test (X-Axis) on the colourful bar graph.<\/div>';
         return;
       }
 
+      const barPalettes = [
+        { grad: 'linear-gradient(180deg, #10b981 0%, #059669 100%)', pill: '#059669' },
+        { grad: 'linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%)', pill: '#1d4ed8' },
+        { grad: 'linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%)', pill: '#6d28d9' },
+        { grad: 'linear-gradient(180deg, #f59e0b 0%, #d97706 100%)', pill: '#d97706' },
+        { grad: 'linear-gradient(180deg, #ec4899 0%, #be185d 100%)', pill: '#be185d' },
+        { grad: 'linear-gradient(180deg, #06b6d4 0%, #0e7490 100%)', pill: '#0e7490' }
+      ];
+
       const rawMax = Math.max(100, ...entries.map(e => Math.max(e.maxMarks || 0, e.netScore || 0)));
-      const yMax = Math.ceil(rawMax / 100) * 100;
+      const step = rawMax <= 200 ? 50 : 100;
+      const yMax = Math.ceil(rawMax / step) * step;
       const ticks = [yMax, Math.round(yMax * 0.75), Math.round(yMax * 0.5), Math.round(yMax * 0.25), 0];
 
       mount.innerHTML =
-        '<div class="graph-shell">' +
-          '<div class="y-axis-title-wrap"><span class="y-axis-title">Obtained Marks<\/span><\/div>' +
-          '<div class="y-axis-ticks">' +
-            ticks.map(t => '<span class="y-tick-lbl">' + t + '<\/span>').join('') +
+        '<div class="graph-outer-card">' +
+          '<div class="graph-legend-bar">' +
+            '<span style="color:#0f172a;">📊 Performance Chart: <span style="color:#0f766e;">Y-Axis = Obtained Marks<\/span> · <span style="color:#1d4ed8;">X-Axis = Each Test<\/span><\/span>' +
+            '<div class="graph-legend-items">' +
+              '<span><i class="legend-dot" style="background:#10b981;"><\/i>Test 1<\/span>' +
+              '<span><i class="legend-dot" style="background:#3b82f6;"><\/i>Test 2<\/span>' +
+              '<span><i class="legend-dot" style="background:#8b5cf6;"><\/i>Test 3<\/span>' +
+              '<span><i class="legend-dot" style="background:#f59e0b;"><\/i>Test 4+<\/span>' +
+            '<\/div>' +
           '<\/div>' +
-          '<div class="plot-area">' +
-            '<div class="gridlines-layer">' +
-              ticks.map(() => '<div class="gridline-row"><\/div>').join('') +
+          '<div class="graph-shell">' +
+            '<div class="y-axis-title-wrap"><span class="y-axis-title">Y-Axis: Obtained Marks<\/span><\/div>' +
+            '<div class="y-axis-ticks">' +
+              ticks.map(t => '<span class="y-tick-lbl">' + t + '<\/span>').join('') +
             '<\/div>' +
-            '<div class="bars-layer">' +
-              entries.map(e => {
-                const clampedScore = Math.max(0, e.netScore);
-                const heightPct = Math.min(100, Math.round((clampedScore / yMax) * 100));
-                return '<div class="bar-col" title="' + escapeHtml(e.title) + ': ' + e.netScore + ' / ' + e.maxMarks + ' (' + e.date + ')">' +
-                  '<span class="bar-val-lbl">' + e.netScore + '<\/span>' +
-                  '<div class="bar-rect" style="height:' + heightPct + '%;"><\/div>' +
-                '<\/div>';
-              }).join('') +
-            '<\/div>' +
-            '<div class="x-axis-labels">' +
-              entries.map((e, idx) => '<div class="x-lbl-cell" title="' + escapeHtml(e.title) + '">T' + (idx + 1) + ': ' + escapeHtml(e.title) + '<\/div>').join('') +
+            '<div class="plot-area">' +
+              '<div class="gridlines-layer">' +
+                ticks.map(() => '<div class="gridline-row"><\/div>').join('') +
+              '<\/div>' +
+              '<div class="bars-layer">' +
+                entries.map((e, idx) => {
+                  const pal = barPalettes[idx % barPalettes.length];
+                  const clampedScore = Math.max(0, e.netScore);
+                  const heightPct = Math.min(92, Math.max(4, Math.round((clampedScore / yMax) * 100)));
+                  const scorePct = e.maxMarks > 0 ? Math.round((e.netScore / e.maxMarks) * 100) : 0;
+                  return '<div class="bar-col" title="' + escapeHtml(e.title) + ': ' + e.netScore + ' / ' + e.maxMarks + ' (' + scorePct + '% · ' + e.date + ')">' +
+                    '<span class="bar-val-pill" style="background:' + pal.pill + ';">' + e.netScore + '/' + e.maxMarks + '<\/span>' +
+                    '<div class="bar-rect" style="height:' + heightPct + '%;background:' + pal.grad + ';">' +
+                      (heightPct >= 18 ? '<span class="bar-pct-inside">' + scorePct + '%<\/span>' : '') +
+                    '<\/div>' +
+                  '<\/div>';
+                }).join('') +
+              '<\/div>' +
+              '<div class="x-axis-labels">' +
+                entries.map((e, idx) => {
+                  const pal = barPalettes[idx % barPalettes.length];
+                  return '<div class="x-lbl-cell" title="' + escapeHtml(e.title) + '">' +
+                    '<span class="x-lbl-tag" style="background:' + pal.pill + ';">Test ' + (idx + 1) + '<\/span>' +
+                    '<span class="x-lbl-name">' + escapeHtml(e.title) + '<\/span>' +
+                  '<\/div>';
+                }).join('') +
+              '<\/div>' +
+              '<div class="x-axis-title-wrap"><span class="x-axis-title">X-Axis: Each Test Attempted (Chronological Order) →<\/span><\/div>' +
             '<\/div>' +
           '<\/div>' +
         '<\/div>';
@@ -2945,7 +2989,7 @@
       const topicMap = {}, evaluatedQuestions = [];
 
       questions.forEach((rawQ, idx) => {
-        const q = enrichQuestionObj({ ...rawQ, num: idx + 1 }, idx);
+        const q = enrichQuestionObj(rawQ, idx);
         questions[idx] = q;
         const userAns = cbtState.answers[idx] || '', corrAns = q.correct || '', tSec = cbtState.timeSpent[idx] || 0, isMarked = !!cbtState.marked[idx];
         totalTime += tSec;
@@ -2973,7 +3017,7 @@
           correct++; sObj.correct++; tObj.correct++; marksAwarded = posMark; sObj.score += posMark; status = 'correct';
           bucket = (isMarked || tSec > 90) ? 'moderate' : 'strong';
         } else if (cNorm && uNorm !== cNorm) {
-          incorrect++; sObj.wrong++; tObj.wrong++; tObj.wrongQs.push(idx + 1); marksAwarded = negMark; sObj.score += negMark; status = 'incorrect'; bucket = 'weak';
+          incorrect++; sObj.wrong++; tObj.wrong++; tObj.wrongQs.push(q.num || (idx + 1)); marksAwarded = negMark; sObj.score += negMark; status = 'incorrect'; bucket = 'weak';
         } else { skipped++; sObj.skipped++; tObj.skipped++; status = 'ungraded'; }
 
         evaluatedQuestions.push({ idx, q, userAns, corrAns, tSec, status, bucket, marksAwarded });
@@ -3065,7 +3109,7 @@
         return '<div style="border:1px solid var(--border);border-radius:12px;padding:12px;">' +
           '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">' +
             '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
-              '<span style="background:#0f172a;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + (item.idx + 1) + '<\/span>' +
+              '<span style="background:#0f172a;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + (item.q.num || (item.idx + 1)) + '<\/span>' +
               '<span style="font-size:12px;font-weight:800;color:var(--primary-dark);">' + item.q.subject + ' · Ch: ' + escapeHtml(item.q.chapter || '') + ' · Topic: ' + escapeHtml(item.q.topic) + ' · Sub-Topic: ' + escapeHtml(item.q.subTopic || '') + '<\/span>' +
               '<span class="pill ' + pillCls + '" style="text-transform:uppercase;">' + item.bucket + '<\/span>' +
             '<\/div>' +
@@ -3075,13 +3119,13 @@
               '<span>Time: <strong>' + item.tSec + 's<\/strong><\/span>' +
             '<\/div>' +
           '<\/div>' +
-          (cropUrl ? ('<div class="q-crop-frame" style="margin-top:6px;"><img src="' + cropUrl + '" alt="Q' + (item.idx + 1) + '" /><\/div>') : ('<div style="font-size:13px;font-weight:600;">' + escapeHtml(item.q.text) + '<\/div>')) +
+          (cropUrl ? ('<div class="q-crop-frame" style="margin-top:6px;"><img src="' + cropUrl + '" alt="Q' + (item.q.num || (item.idx + 1)) + '" /><\/div>') : ('<div style="font-size:13px;font-weight:600;">' + escapeHtml(item.q.text) + '<\/div>')) +
         '<\/div>';
       }).join('');
     }
     function reattemptFilteredQuestions(mode) {
       if (!lastReport) return;
-      const subset = lastReport.evaluatedQuestions.filter(it => mode === 'weak' ? it.bucket === 'weak' : (it.bucket === 'weak' || it.bucket === 'moderate')).map((it, i) => ({ ...it.q, num: i + 1 }));
+      const subset = lastReport.evaluatedQuestions.filter(it => mode === 'weak' ? it.bucket === 'weak' : (it.bucket === 'weak' || it.bucket === 'moderate')).map(it => it.q);
       if (!subset.length) {
         setParseStatus(true, 'No Questions in Selected Bucket', 'There are no questions matching that filter to re-attempt.', true);
         return;
@@ -3287,7 +3331,7 @@
     function closeHistoryDrawer() { document.getElementById('historyDrawer').classList.add('hidden'); }
     function loadSavedSheet(idx) {
       const s = loadStorage(STORAGE_KEYS.SHEETS, [])[idx];
-      if (s) { questions = s.questions.map((q, i) => enrichQuestionObj({ ...q, num: i + 1 }, i)); document.getElementById('testTitleInput').value = s.title; renderQuestionBank(); closeHistoryDrawer(); switchView('upload'); }
+      if (s) { questions = s.questions.map((q, i) => enrichQuestionObj(q, i)); document.getElementById('testTitleInput').value = s.title; renderQuestionBank(); closeHistoryDrawer(); switchView('upload'); }
     }
 
     async function importFullBackupJson(inputEl) {
@@ -3373,6 +3417,7 @@
       return bytes;
     }
 
+    // Build native PDF 1.4 report with Summary, 2-Column Unsolved Booklet (with JPEG crops), and Test-Wise Answer Key
     function buildNativeReportPdfBytes() {
       const appName = (localStorage.getItem(STORAGE_KEYS.APP_NAME) || 'NURA-2 · NEET CBT Simulator').trim();
       const marksEntries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
@@ -3415,7 +3460,6 @@
         pg.cmds.push(`q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${yBot.toFixed(2)} cm ${imgObj.name} Do Q`);
       };
 
-      // Part 1: Summary + Marks vs Each Test + Detailed Weak Chapter/Topic/Sub-Topic
       let p1 = curPage();
       addRect(p1, margin, pageH - 76, pageW - margin * 2, 46, [0.05, 0.58, 0.53]);
       addText(p1, margin + 12, pageH - 50, appName, 14, true, [1, 1, 1]);
@@ -3482,7 +3526,6 @@
         });
       }
 
-      // Part 2: Unsolved 2-Column Practice Booklet
       const unsolvedPool = [];
       wrongTests.forEach(t => {
         (t.questions || []).forEach((rq, idx) => {
@@ -3566,7 +3609,6 @@
         });
       }
 
-      // Part 3: Test-Wise Answer Key Sheet
       const keyTests = wrongTests.filter(t => (t.questions || []).some(q => normalizeAnswerChoice(q.correct)));
       if (keyTests.length) {
         let kPage = newPage();
@@ -3708,7 +3750,7 @@
       setTimeout(() => URL.revokeObjectURL(url), 4000);
     }
 
-    function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/<\/g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
     document.addEventListener('DOMContentLoaded', async () => {
       applyCustomAppNameToUI();
@@ -3721,8 +3763,3 @@
   </script>
 </body>
 </html>
-```
-eof
-
-
-I have generated the complete, self-contained **NURA-2 · NEET CBT & Weak Topic Tracker** application in `index.html` with strict single-question visual image cropping, cross-column and cross-page vertical stitching (`extractLeadingContinuationBeforeFirstMarker` + `stitchTwoDataUrlImagesVertically`), strict serial question numbering (`1, 2, 3, ...`), IndexedDB image storage (`nura2_cropped_images_db_v1`), inline editable App Name with Save button, multi-image Answer Key OCR, CBT simulator with `(1)–(4)` option buttons, vertical Y-axis **Obtained Marks vs Each Test** bar graph, **Master Weak Chapter/Topic/Sub-Topic** tracker, **Test-Wise Wrong Questions** bank, JSON backup/restore, and PDF report export.
