@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nura2-offline-cache-v1';
+const CACHE_NAME = 'nura2-offline-cache-v2';
 const APP_SHELL = [
   './',
   './index.html',
