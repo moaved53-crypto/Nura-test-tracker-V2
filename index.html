@@ -314,7 +314,7 @@
     .drawer-panel {
       background: #fff;
       width: 100%;
-      max-width: 440px;
+      max-width: 540px;
       height: 100%;
       padding: 20px;
       overflow-y: auto;
@@ -572,6 +572,73 @@
       margin: 0 auto;
       border-radius: 6px;
     }
+
+    .bar-del-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #e11d48;
+      color: #fff;
+      border: 1.5px solid #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 0;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+      z-index: 5;
+    }
+    .bar-del-btn:hover { background: #be123c; transform: scale(1.1); }
+    .hist-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .hist-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .trash-item-card {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px;
+      background: #ffffff;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .trash-type-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .trash-pill-graph { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+    .trash-pill-qbank { background: #ccfbf1; color: #0f766e; border: 1px solid #5eead4; }
+    .trash-pill-weak  { background: #ffe4e6; color: #be123c; border: 1px solid #fda4af; }
+    .trash-pill-wrong { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .trash-pill-hist  { background: #ede9fe; color: #6d28d9; border: 1px solid #c4b5fd; }
   </style>
 </head>
 <body>
@@ -586,11 +653,9 @@
           </div>
           <div>
             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-              <strong id="headerBrandTitle" style="font-size:15px;font-weight:900;color:#0f172a;">NURA-2 · NEET CBT Simulator</strong>
-              <span class="pill pill-teal">100% Independent Offline App</span>
+              <strong id="headerBrandTitle" style="font-size:16px;font-weight:900;background:linear-gradient(90deg, #0d9488 0%, #2563eb 45%, #d97706 80%, #e11d48 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:0.01em;">NURA-2 · NEET CBT Simulator</strong>
+              </div>
             </div>
-            <div style="font-size:11px;color:#64748b;">Self-Contained Browser &amp; Installable App · Live: <a href="https://moaved53-crypto.github.io/NURA-Test-Tracker-/" target="_blank" rel="noopener noreferrer" style="color:var(--primary-dark);font-weight:700;">moaved53-crypto.github.io/NURA-Test-Tracker-</a></div>
-          </div>
         </div>
 
         <div style="display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:3px 6px;">
@@ -615,6 +680,7 @@
           <span>Weak Chapter &amp; Topic</span>
           <span id="weakTrackerHeaderBadge" style="background:#e11d48;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
         </button>
+        <button id="navTrashBtn" type="button" class="btn-outline" onclick="switchView('deletedBinView')"><span>♻ Deleted Bin</span><span id="trashCountBadge" style="background:#e11d48;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span></button>
         <button id="navHistoryBtn" type="button" class="btn-outline" onclick="openHistoryDrawer()">
           <span>Saved &amp; History</span>
           <span id="historyCountBadge" style="background:#0f172a;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
@@ -631,40 +697,26 @@
             <span style="width:26px;height:26px;border-radius:8px;background:#ccfbf1;color:#0f766e;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;">1</span>
             <h2 style="margin:0;font-size:16px;font-weight:900;">Upload Practice Sheet (PDF, Screenshots, Text)</h2>
           </div>
-          <span class="pill pill-teal">Zero-Cut Single-Q Cropper + OCR</span>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <button id="quickStartTestBtn" type="button" onclick="startCBTExam()" disabled style="padding:7px 14px;font-size:12px;font-weight:900;border-radius:10px;background:#e2e8f0;color:#64748b;border:1px solid #cbd5e1;">▶ Start Test</button>
+            <span class="pill pill-teal">Zero-Cut Single-Q Cropper + OCR</span>
+          </div>
         </div>
 
-        <div id="dropZone" class="dropzone">
-          <div style="width:44px;height:44px;margin:0 auto 10px;border-radius:14px;background:#ccfbf1;color:#0d9488;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;">↑</div>
-          <div style="font-size:14px;font-weight:900;color:#0f172a;">Tap or Drop PW DPP PDF, JPG/PNG Screenshots, CSV, JSON or TXT</div>
-          <div style="font-size:12px;color:#475569;margin-top:4px;max-width:540px;margin-left:auto;margin-right:auto;">
-            Crops each question individually (1 complete question + its 4 options per cut, strictly isolating left &amp; right columns) so zero formulas or options ever get cut off.
-          </div>
+        <div id="dropZone" class="dropzone" style="padding:28px 18px;background:linear-gradient(135deg,#f0fdfa 0%,#eff6ff 50%,#fffbeb 100%);border:2px dashed #0d9488;border-radius:18px;">
+          <label for="fileInput" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:16px 28px;border-radius:16px;background:linear-gradient(135deg,#0d9488 0%,#2563eb 100%);color:#ffffff;box-shadow:0 8px 20px rgba(13,148,136,0.28);transition:transform 0.15s ease;">
+            <span style="width:48px;height:48px;border-radius:999px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;">⇪</span>
+            <span style="font-size:16px;font-weight:900;letter-spacing:0.03em;">Upload</span>
+          </label>
+          <div id="selectedFileNameBadge" class="hidden" style="margin-top:10px;font-size:12px;font-weight:800;color:#0f766e;"></div>
 
-          <div style="margin-top:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;">
-            <label for="fileInput" class="btn btn-primary" style="padding:10px 18px;font-size:13px;">Select Files from Device</label>
-            <button type="button" id="manualProcessFileBtn" class="btn-success" onclick="window.__onFileInputChanged(document.getElementById('fileInput'), true)" style="padding:10px 16px;font-size:13px;">
-              Process Selected File Now
-            </button>
-          </div>
+          <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" class="hidden" />
 
-          <div style="margin-top:10px;">
-            <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" style="font-size:12px;color:#475569;" />
-          </div>
-
-          <div style="margin-top:12px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;font-size:11px;font-weight:700;">
-            <label style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;padding:6px 10px;border-radius:8px;border:1px solid #a7f3d0;cursor:pointer;color:#065f46;">
-              <input id="autoCropQuestionsToggle" type="checkbox" checked style="accent-color:#059669;" />
-              <span>Auto Question Image Cropper (1 Complete Q + 4 Options per Cut)</span>
-            </label>
-            <label style="display:inline-flex;align-items:center;gap:6px;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--border);cursor:pointer;">
-              <input id="forcePdfOcrToggle" type="checkbox" style="accent-color:#0d9488;" />
-              <span>Force High-Accuracy OCR (Custom-Font PW PDFs)</span>
-            </label>
-            <label style="display:inline-flex;align-items:center;gap:6px;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--border);cursor:pointer;">
-              <input id="skipSolutionsToggle" type="checkbox" checked style="accent-color:#059669;" />
-              <span>Skip Hints &amp; Solutions Pages (Fast Mode)</span>
-            </label>
+          <!-- Internally active controls hidden externally so UI stays clean & attractive -->
+          <div class="hidden" aria-hidden="true">
+            <input id="autoCropQuestionsToggle" type="checkbox" checked />
+            <input id="forcePdfOcrToggle" type="checkbox" />
+            <input id="skipSolutionsToggle" type="checkbox" checked />
           </div>
         </div>
 
@@ -681,18 +733,9 @@
           </div>
         </div>
 
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f1f5f9;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-            <label for="rawTextInput" style="font-size:12px;font-weight:800;">Extracted / Raw Sheet Text</label>
-            <div style="display:flex;gap:12px;">
-              <button type="button" onclick="insertSampleFormat()" style="background:none;border:none;color:var(--primary);padding:0;font-size:12px;">Format Example</button>
-              <button type="button" onclick="clearRawText()" style="background:none;border:none;color:var(--muted);padding:0;font-size:12px;">Clear</button>
-            </div>
-          </div>
-          <textarea id="rawTextInput" rows="4" placeholder="Q1 What is true about glycos?&#10;(1) Greek word, splitting  (2) Latin word, sugar  (3) Greek word, sugar  (4) Latin word, splitting&#10;Answer Key&#10;Q1 (3)" style="font-family:monospace;"></textarea>
-          <div style="margin-top:8px;display:flex;justify-content:flex-end;">
-            <button type="button" class="btn-dark" onclick="parseFromTextarea()">Extract Questions &amp; Auto-Tag Chapter/Topic/Sub-Topic</button>
-          </div>
+        <div class="hidden" aria-hidden="true">
+          <textarea id="rawTextInput" rows="4" style="font-family:monospace;"></textarea>
+          <button type="button" onclick="parseFromTextarea()">Extract</button>
         </div>
       </section>
 
@@ -985,7 +1028,7 @@
             Vertical Y-axis shows <strong>Obtained Marks</strong> and horizontal X-axis shows <strong>Each Test</strong> in chronological order.
           </p>
         </div>
-        <button type="button" class="btn-outline" onclick="switchView('upload')">+ New Test</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" class="btn-danger-soft" onclick="clearAllMarksGraphEntries()">🗑 Clear Graph</button><button type="button" class="btn-outline" onclick="switchView('upload')">+ New Test</button></div>
       </div>
 
       <div class="grid-3" style="margin-top:14px;margin-bottom:14px;">
@@ -1026,7 +1069,7 @@
             Har test ke galat questions ke <strong>Chapter Name</strong>, <strong>Topic</strong>, aur <strong>Specific Sub-Topic</strong> yahan automatically add hote hain. Jab topic <strong>Strong</strong> ho jaye toh checkbox par <strong>Tick ✓</strong> karein!
           </p>
         </div>
-        <button type="button" class="btn-primary" onclick="openAddWeakTopicForm()">+ Add Chapter, Topic &amp; Sub-Topic</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" class="btn-danger-soft" onclick="clearAllWeakTopics()">🗑 Delete All Weak Topics</button><button type="button" class="btn-primary" onclick="openAddWeakTopicForm()">+ Add Chapter, Topic &amp; Sub-Topic</button></div>
       </div>
 
       <div class="grid-3" style="margin-top:14px;">
@@ -1093,10 +1136,39 @@
             Har test ke galat questions unke <strong>exact original Question No. (Q1, Q5, Q14...)</strong>, <strong>Chapter</strong>, <strong>Topic</strong>, aur <strong>Specific Sub-Topic</strong> ke saath yahan save hote hain.
           </p>
         </div>
-        <button type="button" class="btn-primary" onclick="reattemptAllSavedWrongQuestions()">Re-Attempt All Saved Wrong Qs</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" class="btn-danger-soft" onclick="clearAllSavedWrongBank()">🗑 Clear All Wrong Qs</button><button type="button" class="btn-primary" onclick="reattemptAllSavedWrongQuestions()">Re-Attempt All Saved Wrong Qs</button></div>
       </div>
 
       <div id="wrongQsTestsContainer" style="margin-top:14px;display:flex;flex-direction:column;gap:14px;"></div>
+    </div>
+  </section>
+
+  
+  <section id="deletedBinView" class="container hidden" style="max-width:1040px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-amber">Safe Recovery Zone · Restore or Purge</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Deleted Sections Recovery (Graph, Question Bank &amp; Weak Topics)</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            Jo bhi section (<strong>Marks Graph</strong>, <strong>Question Bank</strong>, <strong>Weak Chapter/Topic</strong>, <strong>Wrong Qs</strong>, ya <strong>Test History</strong>) delete hota hai, woh yahan save rehta hai. Aap use <strong>Reload</strong> kar sakte hain ya <strong>Delete</strong> par click karke <strong>Cancel</strong> ya <strong>Delete Permanently</strong> chun sakte hain.
+          </p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn-outline" onclick="switchView('upload')">← Back to App</button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;">
+        <button type="button" onclick="setTrashFilter('all')" data-trash-f="all" class="trash-f-btn btn-dark">All Deleted</button>
+        <button type="button" onclick="setTrashFilter('graph')" data-trash-f="graph" class="trash-f-btn btn-outline">Marks Graph</button>
+        <button type="button" onclick="setTrashFilter('qbank')" data-trash-f="qbank" class="trash-f-btn btn-outline">Question Bank</button>
+        <button type="button" onclick="setTrashFilter('weak')" data-trash-f="weak" class="trash-f-btn btn-outline">Weak Topics</button>
+        <button type="button" onclick="setTrashFilter('wrong')" data-trash-f="wrong" class="trash-f-btn btn-outline">Wrong Qs</button>
+        <button type="button" onclick="setTrashFilter('history')" data-trash-f="history" class="trash-f-btn btn-outline">Test History</button>
+      </div>
+
+      <div id="deletedItemsContainer" style="margin-top:14px;display:flex;flex-direction:column;gap:10px;"></div>
     </div>
   </section>
 
@@ -1163,16 +1235,33 @@
         <div id="savedSheetsList" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Past Test Reports</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);">Attempted Test History (Detailed &amp; Reloadable)</span><button type="button" class="btn-danger-soft" onclick="clearAllTestHistory()" style="padding:3px 8px;font-size:10px;">🗑 Clear History</button></div>
         <div id="testHistoryList" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
     </div>
   </div>
 
+
+  <div id="permanentDeleteModal" class="modal-backdrop hidden" style="z-index:70;">
+    <div class="modal-card" style="max-width:420px;display:flex;flex-direction:column;gap:14px;border:2px solid var(--danger-border);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="width:28px;height:28px;border-radius:999px;background:var(--danger-soft);color:var(--danger);display:inline-flex;align-items:center;justify-content:center;font-weight:900;">⚠</span>
+        <strong style="font-size:15px;color:#881337;">Confirm Permanent Deletion</strong>
+      </div>
+      <div id="permDeleteMessage" style="font-size:13px;color:#334155;line-height:1.5;">
+        Are you sure you want to permanently delete this section?
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;padding-top:6px;border-top:1px solid #f1f5f9;">
+        <button type="button" class="btn-outline" onclick="cancelPermanentDelete()" style="padding:9px 16px;">Cancel</button>
+        <button type="button" class="btn-danger" onclick="executeConfirmedPermanentDelete()" style="padding:9px 16px;">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Register offline service worker for PWA support
+    // Register offline service worker only on HTTP/HTTPS so Chrome file:// direct launch works cleanly
     (function registerNura2ServiceWorker() {
-      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
         navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function() {});
       }
     })();
@@ -1211,6 +1300,200 @@
       WEAK_TRACKER: 'nura2_weak_tracker_v1',
       WRONG_QS_BANK: 'nura2_wrong_qs_bank_v1'
     };
+
+    STORAGE_KEYS.DELETED_BIN = 'nura2_deleted_sections_bin_v1';
+    let currentTrashFilter = 'all';
+    let pendingPermanentDeleteFn = null;
+
+    function openPermanentDeleteConfirm(messageText, onConfirmFn) {
+      pendingPermanentDeleteFn = onConfirmFn;
+      const msgEl = document.getElementById('permDeleteMessage');
+      if (msgEl) msgEl.textContent = messageText || 'Are you sure you want to delete this permanently?';
+      const modal = document.getElementById('permanentDeleteModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function cancelPermanentDelete() {
+      pendingPermanentDeleteFn = null;
+      const modal = document.getElementById('permanentDeleteModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function executeConfirmedPermanentDelete() {
+      const fn = pendingPermanentDeleteFn;
+      cancelPermanentDelete();
+      if (typeof fn === 'function') fn();
+    }
+
+    function pushDeletedSection(category, title, summary, payload) {
+      const bin = loadStorage(STORAGE_KEYS.DELETED_BIN, []);
+      bin.unshift({
+        id: 'del_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        category,
+        title: title || 'Deleted Section',
+        summary: summary || '',
+        deletedAt: new Date().toLocaleString(),
+        payload
+      });
+      saveStorage(STORAGE_KEYS.DELETED_BIN, bin.slice(0, 80));
+      updateHeaderBadges();
+    }
+
+    function setTrashFilter(f) {
+      currentTrashFilter = f;
+      document.querySelectorAll('.trash-f-btn').forEach(btn => {
+        btn.className = `trash-f-btn ${btn.dataset.trashF === f ? 'btn-dark' : 'btn-outline'}`;
+      });
+      renderDeletedBinView();
+    }
+
+    function getTrashBadgeMeta(cat) {
+      if (cat === 'graph') return { cls: 'trash-pill-graph', label: 'Marks Graph' };
+      if (cat === 'qbank') return { cls: 'trash-pill-qbank', label: 'Question Bank' };
+      if (cat === 'weak') return { cls: 'trash-pill-weak', label: 'Weak Topic' };
+      if (cat === 'wrong') return { cls: 'trash-pill-wrong', label: 'Wrong Qs' };
+      return { cls: 'trash-pill-hist', label: 'Test History' };
+    }
+
+    function renderDeletedBinView() {
+      const bin = loadStorage(STORAGE_KEYS.DELETED_BIN, []);
+      const container = document.getElementById('deletedItemsContainer');
+      if (!container) return;
+
+      const filtered = bin.filter(item => currentTrashFilter === 'all' || item.category === currentTrashFilter);
+      if (!filtered.length) {
+        container.innerHTML = '<div style="text-align:center;padding:34px 16px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;">' +
+          '<div style="font-size:14px;font-weight:800;color:#475569;">No Deleted Sections in Bin<\/div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-top:4px;">Jab bhi aap Graph, Question Bank, ya Weak Topic delete karenge, woh yahan reload karne ke liye save ho jayega.<\/div>' +
+          '<\/div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const bMeta = getTrashBadgeMeta(item.category);
+        return '<div class="trash-item-card">' +
+          '<div style="flex:1;min-width:240px;">' +
+            '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+              '<span class="trash-type-pill ' + bMeta.cls + '">' + bMeta.label + '<\/span>' +
+              '<strong style="font-size:14px;color:#0f172a;">' + escapeHtml(item.title) + '<\/strong>' +
+            '<\/div>' +
+            '<div style="font-size:12px;color:#334155;margin-top:4px;">' + escapeHtml(item.summary || '') + '<\/div>' +
+            '<div style="font-size:11px;color:var(--muted);margin-top:2px;">Deleted on: ' + escapeHtml(item.deletedAt || '') + '<\/div>' +
+          '<\/div>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+            '<button type="button" class="btn-primary" onclick="reloadDeletedSection(\'' + item.id + '\')" style="padding:6px 12px;">↻ Reload Section<\/button>' +
+            '<button type="button" class="btn-danger-soft" onclick="promptPermanentDeleteTrashItem(\'' + item.id + '\')" style="padding:6px 12px;">🗑 Delete<\/button>' +
+          '<\/div>' +
+        '<\/div>';
+      }).join('');
+    }
+
+    function reloadDeletedSection(delId) {
+      const bin = loadStorage(STORAGE_KEYS.DELETED_BIN, []);
+      const idx = bin.findIndex(x => x.id === delId);
+      if (idx < 0) return;
+      const item = bin[idx];
+      const p = item.payload || {};
+
+      if (item.category === 'graph') {
+        const curGraph = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+        const restored = Array.isArray(p.entries) ? p.entries : (p.entry ? [p.entry] : []);
+        if (p.mode === 'all') {
+          saveStorage(STORAGE_KEYS.MARKS_GRAPH, restored);
+        } else {
+          curGraph.push(...restored);
+          saveStorage(STORAGE_KEYS.MARKS_GRAPH, curGraph);
+        }
+        bin.splice(idx, 1);
+        saveStorage(STORAGE_KEYS.DELETED_BIN, bin);
+        updateHeaderBadges();
+        renderDeletedBinView();
+        renderMarksBarGraphInto('resultMarksGraphMount');
+        renderMarksBarGraphInto('drawerMarksGraphMount');
+        switchView('marksGraphView');
+      } else if (item.category === 'qbank') {
+        const restoredQs = Array.isArray(p.questions) ? p.questions : [];
+        if (p.mode === 'all') {
+          questions = restoredQs.map((q, i) => enrichQuestionObj(q, i));
+        } else if (p.question) {
+          const newQ = enrichQuestionObj(p.question, questions.length);
+          const insIdx = Math.min(questions.length, Math.max(0, p.index !== undefined ? p.index : questions.length));
+          questions.splice(insIdx, 0, newQ);
+        }
+        bin.splice(idx, 1);
+        saveStorage(STORAGE_KEYS.DELETED_BIN, bin);
+        updateHeaderBadges();
+        renderDeletedBinView();
+        renderQuestionBank();
+        switchView('upload');
+      } else if (item.category === 'weak') {
+        const curWeak = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+        const restoredWeak = Array.isArray(p.items) ? p.items : (p.item ? [p.item] : []);
+        if (p.mode === 'all') {
+          saveStorage(STORAGE_KEYS.WEAK_TRACKER, restoredWeak);
+        } else {
+          saveStorage(STORAGE_KEYS.WEAK_TRACKER, [...restoredWeak, ...curWeak]);
+        }
+        bin.splice(idx, 1);
+        saveStorage(STORAGE_KEYS.DELETED_BIN, bin);
+        updateHeaderBadges();
+        renderDeletedBinView();
+        switchView('weakTracker');
+      } else if (item.category === 'wrong') {
+        const curWrong = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+        if (p.mode === 'all' && Array.isArray(p.bank)) {
+          saveStorage(STORAGE_KEYS.WRONG_QS_BANK, p.bank);
+        } else if (p.mode === 'test' && p.testEntry) {
+          saveStorage(STORAGE_KEYS.WRONG_QS_BANK, [p.testEntry, ...curWrong]);
+        } else if (p.mode === 'single' && p.testMeta && p.question) {
+          const existingIdx = curWrong.findIndex(b => b.id === p.testMeta.id);
+          if (existingIdx >= 0) {
+            curWrong[existingIdx].questions.push(p.question);
+          } else {
+            curWrong.unshift({
+              id: p.testMeta.id,
+              title: p.testMeta.title,
+              date: p.testMeta.date,
+              questions: [p.question]
+            });
+          }
+          saveStorage(STORAGE_KEYS.WRONG_QS_BANK, curWrong);
+        }
+        bin.splice(idx, 1);
+        saveStorage(STORAGE_KEYS.DELETED_BIN, bin);
+        updateHeaderBadges();
+        renderDeletedBinView();
+        switchView('wrongQsPage');
+      } else if (item.category === 'history') {
+        const curHist = loadStorage(STORAGE_KEYS.HISTORY, []);
+        if (p.mode === 'all' && Array.isArray(p.history)) {
+          saveStorage(STORAGE_KEYS.HISTORY, p.history);
+        } else if (p.entry) {
+          saveStorage(STORAGE_KEYS.HISTORY, [p.entry, ...curHist]);
+        }
+        bin.splice(idx, 1);
+        saveStorage(STORAGE_KEYS.DELETED_BIN, bin);
+        updateHeaderBadges();
+        renderDeletedBinView();
+        openHistoryDrawer();
+      }
+    }
+
+    function promptPermanentDeleteTrashItem(delId) {
+      const bin = loadStorage(STORAGE_KEYS.DELETED_BIN, []);
+      const item = bin.find(x => x.id === delId);
+      const label = item ? `"${item.title}"` : 'this deleted section';
+      openPermanentDeleteConfirm(
+        `Are you sure you want to permanently delete ${label}? It cannot be recovered after this.`,
+        () => {
+          const updated = loadStorage(STORAGE_KEYS.DELETED_BIN, []).filter(x => x.id !== delId);
+          saveStorage(STORAGE_KEYS.DELETED_BIN, updated);
+          updateHeaderBadges();
+          renderDeletedBinView();
+        }
+      );
+    }
+
 
     let questions = [];
     let cbtState = {
@@ -1370,10 +1653,49 @@
       return Math.max(w * 0.46, Math.min(w * 0.56, rightStartX - 10));
     }
 
-    // Slice single-column questions strictly from Q# top down to option (4) / above next Q#
+    // Expand vertical slice boundary to include dark pixels (diagrams/chemical structures/options) up to hardCeilNextY
+    function findDarkInkBottomInBand(canvas, x0, x1, startY, hardCeilNextY, minBottomY) {
+      try {
+        const sx = Math.max(0, Math.floor(x0));
+        const sw = Math.max(10, Math.min(canvas.width - sx, Math.ceil(x1 - x0)));
+        const topScan = Math.max(0, Math.floor(startY));
+        const botScan = Math.max(topScan + 4, Math.min(canvas.height, Math.ceil(hardCeilNextY)));
+        const sh = botScan - topScan;
+        if (sh <= 4) return hardCeilNextY;
+
+        const ctx = canvas.getContext('2d');
+        const pixels = ctx.getImageData(sx, topScan, sw, sh).data;
+        let lastDarkRelY = -1;
+
+        // Scan from bottom up so diagrams/options below text are never cut off
+        for (let ry = sh - 1; ry >= 0; ry -= 2) {
+          let darkCount = 0;
+          const rowOff = ry * sw * 4;
+          for (let rx = 0; rx < sw; rx += 3) {
+            const idx = rowOff + rx * 4;
+            if (pixels[idx] < 225 || pixels[idx + 1] < 225 || pixels[idx + 2] < 225) {
+              darkCount++;
+              if (darkCount >= 2) break;
+            }
+          }
+          if (darkCount >= 2) {
+            lastDarkRelY = ry;
+            break;
+          }
+        }
+
+        if (lastDarkRelY >= 0) {
+          const candidateY = topScan + lastDarkRelY + 12;
+          return Math.min(hardCeilNextY, Math.max(minBottomY, candidateY));
+        }
+      } catch (e) {}
+      return hardCeilNextY;
+    }
+
+    // Slice single-column questions strictly from Q# top down to option (4) / diagram bottom / above next Q#
     function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix) {
       const crops = {};
-      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
       const opt4Rx = /^(?:\([4Dd]\)|[4Dd][\.\)])(?:\s|$)/;
       const markers = [];
       let stopY = footerCutoffY;
@@ -1397,20 +1719,24 @@
       markers.sort((a, b) => a.y - b.y);
       for (let i = 0; i < markers.length; i++) {
         const cur = markers[i];
-        const hardCeilNextY = (i + 1 < markers.length) ? (markers[i + 1].y - 8) : stopY;
-        let tightBottomY = hardCeilNextY;
+        const nextTop = (i + 1 < markers.length) ? markers[i + 1].y : stopY;
+        const hardCeilNextY = Math.max(cur.y + 24, nextTop - 10);
 
-        const qItems = colItems.filter(it => it.topY >= cur.y - 2 && it.botY <= hardCeilNextY);
+        const qItems = colItems.filter(it => it.topY >= cur.y - 3 && it.botY <= hardCeilNextY);
         const opt4Items = qItems.filter(it => opt4Rx.test(it.str));
+        let textBottomY = hardCeilNextY;
         if (opt4Items.length) {
           const lastOpt4 = opt4Items[opt4Items.length - 1];
           const postOpt4Items = qItems.filter(it => it.topY >= lastOpt4.topY - 4 && it.botY <= hardCeilNextY);
           const maxBotAfterOpt4 = postOpt4Items.reduce((mx, it) => Math.max(mx, it.botY), lastOpt4.botY);
-          tightBottomY = Math.min(hardCeilNextY, maxBotAfterOpt4 + 10);
+          textBottomY = Math.min(hardCeilNextY, maxBotAfterOpt4 + 12);
         }
 
-        if (tightBottomY - cur.y >= 26) {
-          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, tightBottomY, 0.89);
+        // Also check actual rendered pixels up to hardCeilNextY so diagrams/structures below option (4) are included
+        const finalBottomY = findDarkInkBottomInBand(canvas, x0, x1, cur.y, hardCeilNextY, textBottomY);
+
+        if (finalBottomY - cur.y >= 26) {
+          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, finalBottomY, 0.90);
           if (dataUrl) {
             crops[cur.qNum] = {
               imageKey: `${keyPrefix}_q${cur.qNum}_${Math.random().toString(36).slice(2, 6)}`,
@@ -1546,7 +1872,12 @@
       const badgeEl = document.getElementById('headerLogoBadge');
       if (savedName) {
         if (inputEl && document.activeElement !== inputEl) inputEl.value = savedName;
-        if (titleEl) titleEl.textContent = savedName;
+        if (titleEl) {
+          titleEl.textContent = savedName;
+          titleEl.style.background = 'linear-gradient(90deg, #0d9488 0%, #2563eb 45%, #d97706 80%, #e11d48 100%)';
+          titleEl.style.webkitBackgroundClip = 'text';
+          titleEl.style.webkitTextFillColor = 'transparent';
+        }
         document.title = savedName;
         const cleanWord = savedName.replace(/[^A-Za-z0-9]/g, '');
         if (shortEl) shortEl.textContent = (cleanWord.slice(0, 5) || 'NURA').toUpperCase();
@@ -1582,10 +1913,13 @@
       document.getElementById('weakTrackerHeaderBadge').textContent = weakItems.filter(w => !w.mastered).length;
       const wqBadge = document.getElementById('wrongQsHeaderBadge');
       if (wqBadge) wqBadge.textContent = totalWrongQs;
+      const trashBin = loadStorage(STORAGE_KEYS.DELETED_BIN, []);
+      const tBadge = document.getElementById('trashCountBadge');
+      if (tBadge) tBadge.textContent = trashBin.length;
     }
 
     function switchView(viewName) {
-      ['uploadView', 'cbtView', 'resultView', 'marksGraphView', 'weakTrackerView', 'wrongQsPageView'].forEach(id => {
+      ['uploadView', 'cbtView', 'resultView', 'marksGraphView', 'weakTrackerView', 'wrongQsPageView', 'deletedBinView'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
       });
@@ -1606,6 +1940,10 @@
       if (viewName === 'wrongQsPage') {
         document.getElementById('wrongQsPageView').classList.remove('hidden');
         renderWrongQsBankPage();
+      }
+      if (viewName === 'deletedBinView') {
+        document.getElementById('deletedBinView').classList.remove('hidden');
+        renderDeletedBinView();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1671,6 +2009,11 @@
         const titleInput = document.getElementById('testTitleInput');
         if (titleInput && !titleInput.value.trim()) {
           titleInput.value = primary.name.replace(/\.[^/.]+$/, '');
+        }
+        const fnBadge = document.getElementById('selectedFileNameBadge');
+        if (fnBadge) {
+          fnBadge.textContent = files.length > 1 ? `${files.length} files selected` : primary.name;
+          fnBadge.classList.remove('hidden');
         }
 
         setParseStatus(true, `Reading: ${primary.name}`, 'Snipping each question individually, detecting chapters, sub-topics & answer keys...', false, 10, meta);
@@ -1965,7 +2308,7 @@
         options: split.options,
         imageKey: imgKey,
         imageDataUrl: imgUrl,
-        correct: ['A', 'B', 'C', 'D', '1', '2', '3', '4'].includes(String(q.correct || '').toUpperCase()) ? String(q.correct).toUpperCase() : ''
+        correct: normalizeAnswerChoice(q.correct) ? String(q.correct).trim().toUpperCase() : ''
       };
     }
 
@@ -2126,7 +2469,7 @@
         const isKeyOnlyPage = isAnswerKeyGridOrPage(pageText);
 
         if (enableAutoCrop && !isKeyOnlyPage && !isHintsPage) {
-          const cropScale = 1.9;
+          const cropScale = 2.35;
           const cropVp = page.getViewport({ scale: cropScale });
           const cropCanvas = document.createElement('canvas');
           cropCanvas.width = cropVp.width;
@@ -2402,7 +2745,7 @@
 
     function clearRawText() {
       document.getElementById('rawTextInput').value = '';
-      setParseStatus(false);
+      const ps = document.getElementById('parseStatusBox'); if (ps) ps.classList.add('hidden');
     }
 
     function renderQuestionBank() {
@@ -2473,8 +2816,32 @@
       }
     }
     function updateOptionField(idx, oIdx, val) { if (questions[idx]) questions[idx].options[oIdx] = val; }
-    function deleteQuestion(idx) { questions.splice(idx, 1); renderQuestionBank(); }
-    function clearAllQuestions() { questions = []; renderQuestionBank(); }
+    function deleteQuestion(idx) {
+      const removed = questions[idx];
+      if (removed) {
+        pushDeletedSection(
+          'qbank',
+          `Question Q${removed.num || (idx + 1)} (${removed.subject || 'Subject'})`,
+          (removed.text || 'Visual / Cropped Question').slice(0, 110),
+          { mode: 'single', index: idx, question: stripInlineImageForLocalStorage(removed) }
+        );
+      }
+      questions.splice(idx, 1);
+      renderQuestionBank();
+    }
+    function clearAllQuestions() {
+      if (questions.length) {
+        const testTitle = document.getElementById('testTitleInput')?.value.trim() || 'Question Bank';
+        pushDeletedSection(
+          'qbank',
+          `${testTitle} (${questions.length} Questions)`,
+          `Full Question Bank with ${questions.length} questions cleared.`,
+          { mode: 'all', questions: questions.map(q => stripInlineImageForLocalStorage(q)) }
+        );
+      }
+      questions = [];
+      renderQuestionBank();
+    }
     function addManualQuestion() {
       questions.push(enrichQuestionObj({
         id: 'q_' + Date.now(), num: questions.length + 1, subject: 'Physics',
@@ -2497,12 +2864,29 @@
       if (mode === 'neet200') minInput.value = 200;
 
       const btn = document.getElementById('startTestBtn');
+      const quickBtn = document.getElementById('quickStartTestBtn');
       if (questions.length > 0) {
         btn.disabled = false;
         btn.textContent = `Start NURA-2 CBT Test (${questions.length} Qs)`;
+        if (quickBtn) {
+          quickBtn.disabled = false;
+          quickBtn.textContent = `▶ Start Test (${questions.length} Qs)`;
+          quickBtn.style.background = '#059669';
+          quickBtn.style.color = '#ffffff';
+          quickBtn.style.borderColor = '#047857';
+          quickBtn.style.boxShadow = '0 3px 10px rgba(5, 150, 105, 0.30)';
+        }
       } else {
         btn.disabled = true;
         btn.textContent = 'Upload Practice Sheet to Start';
+        if (quickBtn) {
+          quickBtn.disabled = true;
+          quickBtn.textContent = '▶ Start Test';
+          quickBtn.style.background = '#e2e8f0';
+          quickBtn.style.color = '#64748b';
+          quickBtn.style.borderColor = '#cbd5e1';
+          quickBtn.style.boxShadow = 'none';
+        }
       }
     }
 
@@ -2655,6 +3039,7 @@
                     '<span style="color:var(--danger);">Your: ' + escapeHtml(formatAnswerChoiceDisplay(rawQ.lastUserAns)) + '<\/span>' +
                     '<span style="color:var(--success);">Correct: ' + escapeHtml(formatAnswerChoiceDisplay(q.correct)) + '<\/span>' +
                     '<button type="button" class="btn-soft" onclick="reattemptSingleWrongQuestion(\'' + testEntry.id + '\', ' + qIdx + ')" style="padding:3px 8px;font-size:11px;">Solve Q' + q.num + '<\/button>' +
+                    '<button type="button" class="btn-danger-soft" onclick="deleteSingleWrongQuestion(\'' + testEntry.id + '\', ' + qIdx + ')" title="Delete this question" style="padding:3px 7px;font-size:11px;">🗑<\/button>' +
                   '<\/div>' +
                 '<\/div>' +
                 (cropUrl ? (
@@ -2710,7 +3095,17 @@
       startCBTExam(true);
     }
     function deleteSavedWrongTest(testId) {
-      const bank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).filter(b => b.id !== testId);
+      const allBank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      const target = allBank.find(b => b.id === testId);
+      if (target) {
+        pushDeletedSection(
+          'wrong',
+          `Wrong Qs: ${target.title}`,
+          `${(target.questions || []).length} wrong questions from this test.`,
+          { mode: 'test', testEntry: target }
+        );
+      }
+      const bank = allBank.filter(b => b.id !== testId);
       saveStorage(STORAGE_KEYS.WRONG_QS_BANK, bank);
       updateHeaderBadges();
       renderWrongQsBankPage();
@@ -2860,11 +3255,26 @@
       computeAndRenderResults(true);
     }
 
-    function recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, timestampStr) {
+    let activeGraphEntryId = null;
+    function recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, timestampStr, isNewAttempt = true) {
       const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
       const pct = maxMarks > 0 ? Math.round((netScore / maxMarks) * 100) : 0;
+      if (!isNewAttempt && activeGraphEntryId) {
+        const existingIdx = entries.findIndex(e => e.id === activeGraphEntryId);
+        if (existingIdx >= 0) {
+          entries[existingIdx].title = testTitle;
+          entries[existingIdx].netScore = netScore;
+          entries[existingIdx].maxMarks = maxMarks;
+          entries[existingIdx].pct = pct;
+          entries[existingIdx].accuracy = accuracy;
+          saveStorage(STORAGE_KEYS.MARKS_GRAPH, entries);
+          return;
+        }
+      }
+      const newId = 'mg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5);
+      activeGraphEntryId = newId;
       entries.push({
-        id: 'mg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+        id: newId,
         title: testTitle,
         netScore,
         maxMarks,
@@ -2927,6 +3337,7 @@
                   return '<div class="bar-col" title="' + escapeHtml(e.title) + ': ' + e.netScore + ' / ' + e.maxMarks + ' (' + scorePct + '% · ' + e.date + ')">' +
                     '<span class="bar-val-pill" style="background:' + pal.pill + ';">' + e.netScore + '/' + e.maxMarks + '<\/span>' +
                     '<div class="bar-rect" style="height:' + heightPct + '%;background:' + pal.grad + ';">' +
+                      '<button type="button" class="bar-del-btn" onclick="deleteMarksGraphEntry(' + idx + ')" title="Delete this bar from graph">✕<\/button>' +
                       (heightPct >= 18 ? '<span class="bar-pct-inside">' + scorePct + '%<\/span>' : '') +
                     '<\/div>' +
                   '<\/div>';
@@ -2969,7 +3380,7 @@
           '<td style="font-weight:900;color:var(--primary-dark);">' + e.netScore + ' / ' + e.maxMarks + '<\/td>' +
           '<td>' + e.pct + '%<\/td>' +
           '<td>' + e.accuracy + '%<\/td>' +
-          '<td style="color:var(--muted);">' + escapeHtml(e.date) + '<\/td>' +
+          '<td style="color:var(--muted);">' + escapeHtml(e.date) + ' <button type="button" class="btn-danger-soft" onclick="deleteMarksGraphEntry(' + i + ')" style="padding:2px 6px;font-size:10px;margin-left:6px;">🗑<\/button><\/td>' +
         '<\/tr>'
       ).join('');
     }
@@ -3078,14 +3489,57 @@
       saveTestWrongQuestionsToBank(testTitle, evaluatedQuestions);
       lastReport = { id: 'rep_' + Date.now(), title: testTitle, date: tsStr, netScore, maxMarks, accuracy, evaluatedQuestions, weakTopics };
 
+      recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, tsStr, saveToHistory);
       if (saveToHistory) {
-        recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, tsStr);
         const hist = loadStorage(STORAGE_KEYS.HISTORY, []);
-        hist.unshift({ id: lastReport.id, title: testTitle, date: tsStr, score: `${netScore}/${maxMarks}`, accuracy: `${accuracy}%` });
+        const lightSnapshotQs = questions.map(q => stripInlineImageForLocalStorage(q));
+        const subjBreakdown = Object.entries(subjStats)
+          .filter(([, st]) => st.total > 0)
+          .map(([s, st]) => `${s}: ${st.score}/${st.total * posMark}`)
+          .join(' · ');
+        hist.unshift({
+          id: lastReport.id,
+          title: testTitle,
+          date: tsStr,
+          score: `${netScore}/${maxMarks}`,
+          netScore,
+          maxMarks,
+          scorePct,
+          accuracy: `${accuracy}%`,
+          totalQs: questions.length,
+          correct,
+          incorrect,
+          skipped,
+          timeTakenStr: `${Math.floor(totalTime / 60)}m ${totalTime % 60}s`,
+          subjBreakdown,
+          posMark,
+          negMark,
+          questionsSnapshot: lightSnapshotQs,
+          answersSnapshot: { ...cbtState.answers },
+          markedSnapshot: { ...cbtState.marked },
+          timeSpentSnapshot: { ...cbtState.timeSpent }
+        });
         saveStorage(STORAGE_KEYS.HISTORY, hist.slice(0, 40));
         updateHeaderBadges();
       }
+      if (!saveToHistory) {
+        const hist = loadStorage(STORAGE_KEYS.HISTORY, []);
+        if (hist.length && hist[0].title === testTitle) {
+          hist[0].score = `${netScore}/${maxMarks}`;
+          hist[0].netScore = netScore;
+          hist[0].maxMarks = maxMarks;
+          hist[0].scorePct = scorePct;
+          hist[0].accuracy = `${accuracy}%`;
+          hist[0].correct = correct;
+          hist[0].incorrect = incorrect;
+          hist[0].skipped = skipped;
+          hist[0].questionsSnapshot = questions.map(q => stripInlineImageForLocalStorage(q));
+          saveStorage(STORAGE_KEYS.HISTORY, hist);
+        }
+      }
       renderMarksBarGraphInto('resultMarksGraphMount');
+      renderMarksBarGraphInto('dedicatedMarksGraphMount');
+      renderMarksBarGraphInto('drawerMarksGraphMount');
       renderResultQuestionReview();
     }
 
@@ -3237,7 +3691,17 @@
       document.getElementById('addWeakTopicBox').classList.remove('hidden');
     }
     function deleteWeakTopicItem(id) {
-      saveStorage(STORAGE_KEYS.WEAK_TRACKER, loadStorage(STORAGE_KEYS.WEAK_TRACKER, []).filter(t => t.id !== id));
+      const cur = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const removed = cur.find(t => t.id === id);
+      if (removed) {
+        pushDeletedSection(
+          'weak',
+          `${removed.subTopic || removed.topic || 'Weak Topic'} (${removed.subject || ''})`,
+          `Chapter: ${removed.chapter || ''} · Topic: ${removed.topic || ''}`,
+          { mode: 'single', item: removed }
+        );
+      }
+      saveStorage(STORAGE_KEYS.WEAK_TRACKER, cur.filter(t => t.id !== id));
       updateHeaderBadges(); renderMasterWeakTracker();
     }
     function openAddWeakTopicForm() {
@@ -3321,11 +3785,223 @@
       }
     }
 
+    function deleteSingleWrongQuestion(testId, qIdx) {
+      const bank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      const entryIdx = bank.findIndex(b => b.id === testId);
+      if (entryIdx < 0) return;
+      const entryObj = bank[entryIdx];
+      const removedQ = entryObj.questions[qIdx];
+      if (removedQ) {
+        pushDeletedSection(
+          'wrong',
+          `Wrong Q${removedQ.num || (qIdx + 1)} · ${entryObj.title}`,
+          `${removedQ.subject || ''} · ${removedQ.subTopic || ''}`,
+          { mode: 'single', testMeta: { id: entryObj.id, title: entryObj.title, date: entryObj.date }, question: removedQ }
+        );
+      }
+      bank[entryIdx].questions.splice(qIdx, 1);
+      if (!bank[entryIdx].questions.length) bank.splice(entryIdx, 1);
+      saveStorage(STORAGE_KEYS.WRONG_QS_BANK, bank);
+      updateHeaderBadges();
+      renderWrongQsBankPage();
+    }
+
+    function clearAllSavedWrongBank() {
+      const curBank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      const totalQs = curBank.reduce((a, b) => a + (b.questions ? b.questions.length : 0), 0);
+      if (curBank.length) {
+        pushDeletedSection(
+          'wrong',
+          `All Saved Wrong Questions (${totalQs} Qs)`,
+          `Cleared ${curBank.length} test wrong-question sets.`,
+          { mode: 'all', bank: curBank }
+        );
+      }
+      saveStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      updateHeaderBadges();
+      renderWrongQsBankPage();
+    }
+
+    function clearAllWeakTopics() {
+      const cur = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      if (cur.length) {
+        pushDeletedSection(
+          'weak',
+          `All Weak Chapters & Topics (${cur.length} items)`,
+          `Full Weak Chapter, Topic & Sub-Topic tracker cleared.`,
+          { mode: 'all', items: cur }
+        );
+      }
+      saveStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      updateHeaderBadges();
+      renderMasterWeakTracker();
+    }
+
+    function deleteMarksGraphEntry(idx) {
+      const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+      if (idx >= 0 && idx < entries.length) {
+        const removed = entries[idx];
+        pushDeletedSection(
+          'graph',
+          `Graph Bar: ${removed.title} (${removed.netScore}/${removed.maxMarks})`,
+          `Score: ${removed.pct}% · Accuracy: ${removed.accuracy}% · ${removed.date}`,
+          { mode: 'single', entry: removed }
+        );
+        entries.splice(idx, 1);
+        saveStorage(STORAGE_KEYS.MARKS_GRAPH, entries);
+        renderMarksBarGraphInto('resultMarksGraphMount');
+        renderMarksBarGraphInto('drawerMarksGraphMount');
+        if (!document.getElementById('marksGraphView').classList.contains('hidden')) {
+          renderMarksGraphPage();
+        }
+      }
+    }
+
+    function clearAllMarksGraphEntries() {
+      const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+      if (entries.length) {
+        pushDeletedSection(
+          'graph',
+          `Obtained Marks Graph (${entries.length} Tests Plotted)`,
+          `Full Marks vs Test bar graph cleared.`,
+          { mode: 'all', entries }
+        );
+      }
+      saveStorage(STORAGE_KEYS.MARKS_GRAPH, []);
+      renderMarksBarGraphInto('resultMarksGraphMount');
+      renderMarksBarGraphInto('drawerMarksGraphMount');
+      renderMarksGraphPage();
+    }
+
+    function deleteSavedSheet(idx) {
+      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
+      sheets.splice(idx, 1);
+      saveStorage(STORAGE_KEYS.SHEETS, sheets);
+      updateHeaderBadges();
+      openHistoryDrawer();
+    }
+
+    function deleteTestHistoryItem(idx) {
+      const hist = loadStorage(STORAGE_KEYS.HISTORY, []);
+      const removed = hist[idx];
+      if (removed) {
+        pushDeletedSection(
+          'history',
+          `Test History: ${removed.title}`,
+          `Score: ${removed.score} · Accuracy: ${removed.accuracy} · ${removed.date}`,
+          { mode: 'single', entry: removed }
+        );
+      }
+      hist.splice(idx, 1);
+      saveStorage(STORAGE_KEYS.HISTORY, hist);
+      updateHeaderBadges();
+      openHistoryDrawer();
+    }
+
+    function clearAllTestHistory() {
+      const hist = loadStorage(STORAGE_KEYS.HISTORY, []);
+      if (hist.length) {
+        pushDeletedSection(
+          'history',
+          `All Attempted Test History (${hist.length} Tests)`,
+          `Full test attempt history cleared.`,
+          { mode: 'all', history: hist }
+        );
+      }
+      saveStorage(STORAGE_KEYS.HISTORY, []);
+      updateHeaderBadges();
+      openHistoryDrawer();
+    }
+
+    function reloadHistoryTest(idx, mode = 'report') {
+      const hist = loadStorage(STORAGE_KEYS.HISTORY, []);
+      const h = hist[idx];
+      if (!h) return;
+      if (!h.questionsSnapshot || !h.questionsSnapshot.length) {
+        setParseStatus(true, 'Legacy Entry', 'This older entry was saved before full snapshot reload support.', true);
+        closeHistoryDrawer();
+        return;
+      }
+      questions = h.questionsSnapshot.map((q, i) => enrichQuestionObj(q, i));
+      document.getElementById('testTitleInput').value = h.title || 'Reloaded Test';
+      if (h.posMark !== undefined) document.getElementById('positiveMarkInput').value = h.posMark;
+      if (h.negMark !== undefined) document.getElementById('negativeMarkInput').value = h.negMark;
+      renderQuestionBank();
+      closeHistoryDrawer();
+
+      if (mode === 'reattempt') {
+        startCBTExam(false);
+      } else if (mode === 'bank') {
+        switchView('upload');
+        setParseStatus(true, `Reloaded "${h.title}" to Question Bank`, `${questions.length} questions restored and ready to edit or start.`, false, 100);
+      } else {
+        cbtState = {
+          active: false,
+          filteredIndices: questions.map((_, i) => i),
+          currentPos: 0,
+          subjectFilter: 'All',
+          answers: { ...(h.answersSnapshot || {}) },
+          marked: { ...(h.markedSnapshot || {}) },
+          visited: {},
+          timeSpent: { ...(h.timeSpentSnapshot || {}) },
+          remainingSeconds: 0,
+          totalSeconds: 0,
+          timerInterval: null
+        };
+        switchView('result');
+        computeAndRenderResults(false);
+      }
+    }
+
     function openHistoryDrawer() {
       const sheets = loadStorage(STORAGE_KEYS.SHEETS, []), history = loadStorage(STORAGE_KEYS.HISTORY, []);
       renderMarksBarGraphInto('drawerMarksGraphMount');
-      document.getElementById('savedSheetsList').innerHTML = sheets.length ? sheets.map((s, idx) => '<div style="padding:10px;border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-size:12px;font-weight:800;">' + escapeHtml(s.title) + '<\/div><div style="font-size:11px;color:var(--muted);">' + s.questions.length + ' Qs · ' + s.date + '<\/div><\/div><button type="button" class="btn-primary" onclick="loadSavedSheet(' + idx + ')">Load<\/button><\/div>').join('') : '<div style="font-size:12px;color:var(--muted);">No saved sheets yet.<\/div>';
-      document.getElementById('testHistoryList').innerHTML = history.length ? history.map(h => '<div style="padding:10px;border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-size:12px;font-weight:800;">' + escapeHtml(h.title) + '<\/div><div style="font-size:11px;color:var(--muted);">' + h.date + '<\/div><\/div><span style="font-size:12px;font-weight:900;color:var(--primary-dark);">' + h.score + ' (' + h.accuracy + ')<\/span><\/div>').join('') : '<div style="font-size:12px;color:var(--muted);">No completed tests yet.<\/div>';
+      document.getElementById('savedSheetsList').innerHTML = sheets.length ? sheets.map((s, idx) =>
+        '<div style="padding:10px;border-radius:10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;background:#fff;">' +
+          '<div><div style="font-size:12px;font-weight:800;">' + escapeHtml(s.title) + '<\/div><div style="font-size:11px;color:var(--muted);">' + s.questions.length + ' Qs · ' + s.date + '<\/div><\/div>' +
+          '<div style="display:flex;gap:5px;">' +
+            '<button type="button" class="btn-primary" onclick="loadSavedSheet(' + idx + ')" style="padding:5px 10px;">Load<\/button>' +
+            '<button type="button" class="btn-danger-soft" onclick="deleteSavedSheet(' + idx + ')" style="padding:5px 8px;">🗑<\/button>' +
+          '<\/div>' +
+        '<\/div>'
+      ).join('') : '<div style="font-size:12px;color:var(--muted);">No saved sheets yet.<\/div>';
+
+      document.getElementById('testHistoryList').innerHTML = history.length ? history.map((h, idx) => {
+        const hasSnap = Array.isArray(h.questionsSnapshot) && h.questionsSnapshot.length > 0;
+        const qCount = h.totalQs || (hasSnap ? h.questionsSnapshot.length : '?');
+        const cCount = h.correct !== undefined ? h.correct : '-';
+        const wCount = h.incorrect !== undefined ? h.incorrect : '-';
+        const sCount = h.skipped !== undefined ? h.skipped : '-';
+        const tStr = h.timeTakenStr || '-';
+        return '<div class="hist-card">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
+            '<div>' +
+              '<div style="font-size:13px;font-weight:900;color:#0f172a;">#' + (history.length - idx) + ' · ' + escapeHtml(h.title) + '<\/div>' +
+              '<div style="font-size:11px;color:var(--muted);margin-top:2px;">Attempted: ' + escapeHtml(h.date) + ' · Total: ' + qCount + ' Qs · Time: ' + escapeHtml(tStr) + '<\/div>' +
+            '<\/div>' +
+            '<div style="text-align:right;flex-shrink:0;">' +
+              '<span style="font-size:13px;font-weight:900;color:var(--primary-dark);display:block;">' + escapeHtml(h.score) + '<\/span>' +
+              '<span style="font-size:10px;font-weight:800;color:var(--muted);">Acc: ' + escapeHtml(h.accuracy) + '<\/span>' +
+            '<\/div>' +
+          '<\/div>' +
+          '<div class="hist-meta-row">' +
+            '<span class="pill pill-green">' + cCount + ' Correct<\/span>' +
+            '<span class="pill pill-rose">' + wCount + ' Wrong<\/span>' +
+            '<span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800;">' + sCount + ' Skip<\/span>' +
+            (h.subjBreakdown ? '<span style="color:#334155;font-size:10.5px;">' + escapeHtml(h.subjBreakdown) + '<\/span>' : '') +
+          '<\/div>' +
+          '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;padding-top:6px;border-top:1px solid #f1f5f9;">' +
+            (hasSnap ? (
+              '<div style="display:flex;flex-wrap:wrap;gap:5px;">' +
+                '<button type="button" class="btn-soft" onclick="reloadHistoryTest(' + idx + ', \'report\')" style="padding:5px 9px;font-size:11px;">📊 Reload Analysis<\/button>' +
+                '<button type="button" class="btn-primary" onclick="reloadHistoryTest(' + idx + ', \'reattempt\')" style="padding:5px 9px;font-size:11px;">▶ Re-Attempt Test<\/button>' +
+                '<button type="button" class="btn-outline" onclick="reloadHistoryTest(' + idx + ', \'bank\')" style="padding:5px 9px;font-size:11px;">Load Q-Bank<\/button>' +
+              '<\/div>'
+            ) : '<span style="font-size:10px;color:var(--muted);">Summary only<\/span>') +
+            '<button type="button" class="btn-danger-soft" onclick="deleteTestHistoryItem(' + idx + ')" style="padding:5px 9px;font-size:11px;">🗑 Delete<\/button>' +
+          '<\/div>' +
+        '<\/div>';
+      }).join('') : '<div style="font-size:12px;color:var(--muted);">No completed tests yet.<\/div>';
       document.getElementById('historyDrawer').classList.remove('hidden');
     }
     function closeHistoryDrawer() { document.getElementById('historyDrawer').classList.add('hidden'); }
