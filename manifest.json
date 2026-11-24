@@ -1,13 +1,13 @@
 {
-  "name": "NURA-2 · NEET CBT & Weak Topic Tracker",
+  "name": "NURA-2 \u00b7 NEET CBT & Weak Topic Tracker",
   "short_name": "NURA-2",
-  "description": "Independent Offline NEET CBT Simulator, Question Cropper & Weak Sub-Topic Tracker",
+  "description": "100% Independent Offline NEET CBT Simulator, Question Cropper & Weak Topic Tracker",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f7f6",
   "theme_color": "#0d9488",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "icons": [
     {
       "src": "./icon-192.png",
