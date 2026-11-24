@@ -566,11 +566,15 @@
       overflow-x: auto;
     }
     .q-crop-frame img {
+      image-rendering: auto;
       max-width: 100%;
+      width: auto;
+      max-height: 460px;
       height: auto;
       display: block;
       margin: 0 auto;
-      border-radius: 6px;
+      border-radius: 8px;
+      background: #ffffff;
     }
 
     .bar-del-btn {
@@ -639,6 +643,241 @@
     .trash-pill-weak  { background: #ffe4e6; color: #be123c; border: 1px solid #fda4af; }
     .trash-pill-wrong { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
     .trash-pill-hist  { background: #ede9fe; color: #6d28d9; border: 1px solid #c4b5fd; }
+  
+    .audit-highlight-box {
+      margin-top: 14px;
+      background: #ffffff;
+      border: 2.5px solid #0d9488;
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 8px 24px rgba(13, 148, 136, 0.16), 0 0 0 4px rgba(20, 184, 166, 0.14);
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+    .audit-hl-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 11px;
+      background: linear-gradient(90deg, #f0fdfa 0%, #eff6ff 55%, #fffbeb 100%);
+      border: 1px solid #99f6e4;
+    }
+    .audit-nv-card {
+      border-radius: 12px;
+      padding: 11px 13px;
+      background: #fffbeb;
+      border: 2px solid #f59e0b;
+      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.10);
+    }
+    .audit-um-card {
+      border-radius: 12px;
+      padding: 11px 13px;
+      background: #fff1f2;
+      border: 2px solid #e11d48;
+      box-shadow: 0 3px 10px rgba(225, 29, 72, 0.10);
+    }
+    .audit-note-card {
+      border-radius: 12px;
+      padding: 11px 13px;
+      background: #f0fdfa;
+      border: 2px solid #0d9488;
+      box-shadow: 0 3px 10px rgba(13, 148, 136, 0.10);
+    }
+    .audit-hl-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 9px;
+      padding: 8px 11px;
+      margin-top: 7px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .qnum-chip-amber {
+      display: inline-block;
+      background: #fef3c7;
+      color: #78350f;
+      border: 1px solid #f59e0b;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 900;
+      margin: 2px 3px 2px 0;
+    }
+    .qnum-chip-rose {
+      display: inline-block;
+      background: #ffe4e6;
+      color: #881337;
+      border: 1px solid #e11d48;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 900;
+      margin: 2px 3px 2px 0;
+    }
+
+  
+    .notepad-highlight-card {
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 13px;
+      background: #f0fdfa;
+      border: 2px solid #0d9488;
+      box-shadow: 0 4px 14px rgba(13, 148, 136, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .notepad-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .notepad-area {
+      width: 100%;
+      min-height: 120px;
+      background: #ffffff;
+      border: 1.5px solid #5eead4;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #0f172a;
+      resize: vertical;
+    }
+    .subj-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 9px;
+      margin-top: 4px;
+    }
+    .subj-card-chip {
+      background: #ffffff;
+      border-radius: 11px;
+      padding: 9px 11px;
+      border: 1.5px solid #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+    .subj-card-chip.phy { border-color: #2563eb; background: #eff6ff; }
+    .subj-card-chip.che { border-color: #d97706; background: #fffbeb; }
+    .subj-card-chip.bot { border-color: #059669; background: #ecfdf5; }
+    .subj-card-chip.zoo { border-color: #e11d48; background: #fff1f2; }
+    .subj-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .subj-badge-pill {
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 9px;
+      border-radius: 999px;
+      color: #ffffff;
+    }
+    .subj-badge-phy { background: #2563eb; }
+    .subj-badge-che { background: #d97706; }
+    .subj-badge-bot { background: #059669; }
+    .subj-badge-zoo { background: #e11d48; }
+    .note-attach-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .note-attach-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .note-attach-thumb {
+      max-height: 54px;
+      max-width: 96px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      object-fit: contain;
+      background: #ffffff;
+    }
+
+  
+    .qbox-uploaded-chips-wrap {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f0fdfa;
+      border: 1.5px solid #0d9488;
+    }
+    .qbox-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 6px;
+    }
+    .qbox-file-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1.5px solid #0d9488;
+      color: #0f172a;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.05);
+    }
+    .qbox-chip-del-btn {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+      border-radius: 999px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 900;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .qbox-chip-del-btn:hover { background: #e11d48; color: #ffffff; }
+
+  
+    .front-page-nav-btn {
+      background: linear-gradient(135deg, #0d9488 0%, #2563eb 100%);
+      color: #ffffff;
+      border: 1.5px solid #0f766e;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.24);
+      cursor: pointer;
+    }
+    .front-page-nav-btn:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
   </style>
 </head>
 <body>
@@ -666,11 +905,11 @@
       </div>
 
       <div class="nav-actions">
+        <button id="navFrontPageBtn" type="button" class="front-page-nav-btn" onclick="goToFrontPageDirect()">🏠 Front Page</button>
         <button type="button" class="pill-save" onclick="saveAllDataToJsonFile()"><span id="headerSaveBtnLabel">⬇ Save</span></button>
         <button type="button" class="pill-pdf" onclick="exportFullReportPdf()">PDF</button>
         <button id="installAppBtn" type="button" class="btn-warn hidden" onclick="triggerInstallApp()">⬇ Install</button>
-        <button type="button" class="btn-outline" onclick="openInstallHelpModal()">Live &amp; Install</button>
-        <button id="navUploadBtn" type="button" class="btn-soft" onclick="switchView('upload')">+ New Test</button>
+        <button id="navUploadBtn" type="button" class="btn-soft" onclick="startNewTestSession()">+ New Test</button>
         <button id="navGraphBtn" type="button" class="btn-soft" onclick="switchView('marksGraphView')">📊 Marks Graph</button>
         <button id="navWrongQsBtn" type="button" class="btn-warn" onclick="switchView('wrongQsPage')">
           <span>Wrong Qs Bank</span>
@@ -684,6 +923,18 @@
         <button id="navHistoryBtn" type="button" class="btn-outline" onclick="openHistoryDrawer()">
           <span>Saved &amp; History</span>
           <span id="historyCountBadge" style="background:#0f172a;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
+        </button>
+        <button id="navNoteBoxBtn" type="button" class="btn-soft" onclick="switchView('noteBoxSectionView')">
+          <span>📝 Note Box</span>
+          <span id="noteBoxCountBadge" style="background:#0f766e;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
+        </button>
+        <button id="navUnmatchedQBoxBtn" type="button" class="btn-danger-soft" onclick="switchView('unmatchedQBoxSectionView')">
+          <span>❓ Unmatched Qs</span>
+          <span id="unmatchedQBoxBadge" style="background:#e11d48;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
+        </button>
+        <button id="navSaveSheetSectionBtn" type="button" class="btn-soft" onclick="switchView('savedSheetsSectionView')">
+          <span>📁 Save Sheet</span>
+          <span id="savedSheetsSectionBadge" style="background:#0f766e;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
         </button>
       </div>
     </div>
@@ -704,13 +955,13 @@
         </div>
 
         <div id="dropZone" class="dropzone" style="padding:28px 18px;background:linear-gradient(135deg,#f0fdfa 0%,#eff6ff 50%,#fffbeb 100%);border:2px dashed #0d9488;border-radius:18px;">
-          <label for="fileInput" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:16px 28px;border-radius:16px;background:linear-gradient(135deg,#0d9488 0%,#2563eb 100%);color:#ffffff;box-shadow:0 8px 20px rgba(13,148,136,0.28);transition:transform 0.15s ease;">
+          <button type="button" id="triggerUploadBtn" onclick="openDeviceFilePickerDirect()" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:16px 28px;border-radius:16px;background:linear-gradient(135deg,#0d9488 0%,#2563eb 100%);color:#ffffff;box-shadow:0 8px 20px rgba(13,148,136,0.28);border:none;transition:transform 0.15s ease;">
             <span style="width:48px;height:48px;border-radius:999px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;">⇪</span>
             <span style="font-size:16px;font-weight:900;letter-spacing:0.03em;">Upload</span>
-          </label>
+          </button>
           <div id="selectedFileNameBadge" class="hidden" style="margin-top:10px;font-size:12px;font-weight:800;color:#0f766e;"></div>
 
-          <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" class="hidden" />
+          <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" onchange="if(window.__onFileInputChanged){window.__onFileInputChanged(this,true);}" style="position:fixed;top:-120px;left:-120px;width:1px;height:1px;opacity:0.001;" />
 
           <!-- Internally active controls hidden externally so UI stays clean & attractive -->
           <div class="hidden" aria-hidden="true">
@@ -733,7 +984,7 @@
           </div>
         </div>
 
-        <div class="hidden" aria-hidden="true">
+<div class="hidden" aria-hidden="true">
           <textarea id="rawTextInput" rows="4" style="font-family:monospace;"></textarea>
           <button type="button" onclick="parseFromTextarea()">Extract</button>
         </div>
@@ -751,7 +1002,6 @@
           <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
             <span id="questionCountBadge" class="pill pill-green" style="font-size:11px;padding:4px 10px;">0 Questions</span>
             <button type="button" class="btn-soft" onclick="openBulkKeyModal()">Bulk Key / Multi-Image OCR</button>
-            <button type="button" class="btn-outline" onclick="saveCurrentSheetToLibrary()">Save Sheet</button>
             <button type="button" class="btn-outline" onclick="addManualQuestion()">+ Add Q</button>
             <button type="button" class="btn-danger-soft" onclick="clearAllQuestions()">Clear</button>
           </div>
@@ -830,6 +1080,7 @@
           <span id="cbtTimerDisplay" style="font-size:15px;font-weight:900;color:#fbbf24;font-family:monospace;">00:00</span>
         </div>
         <button type="button" class="btn-outline" onclick="toggleMobilePalette()" style="background:#1e293b;color:#fff;border-color:#334155;">Palette</button>
+        <button id="cbtSaveSheetBtn" type="button" class="btn-soft" onclick="saveCurrentSheetToLibrary(false, this)" style="padding:9px 14px;font-size:13px;font-weight:900;">💾 Save Sheet</button>
         <button type="button" class="btn-success" onclick="confirmAndSubmitExam()" style="padding:9px 14px;font-size:13px;">Submit Test</button>
       </div>
     </div>
@@ -1172,6 +1423,92 @@
     </div>
   </section>
 
+  <section id="noteBoxSectionView" class="container hidden" style="max-width:1040px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card" style="border:2px solid #0d9488;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-teal">Dedicated Study &amp; Screenshot Note Box</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Note Box</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            Notepad ki tarah notes likhein, files/screenshots upload karein, aur Physics · Chemistry · Botany · Zoology ke cards/chips manage karein.
+          </p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <label class="btn btn-primary" style="cursor:pointer;">
+            ⬆ Upload File / Screenshot
+            <input type="file" multiple accept="image/*,.pdf,.txt,.md,.json,.csv" class="hidden" onchange="handleNoteFilesUpload(this)" />
+          </label>
+          <button type="button" class="btn-danger-soft" onclick="deleteTopNoteBoxData()">🗑 Delete Note Box</button>
+          <button type="button" class="btn-outline" onclick="switchView('upload')">← Back to Test</button>
+        </div>
+      </div>
+      <div id="topNoteBoxMount" style="margin-top:12px;"></div>
+    </div>
+  </section>
+
+  <section id="savedSheetsSectionView" class="container hidden" style="max-width:1040px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card" style="border:2px solid #0d9488;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-teal">Saved Cropped Sheets · Instant Direct Start</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Save Sheet (Each Test Cropped)</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            <strong>Save Sheet</strong> button dabate hi uploaded sheet ke sabhi cropped questions yahan test-wise save hote hain. Kisi bhi test ke <strong>Re-Attempt / Start Test</strong> par click karte hi test direct start ho jata hai, aur har test ko <strong>Delete</strong> bhi kiya ja sakta hai.
+          </p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <button type="button" class="btn-primary" onclick="saveCurrentSheetToLibrary(true)">💾 Save Current Sheet Now</button>
+          <button type="button" class="btn-outline" onclick="switchView('upload')">← Back to Test</button>
+        </div>
+      </div>
+
+      <div id="savedSheetsTopSectionList" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+  </section>
+
+  <section id="unmatchedQBoxSectionView" class="container hidden" style="max-width:1040px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card" style="border:2px solid #e11d48;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-rose">Auto-Updated on Every File Upload</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Unmatched Question Box</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            Jo questions visual crop nahi hue ya jinke answer key match nahi hue, unke question numbers yahan har file upload ke saath auto-update hote hain.
+          </p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <span id="auditLiveCountsPill" class="pill pill-teal" style="font-size:11px;padding:4px 10px;">Visual: 0/0 · Matched: 0/0</span>
+
+          <button type="button" class="btn-outline" onclick="switchView('upload')">← Back to Test</button>
+        </div>
+      </div>
+
+      <div id="unmatchedQBoxAutoStatus" style="margin-top:12px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid var(--border);font-size:12px;font-weight:800;color:#0f172a;">
+        Last Upload: Abhi koi file upload nahi hui hai.
+      </div>
+
+      <div id="qboxUploadedFilesChipsArea" class="qbox-uploaded-chips-wrap">
+        <div style="font-size:11.5px;font-weight:900;color:#0f766e;">
+          Uploaded Files Cards / Chips (<span id="qboxUploadedFilesCount">0</span>):
+        </div>
+        <div id="qboxUploadedFilesChipsList" class="qbox-chips-row"></div>
+      </div>
+      <div id="eachTestUnmatchedCropMount"></div>
+
+
+
+      <div class="audit-um-card" style="margin-top:12px;">
+        <div style="font-size:12px;font-weight:900;color:#881337;margin-bottom:4px;">
+          Unmatched Answer Question Numbers:
+        </div>
+        <div id="secUnmatchedAnsNumbers" style="font-size:12px;font-weight:800;color:#9f1239;">None</div>
+        <div id="unmatchedAnsEditList"></div>
+      </div>
+    </div>
+  </section>
+
+
+
   <div id="bulkKeyModal" class="modal-backdrop hidden">
     <div class="modal-card" style="display:flex;flex-direction:column;gap:14px;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -1265,6 +1602,63 @@
         navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function() {});
       }
     })();
+    function sanitizeExtractedMathText(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/Master\s*NCERT\s*with\s*PW\s*Books\s*APP/gi, ' ')
+        .replace(/PW\s*Web\/?App\s*-\s*https?:\/\/\S+/gi, ' ')
+        .replace(/SPACE\s*FOR\s*ROUGH\s*WORK/gi, ' ')
+        .replace(/\b(?:Android App|iOS App|PW Website|CUSTOMER)\b/gi, ' ')
+        .replace(/[\uF000-\uF8FF]/g, ' ')
+        .replace(/[^\x20-\x7E\n]/g, ' ')
+        .replace(/[ \t]{2,}/g, ' ')
+        .trim();
+    }
+    function truncateBeforeSolutions(text) {
+      const rx = /\n\s*(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)/i;
+      const match = String(text || '').match(rx);
+      if (match && match.index > 30) return text.slice(0, match.index).trim();
+      return String(text || '');
+    }
+    function isExtractedPageTextUsable(txt) {
+      const cleaned = String(txt || '').replace(/Android App|iOS App|PW Website|CUSTOMER/gi, '').trim();
+      if (cleaned.length < 40) return false;
+      const printableRatio = (cleaned.match(/[A-Za-z0-9\s\(\)\.\,\?\-\+\=]/g) || []).length / Math.max(1, cleaned.length);
+      return printableRatio > 0.72;
+    }
+    function splitInlineNumberedOrLetteredOptions(rawQText, existingOptions = null) {
+      const cleanRaw = sanitizeExtractedMathText(rawQText || '');
+      const opts = Array.isArray(existingOptions) && existingOptions.length === 4
+        ? existingOptions.map((o, i) => sanitizeExtractedMathText(o) || `Choice (${i + 1})`)
+        : ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'];
+      return { text: cleanRaw, options: opts };
+    }
+    function extractCoverPageSyllabusMap(rawText) {
+      const map = {};
+      const lines = String(rawText || '').split('\n').map(l => l.trim()).filter(Boolean);
+      for (let i = 0; i < lines.length; i++) {
+        const m = lines[i].match(/^(Physics|Chemistry|Botany|Zoology)\s*:\s*(.+)$/i);
+        if (m) map[m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase()] = m[2].trim();
+      }
+      return map;
+    }
+    function classifyQuestionTaxonomy(qText, qNum = 1, fallbackSub = '', coverSyllabusMap = {}) {
+      let sub = ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(fallbackSub) ? fallbackSub : '';
+      if (!sub) {
+        if (qNum >= 1 && qNum <= 45) sub = 'Physics';
+        else if (qNum >= 46 && qNum <= 90) sub = 'Chemistry';
+        else if (qNum >= 91 && qNum <= 135) sub = 'Botany';
+        else if (qNum >= 136 && qNum <= 180) sub = 'Zoology';
+        else sub = 'Physics';
+      }
+      const coverCh = coverSyllabusMap[sub] || '';
+      return {
+        subject: sub,
+        chapter: coverCh || `${sub} Practice Chapter`,
+        topic: `${sub} Core Topic`,
+        subTopic: 'Concept & Numerical Application'
+      };
+    }
 
     let deferredInstallPrompt = null;
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -1539,6 +1933,30 @@
       } catch (e) {}
     }
 
+    async function idbPutImagesBatch(cropsMap) {
+      const entries = Object.entries(cropsMap || {});
+      if (!entries.length) return;
+      entries.forEach(([, cObj]) => {
+        if (cObj && cObj.imageKey && cObj.imageDataUrl) {
+          questionImageMemoryCache[cObj.imageKey] = cObj.imageDataUrl;
+        }
+      });
+      try {
+        const db = await openNura2ImageDB();
+        await new Promise((res) => {
+          const tx = db.transaction(IDB_STORE, 'readwrite');
+          const store = tx.objectStore(IDB_STORE);
+          entries.forEach(([, cObj]) => {
+            if (cObj && cObj.imageKey && cObj.imageDataUrl) {
+              store.put(cObj.imageDataUrl, cObj.imageKey);
+            }
+          });
+          tx.oncomplete = () => res();
+          tx.onerror = () => res();
+        });
+      } catch (e) {}
+    }
+
     async function hydrateAllSavedQuestionImages() {
       try {
         const db = await openNura2ImageDB();
@@ -1576,6 +1994,12 @@
       return copy;
     }
 
+        function isAnswerKeyFileNameOrText(fileName, text = '') {
+      const n = String(fileName || '').toLowerCase();
+      if (/\b(ans(?:wer)?[\s_\-]*key|key[\s_\-]*sheet|omr[\s_\-]*key)\b/i.test(n)) return true;
+      return isAnswerKeyGridOrPage(text);
+    }
+
     function isAnswerKeyGridOrPage(text) {
       const clean = sanitizeExtractedMathText(text || '');
       if (!clean) return false;
@@ -1588,7 +2012,7 @@
     }
 
     // Slice a crisp JPEG data URL from a rendered canvas, trimming excess whitespace
-    function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.89) {
+    function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.96) {
       const padX = 8, padTop = 6, padBot = 6;
       const sx = Math.max(0, Math.floor(x0 - padX));
       const sy = Math.max(0, Math.floor(y0 - padTop));
@@ -1667,11 +2091,11 @@
         const pixels = ctx.getImageData(sx, topScan, sw, sh).data;
         let lastDarkRelY = -1;
 
-        // Scan from bottom up so diagrams/options below text are never cut off
-        for (let ry = sh - 1; ry >= 0; ry -= 2) {
+        // Fast bottom-up scan so diagrams/options below text are included quickly
+        for (let ry = sh - 1; ry >= 0; ry -= 8) {
           let darkCount = 0;
           const rowOff = ry * sw * 4;
-          for (let rx = 0; rx < sw; rx += 3) {
+          for (let rx = 0; rx < sw; rx += 10) {
             const idx = rowOff + rx * 4;
             if (pixels[idx] < 225 || pixels[idx + 1] < 225 || pixels[idx + 2] < 225) {
               darkCount++;
@@ -1736,7 +2160,7 @@
         const finalBottomY = findDarkInkBottomInBand(canvas, x0, x1, cur.y, hardCeilNextY, textBottomY);
 
         if (finalBottomY - cur.y >= 26) {
-          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, finalBottomY, 0.90);
+          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, finalBottomY, 0.98);
           if (dataUrl) {
             crops[cur.qNum] = {
               imageKey: `${keyPrefix}_q${cur.qNum}_${Math.random().toString(36).slice(2, 6)}`,
@@ -1793,7 +2217,7 @@
           im.onerror = rej;
           im.src = dataUrl;
         });
-        const scale = img.width < 1100 ? 1.5 : 1.0;
+        const scale = img.width > 1350 ? (1350 / img.width) : (img.width < 1000 ? 1.35 : 1.0);
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(img.width * scale);
         canvas.height = Math.round(img.height * scale);
@@ -1804,9 +2228,12 @@
 
         const worker = await Promise.race([
           getSharedOcrWorker(),
-          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 12000))
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 4500))
         ]);
-        const ocrRes = await worker.recognize(canvas.toDataURL('image/jpeg', 0.90));
+        const ocrRes = await Promise.race([
+          worker.recognize(canvas.toDataURL('image/jpeg', 0.85)),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 4500))
+        ]);
         const ocrFullText = ocrRes?.data?.text || '';
         if (isAnswerKeyGridOrPage(ocrFullText)) return {};
 
@@ -1832,7 +2259,7 @@
         if (Object.keys(singleCrops).length > 0) return singleCrops;
 
         const fallbackQNum = fileIndex + 1;
-        const fullUrl = sliceQuestionCropFromCanvas(canvas, 4, 4, canvas.width - 4, canvas.height - 4, 0.90);
+        const fullUrl = sliceQuestionCropFromCanvas(canvas, 4, 4, canvas.width - 4, canvas.height - 4, 0.98);
         if (fullUrl) {
           return {
             [fallbackQNum]: {
@@ -1845,6 +2272,110 @@
       } catch (e) {
         return {};
       }
+    }
+
+    
+    function getQuestionImagesArray(q) {
+      if (!q) return [];
+      if (Array.isArray(q.imageDataUrls) && q.imageDataUrls.length) {
+        return q.imageDataUrls.filter(u => typeof u === 'string' && u.startsWith('data:image/'));
+      }
+      const single = getQuestionImageUrl(q);
+      return single ? [single] : [];
+    }
+
+    async function stitchImagesVerticallyDataUrl(dataUrls) {
+      const valid = (dataUrls || []).filter(u => typeof u === 'string' && u.startsWith('data:image/'));
+      if (!valid.length) return '';
+      if (valid.length === 1) return valid[0];
+
+      const loadedImgs = await Promise.all(valid.map(srcUrl => new Promise((res) => {
+        const im = new Image();
+        im.onload = () => res(im);
+        im.onerror = () => res(null);
+        im.src = srcUrl;
+      })));
+      const imgs = loadedImgs.filter(Boolean);
+      if (!imgs.length) return valid[0];
+
+      const targetW = Math.min(1400, Math.max(400, ...imgs.map(im => im.naturalWidth || im.width || 600)));
+      const scaledHeights = imgs.map(im => {
+        const nw = im.naturalWidth || im.width || 600;
+        const nh = im.naturalHeight || im.height || 200;
+        return Math.max(20, Math.round((nh / Math.max(1, nw)) * targetW));
+      });
+      const gap = 8;
+      const totalH = scaledHeights.reduce((a, b) => a + b, 0) + gap * (imgs.length - 1);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetW;
+      canvas.height = totalH;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      let curY = 0;
+      for (let i = 0; i < imgs.length; i++) {
+        ctx.drawImage(imgs[i], 0, curY, targetW, scaledHeights[i]);
+        curY += scaledHeights[i] + gap;
+      }
+      return canvas.toDataURL('image/jpeg', 0.90);
+    }
+
+    async function handlePerQuestionMultiScreenshotUpload(qIdx, inputEl) {
+      const files = Array.from(inputEl?.files || []);
+      if (!files.length || !questions[qIdx]) return;
+
+      const newParts = [];
+      for (const f of files) {
+        const dUrl = await readFileAsDataURLSafe(f);
+        if (dUrl && typeof dUrl === 'string' && dUrl.startsWith('data:image/')) {
+          newParts.push(dUrl);
+        }
+      }
+      if (!newParts.length) return;
+
+      const stitchedUrl = newParts.length > 1
+        ? await stitchImagesVerticallyDataUrl(newParts)
+        : newParts[0];
+
+      const qNum = questions[qIdx].num || (qIdx + 1);
+      const imgKey = `qimg_${Date.now()}_complete_q${qNum}_${Math.random().toString(36).slice(2, 6)}`;
+      questionImageMemoryCache[imgKey] = stitchedUrl;
+      await idbPutImage(imgKey, stitchedUrl);
+
+      questions[qIdx] = {
+        ...questions[qIdx],
+        imageKey: imgKey,
+        imageDataUrl: stitchedUrl,
+        imageDataUrls: newParts
+      };
+
+      if (inputEl) inputEl.value = '';
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection(`Q${qNum} Complete Cropped Question Uploaded`);
+      setParseStatus(
+        true,
+        `Q${qNum} Updated with Complete Cropped Question`,
+        `Saved in Question Bank, CBT, Result & Session (${newParts.length} image${newParts.length > 1 ? 's' : ''}).`,
+        false,
+        100,
+        `Q${qNum} ✓`
+      );
+      if (lastReport) {
+        computeAndRenderResults(false);
+      }
+    }
+
+    function clearPerQuestionScreenshots(qIdx) {
+      if (!questions[qIdx]) return;
+      delete questions[qIdx].imageDataUrl;
+      delete questions[qIdx].imageDataUrls;
+      delete questions[qIdx].imageKey;
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection();
     }
 
     function removeQuestionCroppedImage(idx) {
@@ -1916,10 +2447,12 @@
       const trashBin = loadStorage(STORAGE_KEYS.DELETED_BIN, []);
       const tBadge = document.getElementById('trashCountBadge');
       if (tBadge) tBadge.textContent = trashBin.length;
+      const ssBadge = document.getElementById('savedSheetsSectionBadge');
+      if (ssBadge) ssBadge.textContent = sheets.length;
     }
 
     function switchView(viewName) {
-      ['uploadView', 'cbtView', 'resultView', 'marksGraphView', 'weakTrackerView', 'wrongQsPageView', 'deletedBinView'].forEach(id => {
+      ['uploadView', 'cbtView', 'resultView', 'marksGraphView', 'weakTrackerView', 'wrongQsPageView', 'deletedBinView', 'noteBoxSectionView', 'savedSheetsSectionView', 'unmatchedQBoxSectionView'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
       });
@@ -1944,6 +2477,18 @@
       if (viewName === 'deletedBinView') {
         document.getElementById('deletedBinView').classList.remove('hidden');
         renderDeletedBinView();
+      }
+      if (viewName === 'noteBoxSectionView') {
+        document.getElementById('noteBoxSectionView').classList.remove('hidden');
+        syncNoteBoxViews();
+      }
+      if (viewName === 'unmatchedQBoxSectionView') {
+        document.getElementById('unmatchedQBoxSectionView').classList.remove('hidden');
+        renderUnmatchedQBoxSection();
+      }
+      if (viewName === 'savedSheetsSectionView') {
+        document.getElementById('savedSheetsSectionView').classList.remove('hidden');
+        renderSavedSheetsTopSection();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1983,87 +2528,109 @@
       return /^%PDF-/i.test(sample.trim()) || (/\d+\s+0\s+obj/i.test(sample) && /\/(MediaBox|Contents|Font|Resources|Type\s*\/Page)/i.test(sample));
     }
 
+    // ==================== FAST COMPLETE QUESTION CROPPER & FAST ANSWER KEY UPLOAD ====================
+    function openDeviceFilePickerDirect() {
+      const inp = document.getElementById('fileInput');
+      if (!inp) return;
+      try { inp.value = ''; } catch (e) {}
+      setParseStatus(true, 'Opening File Chooser...', 'Select practice sheet (PDF/Image/JSON/TXT) or Answer Key.', false, 5, 'Fast Upload');
+      try {
+        if (typeof inp.showPicker === 'function') {
+          inp.showPicker();
+          return;
+        }
+      } catch (e) {}
+      inp.click();
+    }
+
     function setupFileDropzone() {
       const dropZone = document.getElementById('dropZone');
       const fileInput = document.getElementById('fileInput');
-      let busy = false;
-      let lastProcessedSignature = '';
+      let isUploading = false;
 
-      const buildFileSignature = (files) => {
-        if (!files || !files.length) return '';
-        return Array.from(files).map(f => `${f.name}:${f.size}:${f.lastModified}`).join('|');
-      };
-
-      const startProcessingSelectedFiles = (files, force = false) => {
-        if (!files || !files.length) {
-          setParseStatus(true, 'No File Selected', 'Tap "Select Files from Device" first to choose a PDF, image, JSON, CSV, or TXT file.', true);
+      const runUploadPipeline = async (rawFiles) => {
+        const files = Array.from(rawFiles || []);
+        if (!files.length) {
+          setParseStatus(true, 'No File Selected', 'Tap Upload button to select a practice sheet or answer key.', true);
           return;
         }
-        const sig = buildFileSignature(files);
-        if (!force && (busy || sig === lastProcessedSignature)) return;
+        if (isUploading) return;
+        isUploading = true;
 
-        busy = true;
-        lastProcessedSignature = sig;
-        const primary = files[0];
-        const meta = files.length > 1 ? `${files.length} files` : `${formatBytes(primary.size)}`;
+        const firstFile = files[0];
+        const sizeLabel = files.length > 1
+          ? `${files.length} files`
+          : formatBytes(firstFile.size);
+
         const titleInput = document.getElementById('testTitleInput');
         if (titleInput && !titleInput.value.trim()) {
-          titleInput.value = primary.name.replace(/\.[^/.]+$/, '');
+          titleInput.value = firstFile.name.replace(/\.[^/.]+$/, '');
         }
-        const fnBadge = document.getElementById('selectedFileNameBadge');
-        if (fnBadge) {
-          fnBadge.textContent = files.length > 1 ? `${files.length} files selected` : primary.name;
-          fnBadge.classList.remove('hidden');
+        const badge = document.getElementById('selectedFileNameBadge');
+        if (badge) {
+          badge.textContent = files.length > 1 ? `${files.length} files selected` : firstFile.name;
+          badge.classList.remove('hidden');
         }
 
-        setParseStatus(true, `Reading: ${primary.name}`, 'Snipping each question individually, detecting chapters, sub-topics & answer keys...', false, 10, meta);
-        handleUploadedFiles(Array.from(files))
-          .catch(err => {
-            lastProcessedSignature = '';
-            setParseStatus(true, 'Extraction Error', err?.message || 'Could not process file. Tap "Process Selected File Now" to retry.', true, null, meta);
-          })
-          .finally(() => { busy = false; });
+        setParseStatus(true, `Fast Uploading & Cropping: ${firstFile.name}`, 'Extracting stem + diagram + all 4 options per question...', false, 15, sizeLabel);
+        try {
+          await handleUploadedFiles(files);
+        } catch (err) {
+          setParseStatus(true, 'Upload Failed', err?.message || 'Please try selecting the file again.', true, null, sizeLabel);
+        } finally {
+          isUploading = false;
+          try { if (fileInput) fileInput.value = ''; } catch (e) {}
+        }
       };
 
-      window.__onFileInputChanged = (el, force = false) => {
-        const files = el?.files ? Array.from(el.files) : [];
-        startProcessingSelectedFiles(files, force);
+      window.__onFileInputChanged = (el) => {
+        const selected = el?.files ? Array.from(el.files) : [];
+        runUploadPipeline(selected);
       };
 
       if (fileInput) {
-        fileInput.addEventListener('change', () => startProcessingSelectedFiles(Array.from(fileInput.files || []), false));
-        fileInput.addEventListener('input', () => startProcessingSelectedFiles(Array.from(fileInput.files || []), false));
+        fileInput.addEventListener('change', (e) => {
+          const selected = Array.from(e.target?.files || fileInput.files || []);
+          runUploadPipeline(selected);
+        });
       }
 
-      setInterval(() => {
-        if (fileInput && fileInput.files && fileInput.files.length && !busy) {
-          const sig = buildFileSignature(fileInput.files);
-          if (sig !== lastProcessedSignature) {
-            startProcessingSelectedFiles(Array.from(fileInput.files), false);
-          }
-        }
-      }, 300);
-
-      ['dragenter', 'dragover'].forEach(evt => {
-        dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.add('dragover'); });
-      });
-      ['dragleave', 'drop'].forEach(evt => {
-        dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.remove('dragover'); });
-      });
-      dropZone.addEventListener('drop', e => {
-        if (e.dataTransfer?.files?.length) startProcessingSelectedFiles(Array.from(e.dataTransfer.files), true);
-      });
+      if (dropZone) {
+        ['dragenter', 'dragover'].forEach(evt => {
+          dropZone.addEventListener(evt, (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+          });
+        });
+        ['dragleave', 'drop'].forEach(evt => {
+          dropZone.addEventListener(evt, (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+          });
+        });
+        dropZone.addEventListener('drop', (e) => {
+          const dropped = Array.from(e.dataTransfer?.files || []);
+          if (dropped.length) runUploadPipeline(dropped);
+        });
+      }
 
       const bulkKeyDrop = document.getElementById('bulkKeyDropZone');
       if (bulkKeyDrop) {
         ['dragenter', 'dragover'].forEach(evt => {
-          bulkKeyDrop.addEventListener(evt, e => { e.preventDefault(); bulkKeyDrop.classList.add('dragover'); });
+          bulkKeyDrop.addEventListener(evt, (e) => {
+            e.preventDefault();
+            bulkKeyDrop.classList.add('dragover');
+          });
         });
         ['dragleave', 'drop'].forEach(evt => {
-          bulkKeyDrop.addEventListener(evt, e => { e.preventDefault(); bulkKeyDrop.classList.remove('dragover'); });
+          bulkKeyDrop.addEventListener(evt, (e) => {
+            e.preventDefault();
+            bulkKeyDrop.classList.remove('dragover');
+          });
         });
-        bulkKeyDrop.addEventListener('drop', e => {
-          if (e.dataTransfer?.files?.length) processAnswerKeyFiles(Array.from(e.dataTransfer.files));
+        bulkKeyDrop.addEventListener('drop', (e) => {
+          const dropped = Array.from(e.dataTransfer?.files || []);
+          if (dropped.length) processAnswerKeyFiles(dropped);
         });
       }
     }
@@ -2078,18 +2645,20 @@
       return new Promise((resolve, reject) => {
         const r = new FileReader();
         r.onload = () => resolve(r.result);
-        r.onerror = () => reject(new Error('Could not read file buffer. If selected from Google Drive/Cloud, download it to local storage first.'));
+        r.onerror = () => reject(new Error('Could not read file.'));
         r.readAsArrayBuffer(file);
       });
     }
+
     function readFileAsDataURLSafe(file) {
       return new Promise((resolve, reject) => {
         const r = new FileReader();
         r.onload = () => resolve(r.result);
-        r.onerror = () => reject(new Error('Could not read image file.'));
+        r.onerror = () => reject(new Error('Could not read image.'));
         r.readAsDataURL(file);
       });
     }
+
     function readFileAsTextSafe(file) {
       return new Promise((resolve, reject) => {
         const r = new FileReader();
@@ -2098,221 +2667,376 @@
         r.readAsText(file);
       });
     }
+
     function loadScriptDynamic(src) {
       return new Promise((resolve, reject) => {
         const existing = document.querySelector(`script[src="${src}"]`);
         if (existing) {
           if (existing.dataset.loaded === '1') { resolve(); return; }
           existing.addEventListener('load', resolve, { once: true });
-          existing.addEventListener('error', () => reject(new Error('Could not load library: ' + src)), { once: true });
+          existing.addEventListener('error', () => reject(new Error('Failed loading: ' + src)), { once: true });
           return;
         }
         const s = document.createElement('script');
         s.src = src;
         s.async = true;
         s.onload = () => { s.dataset.loaded = '1'; resolve(); };
-        s.onerror = () => reject(new Error('Could not load library: ' + src));
+        s.onerror = () => reject(new Error('Failed loading: ' + src));
         document.head.appendChild(s);
       });
     }
 
     async function ensurePdfJsReady() {
       if (!window.pdfjsLib) await loadScriptDynamic(PDFJS_CDN);
-      if (!window.pdfjsLib) throw new Error('PDF engine unavailable.');
+      if (!window.pdfjsLib) throw new Error('PDF library unavailable.');
       pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_CDN;
     }
 
     async function loadPdfDocumentResilient(arrayBuffer) {
       await ensurePdfJsReady();
-      const rawCopy = new Uint8Array(arrayBuffer);
+      const bytes = new Uint8Array(arrayBuffer);
       try {
-        const doc1 = await pdfjsLib.getDocument({ data: new Uint8Array(rawCopy.slice(0)) }).promise;
-        if (doc1 && typeof doc1.numPages === 'number') return doc1;
+        const d1 = await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise;
+        if (d1 && d1.numPages > 0) return d1;
       } catch (e) {}
-      const doc2 = await pdfjsLib.getDocument({ data: new Uint8Array(rawCopy.slice(0)), disableWorker: true }).promise;
-      if (!doc2 || typeof doc2.numPages !== 'number') throw new Error('Unable to open PDF structure.');
-      return doc2;
+      const d2 = await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)), disableWorker: true }).promise;
+      if (!d2 || d2.numPages <= 0) throw new Error('Unable to parse PDF pages.');
+      return d2;
     }
 
     async function getSharedOcrWorker() {
       if (sharedOcrWorker) return sharedOcrWorker;
       if (!window.Tesseract) await loadScriptDynamic(TESSERACT_CDN);
-      if (!window.Tesseract) throw new Error('OCR engine unavailable offline.');
+      if (!window.Tesseract) throw new Error('OCR library unavailable.');
       sharedOcrWorker = await Tesseract.createWorker('eng');
       return sharedOcrWorker;
     }
 
-    function sanitizeExtractedMathText(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/Master\s*NCERT\s*with\s*PW\s*Books\s*APP/gi, ' ')
-        .replace(/PW\s*Web\/?App\s*-\s*https?:\/\/\S+/gi, ' ')
-        .replace(/Library-\s*https?:\/\/\S+/gi, ' ')
-        .replace(/SPACE\s*FOR\s*ROUGH\s*WORK/gi, ' ')
-        .replace(/\b(?:Android App|iOS App|PW Website|CUSTOMER)\b/gi, ' ')
-        .replace(/[\uF000-\uF8FF]/g, ' ')
-        .replace(/[\u2018\u2019\u02BC]/g, "'")
-        .replace(/[\u201C\u201D]/g, '"')
-        .replace(/\u221A/g, ' sqrt ')
-        .replace(/\u03B8/g, ' theta ')
-        .replace(/\u2192/g, ' -> ')
-        .replace(/\u00D7/g, ' x ')
-        .replace(/[\u00B7\u22C5]/g, ' . ')
-        .replace(/\u2264/g, ' <= ')
-        .replace(/\u2265/g, ' >= ')
-        .replace(/\u2260/g, ' != ')
-        .replace(/\u222B/g, ' integral ')
-        .replace(/\u221E/g, ' infinity ')
-        .replace(/([ijk])\s*[\^\u02C6]/g, '$1_hat')
-        .replace(/([A-Za-z])\s*[\u20D7]/g, 'vec($1)')
-        .replace(/[^\x20-\x7E\n]/g, ' ')
-        .replace(/\bsimpli\s*fi\s*cation\b/gi, 'simplification')
-        .replace(/\bfi\s*gure\b/gi, 'figure')
-        .replace(/([A-Za-z0-9\)\]])\s+(?:->\s*){2,}([A-Za-z0-9\(\[])/g, '$1 -> $2')
-        .replace(/(?:->\s*){2,}/g, ' -> ')
-        .replace(/[ \t]{2,}/g, ' ')
-        .trim();
-    }
-
-    function splitInlineNumberedOrLetteredOptions(rawQText, existingOptions = null) {
-      const cleanRaw = sanitizeExtractedMathText(rawQText || '');
-      const cleanExisting = Array.isArray(existingOptions) && existingOptions.length === 4
-        ? existingOptions.map(o => sanitizeExtractedMathText(o).replace(/^\(?[1-4A-Da-d]\)?[\.\)]?\s*/, '').trim())
-        : [];
-      const hasValidExisting = cleanExisting.length === 4 &&
-        cleanExisting.every(s => s && !/^Option\s*[A-D1-4]$/i.test(s) && !/^Choice\s*\(?[1-4]\)?$/i.test(s));
-
-      if (hasValidExisting) {
-        return { text: cleanRaw, options: cleanExisting };
-      }
-
-      const splitTokens = (markerList) => {
-        const positions = [];
-        let searchFrom = 0;
-        for (let i = 0; i < markerList.length; i++) {
-          const rx = new RegExp(markerList[i], 'g');
-          rx.lastIndex = searchFrom;
-          let found = null;
-          let m;
-          while ((m = rx.exec(cleanRaw)) !== null) {
-            if (m.index < 3) continue;
-            if (found === null) found = { index: m.index, fullLen: m[0].trim().length };
+    // Trim outer blank margins while preserving full stem + diagrams + all 4 options
+    function trimCropWhitespace(canvas, quality = 0.98) {
+      try {
+        const w = canvas.width, h = canvas.height;
+        const ctx = canvas.getContext('2d');
+        const px = ctx.getImageData(0, 0, w, h).data;
+        let minX = w, minY = h, maxX = 0, maxY = 0, anyInk = false;
+        for (let y = 0; y < h; y += 3) {
+          for (let x = 0; x < w; x += 3) {
+            const idx = (y * w + x) * 4;
+            if (px[idx] < 246 || px[idx + 1] < 246 || px[idx + 2] < 246) {
+              anyInk = true;
+              if (x < minX) minX = x;
+              if (x > maxX) maxX = x;
+              if (y < minY) minY = y;
+              if (y > maxY) maxY = y;
+            }
           }
-          if (!found) return null;
-          positions.push(found);
-          searchFrom = found.index + found.fullLen;
         }
-        if (positions.length !== 4) return null;
-        const stem = cleanRaw.slice(0, positions[0].index).trim();
-        const opts = positions.map((pos, idx) => {
-          const start = pos.index + pos.fullLen;
-          const end = idx < 3 ? positions[idx + 1].index : cleanRaw.length;
-          return cleanRaw.slice(start, end).trim() || `Choice (${idx + 1})`;
-        });
-        if (stem.length >= 2 && opts.every(o => o.length >= 1)) {
-          return { text: stem, options: opts };
+        if (anyInk && maxX > minX && maxY > minY) {
+          const padX = 10, padTop = 8, padBot = 10;
+          const x0 = Math.max(0, minX - padX);
+          const y0 = Math.max(0, minY - padTop);
+          const cw = Math.min(w - x0, (maxX - minX) + padX * 2);
+          const ch = Math.min(h - y0, (maxY - minY) + padTop + padBot);
+          if (cw >= 32 && ch >= 20) {
+            const out = document.createElement('canvas');
+            out.width = cw;
+            out.height = ch;
+            const octx = out.getContext('2d');
+            octx.fillStyle = '#ffffff';
+            octx.fillRect(0, 0, cw, ch);
+            octx.drawImage(canvas, x0, y0, cw, ch, 0, 0, cw, ch);
+            return out.toDataURL('image/jpeg', quality);
+          }
         }
-        return null;
-      };
-
-      const numSplit = splitTokens(['\\(1\\)', '\\(2\\)', '\\(3\\)', '\\(4\\)']);
-      if (numSplit) return numSplit;
-
-      const letSplit = splitTokens(['\\([Aa]\\)', '\\([Bb]\\)', '\\([Cc]\\)', '\\([Dd]\\)']);
-      if (letSplit) return letSplit;
-
-      return {
-        text: cleanRaw,
-        options: Array.isArray(existingOptions) && existingOptions.length === 4
-          ? existingOptions.map((o, i) => sanitizeExtractedMathText(o) || `Choice (${i + 1})`)
-          : ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)']
-      };
+      } catch (e) {}
+      return canvas.toDataURL('image/jpeg', quality);
     }
 
-    function extractCoverPageSyllabusMap(rawText) {
-      const map = {};
-      const lines = String(rawText || '').split('\n').map(l => l.trim()).filter(Boolean);
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const m = line.match(/^(Physics|Chemistry|Botany|Zoology)\s*:\s*(.+)$/i);
+    function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.98) {
+      const padX = 10, padTop = 8, padBot = 10;
+      const sx = Math.max(0, Math.floor(x0 - padX));
+      const sy = Math.max(0, Math.floor(y0 - padTop));
+      const sw = Math.min(srcCanvas.width - sx, Math.ceil((x1 - x0) + padX * 2));
+      const sh = Math.min(srcCanvas.height - sy, Math.ceil((y1 - y0) + padTop + padBot));
+      if (sw < 34 || sh < 20) return '';
+
+      const boxCanvas = document.createElement('canvas');
+      boxCanvas.width = sw;
+      boxCanvas.height = sh;
+      const bctx = boxCanvas.getContext('2d');
+      bctx.fillStyle = '#ffffff';
+      bctx.fillRect(0, 0, sw, sh);
+      bctx.drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+      return trimCropWhitespace(boxCanvas, quality);
+    }
+
+    function detectTwoColumnSplitX(canvas, items) {
+      const w = canvas.width;
+      const qRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+      const leftQs = items.filter(it => it.x < w * 0.45 && qRx.test(it.str));
+      const rightQs = items.filter(it => it.x >= w * 0.46 && it.x <= w * 0.66 && qRx.test(it.str));
+      if (!leftQs.length || !rightQs.length) return null;
+      const sortedX = rightQs.map(r => r.x).sort((a, b) => a - b);
+      const midRight = sortedX[Math.floor(sortedX.length / 2)];
+      return Math.max(w * 0.46, Math.min(w * 0.56, midRight - 10));
+    }
+
+    // Ensure complete question capture: stem + diagram + all 4 options up to just above next question
+    function findCompleteQuestionBottomY(canvas, x0, x1, startY, hardCeilNextY, minBottomY) {
+      try {
+        const sx = Math.max(0, Math.floor(x0));
+        const sw = Math.max(10, Math.min(canvas.width - sx, Math.ceil(x1 - x0)));
+        const topY = Math.max(0, Math.floor(startY));
+        const botY = Math.max(topY + 4, Math.min(canvas.height, Math.ceil(hardCeilNextY)));
+        const sh = botY - topY;
+        if (sh <= 4) return hardCeilNextY;
+
+        const ctx = canvas.getContext('2d');
+        const pixels = ctx.getImageData(sx, topY, sw, sh).data;
+        for (let ry = sh - 1; ry >= 0; ry -= 6) {
+          const rowOff = ry * sw * 4;
+          let dark = 0;
+          for (let rx = 0; rx < sw; rx += 8) {
+            const idx = rowOff + rx * 4;
+            if (pixels[idx] < 230 || pixels[idx + 1] < 230 || pixels[idx + 2] < 230) {
+              dark++;
+              if (dark >= 2) break;
+            }
+          }
+          if (dark >= 2) {
+            return Math.min(hardCeilNextY, Math.max(minBottomY, topY + ry + 14));
+          }
+        }
+      } catch (e) {}
+      return hardCeilNextY;
+    }
+
+    function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix) {
+      const crops = {};
+      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
+      const opt4Rx = /^(?:\([4Dd]\)|[4Dd][\.\)])(?:\s|$)/;
+      const markers = [];
+      let stopY = footerCutoffY;
+
+      colItems.forEach(it => {
+        if (it.topY < headerCutoffY || it.topY > footerCutoffY) return;
+        if (/^(?:Hints\s*&?\s*Solutions|Answer\s*Key|Video\s*Solution|Text\s*Solution)/i.test(it.str)) {
+          if (it.topY < stopY) stopY = it.topY - 6;
+          return;
+        }
+        const m = it.str.match(qMarkerRx);
         if (m) {
-          const subj = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
-          let val = m[2].replace(/\(Complete Chapter\)/gi, '').replace(/\s+\/\s+/g, ', ').trim();
-          if (i + 1 < lines.length && !/^(Physics|Chemistry|Botany|Zoology|General Instructions|OMR)/i.test(lines[i + 1]) && lines[i + 1].length < 90 && !/^Q\.?\s*\d{1,3}\b/i.test(lines[i + 1])) {
-            val += ' ' + lines[i + 1].replace(/\(Complete Chapter\)/gi, '').trim();
+          const qNum = parseInt(m[1] || m[2], 10);
+          if (qNum >= 1 && qNum <= 300) {
+            const dup = markers.find(mk => mk.qNum === qNum && Math.abs(mk.y - it.topY) < 18);
+            if (!dup) markers.push({ qNum, y: it.topY });
           }
-          map[subj] = val.replace(/,\s*$/, '').trim();
+        }
+      });
+
+      markers.sort((a, b) => a.y - b.y);
+      for (let i = 0; i < markers.length; i++) {
+        const cur = markers[i];
+        const nextTop = (i + 1 < markers.length) ? markers[i + 1].y : stopY;
+        const hardCeilNextY = Math.max(cur.y + 24, nextTop - 8);
+
+        const qItems = colItems.filter(it => it.topY >= cur.y - 3 && it.botY <= hardCeilNextY);
+        const opt4Items = qItems.filter(it => opt4Rx.test(it.str));
+        let textBottomY = hardCeilNextY;
+        if (opt4Items.length) {
+          const lastOpt4 = opt4Items[opt4Items.length - 1];
+          const postOpt4 = qItems.filter(it => it.topY >= lastOpt4.topY - 4 && it.botY <= hardCeilNextY);
+          const maxBot = postOpt4.reduce((mx, it) => Math.max(mx, it.botY), lastOpt4.botY);
+          textBottomY = Math.min(hardCeilNextY, maxBot + 14);
+        }
+
+        const finalBottomY = findCompleteQuestionBottomY(canvas, x0, x1, cur.y, hardCeilNextY, textBottomY);
+        if (finalBottomY - cur.y >= 26) {
+          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, finalBottomY, 0.86);
+          if (dataUrl) {
+            crops[cur.qNum] = {
+              imageKey: `${keyPrefix}_q${cur.qNum}_${Math.random().toString(36).slice(2, 6)}`,
+              imageDataUrl: dataUrl
+            };
+          }
         }
       }
-      return map;
+      return crops;
     }
 
-    function classifyQuestionTaxonomy(qText, qNum = 1, fallbackSub = '', coverSyllabusMap = {}) {
-      const clean = sanitizeExtractedMathText(qText || '');
-      const lower = clean.toLowerCase();
-      let sub = ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(fallbackSub) ? fallbackSub : '';
-      if (!sub) {
-        if (qNum >= 1 && qNum <= 45) sub = 'Physics';
-        else if (qNum >= 46 && qNum <= 90) sub = 'Chemistry';
-        else if (qNum >= 91 && qNum <= 135) sub = 'Botany';
-        else if (qNum >= 136 && qNum <= 180) sub = 'Zoology';
-        else sub = 'Physics';
+    function cropQuestionsFromRenderedPageCanvas(canvas, textItems, pdfWidth, pdfHeight, scale, pageIndex) {
+      if (!textItems || !textItems.length) return {};
+      const mapped = textItems.map(it => {
+        const xPdf = it.transform[4];
+        const yPdfBottom = it.transform[5];
+        const hPdf = Math.abs(it.height || it.transform[3] || 11);
+        return {
+          str: sanitizeExtractedMathText(it.str || ''),
+          x: xPdf * scale,
+          topY: (pdfHeight - (yPdfBottom + hPdf)) * scale,
+          botY: (pdfHeight - yPdfBottom) * scale
+        };
+      }).filter(it => it.str && !/^(Android App|iOS App|PW Website|CUSTOMER|SPACE FOR ROUGH WORK)$/i.test(it.str));
+
+      if (isAnswerKeyGridOrPage(mapped.map(m => m.str).join(' '))) return {};
+
+      const headerCutoffY = canvas.height * 0.045;
+      const footerCutoffY = canvas.height * 0.96;
+      const splitX = detectTwoColumnSplitX(canvas, mapped);
+
+      if (splitX !== null) {
+        const leftItems = mapped.filter(it => it.x < splitX - 4);
+        const rightItems = mapped.filter(it => it.x >= splitX + 4);
+        const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 10, splitX - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_L`);
+        const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_R`);
+        return { ...leftCrops, ...rightCrops };
       }
 
-      const rules = [
-        { sub: 'Physics', rx: /\b(integral|definite integral|derivative|differentiate|dy\/dx|quadratic|minimum|maximum|binomial|radian|arcminute|arcsecond|slope|curve|area of.*region|y\^2\s*=|y\s*=.*x\^|log_5|sec\s*theta|cos\^2|tan\^2)\b/i, ch: 'Basic Maths & Calculus (Mathematical Tools)', tp: 'Calculus, Trigonometry & Graphs', st: /\b(integral|definite integral)\b/i.test(lower) ? 'Definite & Indefinite Integration' : (/\b(derivative|differentiate|dy\/dx|rate of increase|slope|minimum|maximum)\b/i.test(lower) ? 'Differentiation & Rate of Change' : (/\b(radian|arcminute|arcsecond|cos\^2|sec\s*theta|tan\^2)\b/i.test(lower) ? 'Trigonometry & Angle Units' : 'Graphs, Logarithms & Area Under Curve')) },
-        { sub: 'Physics', rx: /\b(vector|unit vector|resultant|perpendicular|dot product|cross product|i_hat|j_hat|k_hat|body diagonal|angle between)\b/i, ch: 'Vectors', tp: 'Vector Algebra, Resolution & Products', st: /\b(cross product|dot product|p\s*x\s*q|r\s*\.\s*p)\b/i.test(lower) ? 'Dot & Cross Product Properties' : (/\b(unit vector|perpendicular|body diagonal)\b/i.test(lower) ? 'Unit Vectors, Components & Projections' : 'Resultant & Angle Between Vectors') },
-        { sub: 'Physics', rx: /\b(stress|strain|young'?s modulus|bulk modulus|shear modulus|poisson|elastic|plastic|hooke|wire|elongation|tensile|gravity|gravitation|escape velocity|orbital|kepler|satellite)\b/i, ch: 'Properties of Solids & Gravitation', tp: 'Elasticity & Gravitation', st: /\b(stress|strain|young|modulus|elastic|tensile|wire)\b/i.test(lower) ? 'Stress, Strain & Youngs Modulus' : 'Acceleration Due to Gravity & Satellites' },
-        { sub: 'Chemistry', rx: /\b(molarity|molality|ppm|mole fraction|limiting reagent|stoichiometry|empirical formula|molecular formula|significant figures|vapour density|avogadro|s\.i\. prefixes|s\.i\. base|mass %|combustion|moles of electrons|h\+\s*ions)\b/i, ch: 'Some Basic Concepts of Chemistry', tp: 'Mole Concept, Stoichiometry & Concentration', st: /\b(limiting reagent|unreacted|moles of.*formed|mass of.*required)\b/i.test(lower) ? 'Limiting Reagent & Reaction Stoichiometry' : (/\b(molarity|molality|ppm|mole fraction)\b/i.test(lower) ? 'Molarity, Molality, Mole Fraction & ppm' : (/\b(empirical formula|molecular formula|combustion|mass %)\b/i.test(lower) ? 'Empirical/Molecular Formula & Combustion' : 'Mole Calculation, Significant Figures & Laws')) },
-        { sub: 'Botany', rx: /\b(cell theory|schleiden|schwann|virchow|organelle|mitochondria|chloroplast|ribosome|70s|80s|polysome|golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast|plasma membrane|phospholipid|fluid mosaic|centrosome|centriole|cilium|axoneme|nucleus|chromatin|nucleolus|chromosome|metacentric|telocentric|mesosome|cell envelope|glycocalyx|plasmid|chromatophore|leucoplast|chromoplast|mycoplasma|prokaryotic|sieve cell)\b/i, ch: 'Cell - The Unit of Life', tp: 'Cell Theory, Membrane & Cell Organelles', st: /\b(mitochondria|chloroplast|thylakoid|stroma|70s|80s|ribosome|polysome)\b/i.test(lower) ? 'Mitochondria, Chloroplast & Ribosomes' : (/\b(golgi|endoplasmic reticulum|lysosome|vacuole|tonoplast)\b/i.test(lower) ? 'Endomembrane System (ER, Golgi, Lysosome, Vacuole)' : (/\b(plasma membrane|phospholipid|fluid mosaic|cell wall|calcium pectate)\b/i.test(lower) ? 'Plasma Membrane & Cell Wall' : (/\b(nucleus|chromatin|chromosome|metacentric|telocentric|centriole|axoneme)\b/i.test(lower) ? 'Nucleus, Chromosomes & Cytoskeleton/Centriole' : 'Prokaryotic Cell, Envelope & Cell Overview'))) },
-        { sub: 'Zoology', rx: /\b(cockroach|periplaneta|ommatidia|tergite|sternite|haemolymph|haemocoel|ostia|malpighian|ootheca|spermatheca|phallomere|gonopore|spermatophore|ovariole|anal cerci|anal styles|spiracle|mandible|crop|gizzard|hindgut|frog|rana|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation|epithelium|connective tissue|areolar|adipose|cartilage|bone|osteocyte|chondrocyte|intercalated discs|cardiac muscle|skeletal muscle|smooth muscle|exocrine|endocrine|neuron|nerve impulse)\b/i, ch: 'Structural Organisation in Animals', tp: 'Animal Tissues, Cockroach & Frog', st: /\b(cockroach|ommatidia|tergite|sternite|haemolymph|malpighian|ootheca|spermatheca|phallomere|anal cerci|spiracle)\b/i.test(lower) ? 'Cockroach Morphology & Organ Systems' : (/\b(frog|mesorchium|vasa efferentia|cloaca|foramen magnum|aestivation|hibernation)\b/i.test(lower) ? 'Frog Morphology & Organ Systems' : 'Epithelial, Connective, Muscular & Neural Tissues') }
-      ];
+      return sliceSingleColumnQuestions(canvas, mapped, 10, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_S`);
+    }
 
-      for (const r of rules) {
-        if (r.rx.test(clean)) {
-          const detectedSub = r.sub || sub;
-          const coverCh = coverSyllabusMap[detectedSub] || '';
-          const chapter = (coverCh && coverCh.length < 85) ? coverCh : r.ch;
-          return { subject: detectedSub, chapter, topic: r.tp, subTopic: r.st };
+    async function cropQuestionsFromImageDataUrl(dataUrl, fileIndex = 0) {
+      try {
+        const img = await new Promise((res, rej) => {
+          const im = new Image();
+          im.onload = () => res(im);
+          im.onerror = rej;
+          im.src = dataUrl;
+        });
+        const scale = img.width > 1200 ? (1200 / img.width) : (img.width < 900 ? 1.25 : 1.0);
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const worker = await Promise.race([
+          getSharedOcrWorker(),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2800))
+        ]);
+        const ocrRes = await Promise.race([
+          worker.recognize(canvas.toDataURL('image/jpeg', 0.82)),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2800))
+        ]);
+        const ocrFullText = ocrRes?.data?.text || '';
+        if (isAnswerKeyGridOrPage(ocrFullText)) return {};
+
+        const words = ocrRes?.data?.words || [];
+        const mapped = words.map(w => ({
+          str: sanitizeExtractedMathText(w.text || ''),
+          x: (w.bbox?.x0 || 0),
+          topY: (w.bbox?.y0 || 0),
+          botY: (w.bbox?.y1 || 20)
+        })).filter(it => it.str);
+
+        const splitX = detectTwoColumnSplitX(canvas, mapped);
+        if (splitX !== null) {
+          const leftItems = mapped.filter(it => it.x < splitX - 4);
+          const rightItems = mapped.filter(it => it.x >= splitX + 4);
+          const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 8, splitX - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_L`);
+          const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_R`);
+          const combined = { ...leftCrops, ...rightCrops };
+          if (Object.keys(combined).length > 0) return combined;
+        }
+
+        const singleCrops = sliceSingleColumnQuestions(canvas, mapped, 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_S`);
+        if (Object.keys(singleCrops).length > 0) return singleCrops;
+
+        const fallbackUrl = sliceQuestionCropFromCanvas(canvas, 4, 4, canvas.width - 4, canvas.height - 4, 0.86);
+        if (fallbackUrl) {
+          return {
+            [fileIndex + 1]: {
+              imageKey: `qimg_${Date.now()}_img${fileIndex}_full_${Math.random().toString(36).slice(2, 6)}`,
+              imageDataUrl: fallbackUrl
+            }
+          };
+        }
+        return {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    async function extractAnswerKeyFastFromFile(file) {
+      const name = file.name.toLowerCase();
+      if (name.endsWith('.json')) {
+        const txt = await readFileAsTextSafe(file);
+        const parsed = JSON.parse(txt);
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          return extractAnswerKeyMapFast(JSON.stringify(parsed) + '\n' + Object.entries(parsed).map(([k, v]) => `Q${k} ${v}`).join(' '));
         }
       }
-
-      const coverCh = coverSyllabusMap[sub] || '';
-      const defaultChapter = coverCh || (sub === 'Physics' ? 'Physics Practice Sheet' : sub === 'Chemistry' ? 'Chemistry Practice Sheet' : sub === 'Botany' ? 'Botany Practice Sheet' : 'Zoology Practice Sheet');
-      return {
-        subject: sub,
-        chapter: defaultChapter,
-        topic: sub === 'Physics' ? 'Core Physics Concepts' : sub === 'Chemistry' ? 'Core Chemistry Concepts' : sub === 'Botany' ? 'Core Botany Concepts' : 'Core Zoology Concepts',
-        subTopic: 'Concept & Numerical Application'
-      };
-    }
-
-    function enrichQuestionObj(q, idx = 0, fallbackSub = '', coverSyllabusMap = {}) {
-      const qNum = parseInt(q.num, 10) || (idx + 1);
-      const split = splitInlineNumberedOrLetteredOptions(q.text || '', q.options);
-      const tax = classifyQuestionTaxonomy(split.text + ' ' + split.options.join(' '), qNum, q.subject || fallbackSub, coverSyllabusMap);
-      const chapter = (q.chapter && !/^General Chapter$/i.test(q.chapter.trim())) ? sanitizeExtractedMathText(q.chapter) : tax.chapter;
-      const topic = (q.topic && !/^General Concept$/i.test(q.topic.trim())) ? sanitizeExtractedMathText(q.topic) : tax.topic;
-      const subTopic = (q.subTopic && q.subTopic.trim()) ? sanitizeExtractedMathText(q.subTopic) : tax.subTopic;
-      const imgKey = q.imageKey || '';
-      const imgUrl = q.imageDataUrl || (imgKey ? questionImageMemoryCache[imgKey] : '') || '';
-      if (imgKey && imgUrl) questionImageMemoryCache[imgKey] = imgUrl;
-      return {
-        id: q.id || ('q_' + Date.now() + '_' + idx),
-        num: qNum,
-        subject: ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(q.subject) ? q.subject : tax.subject,
-        chapter,
-        topic,
-        subTopic,
-        text: split.text,
-        options: split.options,
-        imageKey: imgKey,
-        imageDataUrl: imgUrl,
-        correct: normalizeAnswerChoice(q.correct) ? String(q.correct).trim().toUpperCase() : ''
-      };
+      if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+        const buf = await readFileAsArrayBufferSafe(file);
+        const pdf = await loadPdfDocumentResilient(buf);
+        let txt = '';
+        for (let p = 1; p <= pdf.numPages; p++) {
+          const page = await pdf.getPage(p);
+          const vp = page.getViewport({ scale: 1.0 });
+          const tc = await page.getTextContent();
+          const nativeTxt = reconstructColumnAwareText(tc.items, vp.width, vp.height);
+          if (nativeTxt && nativeTxt.trim().length > 10) {
+            txt += '\n' + nativeTxt;
+          } else {
+            const cVp = page.getViewport({ scale: 1.05 });
+            const canvas = document.createElement('canvas');
+            canvas.width = cVp.width;
+            canvas.height = cVp.height;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            await page.render({ canvasContext: ctx, viewport: cVp }).promise;
+            const ocrTxt = await Promise.race([
+              runFastImageOCR(canvas.toDataURL('image/jpeg', 0.78), 1.0),
+              new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 3200))
+            ]).catch(() => '');
+            txt += '\n' + ocrTxt;
+          }
+        }
+        return extractAnswerKeyMapFast(txt);
+      }
+      if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
+        const dataUrl = await readFileAsDataURLSafe(file);
+        const ocrTxt = await Promise.race([
+          runFastImageOCR(dataUrl, 1.05),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 3200))
+        ]).catch(() => '');
+        return extractAnswerKeyMapFast(ocrTxt);
+      }
+      const rawTxt = await readFileAsTextSafe(file);
+      return extractAnswerKeyMapFast(rawTxt);
     }
 
     async function handleUploadedFiles(files) {
+      if (files.length === 1 && isAnswerKeyFileNameOrText(files[0].name)) {
+        const akFile = files[0];
+        const totalTargetQs = Array.isArray(questions) ? questions.length : 0;
+        setParseStatus(true, `Fast Answer Key Upload: ${akFile.name}`, 'Matching answer keys instantly...', false, 45, 'Fast Key');
+
+        const keyMap = await extractAnswerKeyFastFromFile(akFile);
+        const applied = totalTargetQs > 0 ? applyAnswerKeyMapInstant(keyMap) : 0;
+        addUploadedFileChipsToQuestionBox(files);
+        renderUnmatchedQBoxSection(akFile.name);
+        if (totalTargetQs > 0) {
+          renderQuestionBank();
+          saveFrontPageSessionState();
+          if (lastReport) computeAndRenderResults(false);
+        }
+        setParseStatus(
+          true,
+          applied > 0
+            ? `Fast Keys Applied: ${applied}/${totalTargetQs}`
+            : `Answer Key Scanned (${Object.keys(keyMap).length} keys found)`,
+          akFile.name,
+          false,
+          100,
+          `${applied}/${totalTargetQs} Keys`
+        );
+        return;
+      }
+
       let combinedText = '';
       const enableAutoCrop = document.getElementById('autoCropQuestionsToggle')?.checked !== false;
       const allCropsByQNum = {};
@@ -2320,11 +3044,27 @@
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const name = file.name.toLowerCase();
-        const basePct = Math.round((i / files.length) * 85) + 10;
+        const pct = Math.round(((i + 0.5) / files.length) * 80) + 10;
 
         if (name.endsWith('.json')) {
           const txt = await readFileAsTextSafe(file);
           const parsed = JSON.parse(txt);
+          if (parsed && typeof parsed === 'object' && (parsed.app === 'NURA-2' || parsed.sheets || parsed.marksGraph || parsed.weakTracker || parsed.wrongQsBank || parsed.history)) {
+            await restoreFullBackupDataObject(parsed);
+            addUploadedFileChipsToQuestionBox([file]);
+            const restoredSheetsCount = Array.isArray(parsed.sheets) ? parsed.sheets.length : 0;
+            const restoredWeakCount = Array.isArray(parsed.weakTracker) ? parsed.weakTracker.length : 0;
+            setParseStatus(
+              true,
+              `Full App Backup Restored from ${file.name}`,
+              `Active Qs: ${questions.length} · Saved Sheets: ${restoredSheetsCount} · Weak Topics: ${restoredWeakCount}`,
+              false,
+              100,
+              'Backup Restored'
+            );
+            showQuickToast(`✓ All Data Imported from ${file.name}!`);
+            return;
+          }
           const arr = Array.isArray(parsed) ? parsed : (parsed.questions || []);
           if (arr.length) {
             for (let idx = 0; idx < arr.length; idx++) {
@@ -2333,40 +3073,42 @@
               }
             }
             questions = arr.map((q, idx) => enrichQuestionObj(q, idx));
+            addUploadedFileChipsToQuestionBox([file]);
             renderQuestionBank();
+            saveFrontPageSessionState();
             setParseStatus(true, `Loaded ${questions.length} Questions from JSON`, file.name, false, 100, `${questions.length} Qs`);
             return;
           }
         } else if (name.endsWith('.pdf') || file.type === 'application/pdf') {
-          const pdfRes = await extractTextFromPdfFile(file, basePct, enableAutoCrop);
+          const pdfRes = await extractTextFromPdfFile(file, pct, enableAutoCrop, false);
           combinedText += '\n' + pdfRes.text;
           Object.assign(allCropsByQNum, pdfRes.cropsByQNum);
         } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
-          setParseStatus(true, `Snipping & Scanning Image ${i + 1}/${files.length}`, file.name, false, basePct);
+          setParseStatus(true, `Fast Cropping Image ${i + 1}/${files.length}`, file.name, false, pct);
           const dataUrl = await readFileAsDataURLSafe(file);
-          let ocrTxt = '';
-          try {
-            ocrTxt = await Promise.race([
-              runFastImageOCR(dataUrl, 1.5),
-              new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 12000))
-            ]);
-          } catch (ocrErr) {
-            ocrTxt = '';
-          }
-          combinedText += '\n' + ocrTxt;
-          if (enableAutoCrop && !isAnswerKeyGridOrPage(ocrTxt)) {
+          if (enableAutoCrop) {
             const imgCrops = await cropQuestionsFromImageDataUrl(dataUrl, i);
             if (Object.keys(imgCrops).length > 0) {
-              for (const [k, cObj] of Object.entries(imgCrops)) {
-                await idbPutImage(cObj.imageKey, cObj.imageDataUrl);
-                allCropsByQNum[k] = cObj;
-              }
+              await idbPutImagesBatch(imgCrops);
+              Object.assign(allCropsByQNum, imgCrops);
             } else {
-              const fallbackKey = `qimg_${Date.now()}_img${i}_raw_${Math.random().toString(36).slice(2, 6)}`;
-              await idbPutImage(fallbackKey, dataUrl);
-              allCropsByQNum[i + 1] = { imageKey: fallbackKey, imageDataUrl: dataUrl };
+              const fbObj = {
+                [i + 1]: {
+                  imageKey: `qimg_${Date.now()}_img${i}_${Math.random().toString(36).slice(2, 6)}`,
+                  imageDataUrl: dataUrl
+                }
+              };
+              await idbPutImagesBatch(fbObj);
+              allCropsByQNum[i + 1] = fbObj[i + 1];
             }
           }
+          try {
+            const ocrTxt = await Promise.race([
+              runFastImageOCR(dataUrl, 1.0),
+              new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2200))
+            ]);
+            combinedText += '\n' + ocrTxt;
+          } catch (e) {}
         } else {
           const txt = await readFileAsTextSafe(file);
           if (isRawPdfSyntax(txt)) throw new Error('Raw PDF binary detected.');
@@ -2376,7 +3118,7 @@
 
       const cleanText = truncateBeforeSolutions(combinedText.trim());
       if (isRawPdfSyntax(cleanText)) {
-        throw new Error('Raw PDF binary detected. Please select a valid PDF or image file.');
+        throw new Error('Raw PDF binary detected. Choose a valid PDF or image file.');
       }
 
       document.getElementById('rawTextInput').value = cleanText;
@@ -2384,11 +3126,11 @@
       const cropKeys = Object.keys(allCropsByQNum).map(Number).sort((a, b) => a - b);
 
       if (!extracted.length && !cropKeys.length) {
-        setParseStatus(true, 'No Readable Text Found', 'Enable "Auto Question Image Cropper" or "Force High-Accuracy OCR" and tap "Process Selected File Now".', true);
+        setParseStatus(true, 'No Questions Found', 'Could not extract questions or crops from the selected file.', true);
         return;
       }
 
-      const keyMapFromText = extractAnswerKeyMap(cleanText);
+      const keyMapFromText = extractAnswerKeyMapFast(cleanText);
       const qByNum = {};
       extracted.forEach(q => { qByNum[q.num] = q; });
 
@@ -2401,7 +3143,7 @@
           qByNum[qNum] = enrichQuestionObj({
             id: 'q_' + Date.now() + '_' + qNum,
             num: qNum,
-            text: `Visual Question Q${qNum} (Cropped from Sheet)`,
+            text: `Visual Question Q${qNum} (Complete Crop: Stem + Diagram + 4 Options)`,
             options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'],
             imageKey: cropObj.imageKey,
             imageDataUrl: cropObj.imageDataUrl,
@@ -2414,40 +3156,28 @@
       const matchedKeys = finalQuestions.filter(q => q.correct).length;
       const croppedCount = finalQuestions.filter(q => getQuestionImageUrl(q)).length;
 
+      addUploadedFileChipsToQuestionBox(files);
       questions = finalQuestions;
+      renderUnmatchedQBoxSection(files.map(f => f.name).join(', '));
       renderQuestionBank();
+      saveFrontPageSessionState();
       setParseStatus(
         true,
-        `Ready: ${questions.length} Questions (${croppedCount} Cropped Visual Qs · ${matchedKeys}/${questions.length} Answer Keys Matched)`,
-        croppedCount > 0 ? 'Each question is individually snipped (1 Q + 4 options per card). Ready for CBT!' : 'Chapter, Topic & Specific Sub-Topic auto-tagged.',
+        `Fast Done: ${questions.length} Questions (${croppedCount} Complete Crops · ${matchedKeys}/${questions.length} Keys Matched)`,
+        'Each question includes stem + diagram + all 4 options and is ready for CBT.',
         false,
         100,
         `${questions.length} Qs`
       );
     }
 
-    function truncateBeforeSolutions(text) {
-      const rx = /\n\s*(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:|Note\s*:\s*scan\s*the\s*QR\s*code)/i;
-      const match = text.match(rx);
-      if (match && match.index > 30) return text.slice(0, match.index).trim();
-      return text;
-    }
-
-    function isExtractedPageTextUsable(txt) {
-      const cleaned = txt.replace(/Android App|iOS App|PW Website|CUSTOMER/gi, '').trim();
-      if (cleaned.length < 40) return false;
-      const hasQuestionPattern = /(?:^|\n|\s)(?:Q\.?\s*\d{1,3}|\d{1,3}\s*[\.\)])\s+[A-Za-z]/i.test(cleaned);
-      const hasAnswerKeyPattern = /Answer\s*Key/i.test(cleaned) && /(?:Q\.?\s*\d{1,3}|\d{1,3})\s*[\.\-\:\s]\s*\(?[A-D1-4]\)?/i.test(cleaned);
-      const printableRatio = (cleaned.match(/[A-Za-z0-9\s\(\)\.\,\?\-\+\=]/g) || []).length / Math.max(1, cleaned.length);
-      return printableRatio > 0.72 && (hasQuestionPattern || hasAnswerKeyPattern);
-    }
-
-    async function extractTextFromPdfFile(file, startPct = 10, enableAutoCrop = true) {
+    async function extractTextFromPdfFile(file, startPct = 10, enableAutoCrop = true, fastKeyOnly = false) {
       const buf = await readFileAsArrayBufferSafe(file);
-      if (!buf || buf.byteLength === 0) throw new Error('Empty 0-byte PDF stream.');
+      if (!buf || buf.byteLength === 0) throw new Error('Empty PDF file.');
       const pdf = await loadPdfDocumentResilient(buf);
-      const forceOcr = document.getElementById('forcePdfOcrToggle')?.checked || false;
+      const forceOcr = fastKeyOnly ? false : (document.getElementById('forcePdfOcrToggle')?.checked || false);
       const skipSolutions = document.getElementById('skipSolutionsToggle')?.checked !== false;
+      const fileLooksLikeKey = fastKeyOnly || isAnswerKeyFileNameOrText(file.name);
 
       let fullOut = '';
       let sawQuestions = false;
@@ -2455,8 +3185,8 @@
       const cropsByQNum = {};
 
       for (let p = 1; p <= pdf.numPages; p++) {
-        const pct = Math.min(92, startPct + Math.round((p / pdf.numPages) * 75));
-        setParseStatus(true, `Processing & Cropping Page ${p} of ${pdf.numPages}`, file.name, false, pct);
+        const pct = Math.min(92, startPct + Math.round((p / pdf.numPages) * 70));
+        setParseStatus(true, `Fast Cropping PDF Page ${p}/${pdf.numPages}`, file.name, false, pct);
 
         const page = await pdf.getPage(p);
         const viewport = page.getViewport({ scale: 1.0 });
@@ -2466,10 +3196,10 @@
         const isHintsPage = /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText);
         if (skipSolutions && isHintsPage) break;
 
-        const isKeyOnlyPage = isAnswerKeyGridOrPage(pageText);
+        const isKeyOnlyPage = fileLooksLikeKey || isAnswerKeyGridOrPage(pageText);
 
-        if (enableAutoCrop && !isKeyOnlyPage && !isHintsPage) {
-          const cropScale = 2.35;
+        if (enableAutoCrop && !fileLooksLikeKey && !isKeyOnlyPage && !isHintsPage) {
+          const cropScale = 2.5;
           const cropVp = page.getViewport({ scale: cropScale });
           const cropCanvas = document.createElement('canvas');
           cropCanvas.width = cropVp.width;
@@ -2480,15 +3210,14 @@
           await page.render({ canvasContext: cropCtx, viewport: cropVp }).promise;
 
           const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, cropScale, p);
-          for (const [k, cObj] of Object.entries(pageCrops)) {
-            await idbPutImage(cObj.imageKey, cObj.imageDataUrl);
-            cropsByQNum[k] = cObj;
+          if (Object.keys(pageCrops).length) {
+            await idbPutImagesBatch(pageCrops);
+            Object.assign(cropsByQNum, pageCrops);
           }
         }
 
-        if (forceOcr || !isExtractedPageTextUsable(pageText)) {
-          setParseStatus(true, `Fast OCR Page ${p}/${pdf.numPages}`, file.name, false, pct);
-          const scale = /Answer\s*Key/i.test(pageText) ? 2.1 : 1.65;
+        if (forceOcr || (!isExtractedPageTextUsable(pageText) && !Object.keys(cropsByQNum).length)) {
+          const scale = 1.15;
           const hiVp = page.getViewport({ scale });
           const canvas = document.createElement('canvas');
           canvas.width = hiVp.width;
@@ -2496,16 +3225,20 @@
           const ctx = canvas.getContext('2d');
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.filter = 'contrast(1.35) grayscale(1)';
           await page.render({ canvasContext: ctx, viewport: hiVp }).promise;
-          const pageDataUrl = canvas.toDataURL('image/jpeg', 0.88);
-          pageText = await runFastImageOCR(pageDataUrl);
+          const pageDataUrl = canvas.toDataURL('image/jpeg', 0.80);
+          try {
+            pageText = await Promise.race([
+              runFastImageOCR(pageDataUrl, 1.0),
+              new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2500))
+            ]);
+          } catch (e) {}
 
           if (enableAutoCrop && !Object.keys(cropsByQNum).length && !isAnswerKeyGridOrPage(pageText)) {
             const ocrCrops = await cropQuestionsFromImageDataUrl(pageDataUrl, p);
-            for (const [k, cObj] of Object.entries(ocrCrops)) {
-              await idbPutImage(cObj.imageKey, cObj.imageDataUrl);
-              cropsByQNum[k] = cObj;
+            if (Object.keys(ocrCrops).length) {
+              await idbPutImagesBatch(ocrCrops);
+              Object.assign(cropsByQNum, ocrCrops);
             }
           }
         }
@@ -2521,6 +3254,7 @@
         if (/Answer\s*Key/i.test(pageText)) sawAnswerKey = true;
         if (skipSolutions && sawQuestions && sawAnswerKey) break;
       }
+
       return { text: fullOut, cropsByQNum };
     }
 
@@ -2612,6 +3346,50 @@
       text = text.replace(/([^\n])\s+(?=Q\.?\s*\d{1,3}\b)/g, '$1\n');
       text = text.replace(/([^\n])\s+(?=\([A-Da-d1-4]\)\s+)/g, '$1\n');
       return text;
+    }
+
+        function extractAnswerKeyMapFast(text) {
+      const keyMap = extractAnswerKeyMap(text);
+      const raw = sanitizeExtractedMathText(String(text || ''))
+        .replace(/\b(202[0-9]|199[0-9]|NEET\s*3\.0|Yakeen)\b/gi, ' ');
+      const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+      for (let i = 0; i < lines.length - 1; i++) {
+        const qNums = (lines[i].match(/\b(\d{1,3})\b/g) || []).map(Number).filter(n => n >= 1 && n <= 250);
+        const ansList = (lines[i + 1].match(/\(?([1-4A-Da-d])\)?/g) || []).map(s => s.replace(/[\(\)]/g, '').toUpperCase());
+        if (qNums.length >= 3 && qNums.length === ansList.length) {
+          for (let k = 0; k < qNums.length; k++) {
+            if (!keyMap[qNums[k]]) keyMap[qNums[k]] = ansList[k];
+          }
+        }
+      }
+
+      const pairRx = /(?:Q\.?\s*)?(\d{1,3})\s*[\.\:\-\)\s]+\(?([1-4A-Da-d])\)?(?=\s|$|,|;)/g;
+      let m;
+      while ((m = pairRx.exec(raw)) !== null) {
+        const qNum = parseInt(m[1], 10);
+        const ans = String(m[2] || '').toUpperCase();
+        if (qNum >= 1 && qNum <= 250 && !keyMap[qNum]) {
+          keyMap[qNum] = ans;
+        }
+      }
+      return keyMap;
+    }
+
+    function applyAnswerKeyMapInstant(keyMap) {
+      let applied = 0;
+      const qCount = questions.length;
+      for (let idx = 0; idx < qCount; idx++) {
+        const q = questions[idx];
+        const qNum = q.num || (idx + 1);
+        const rawKey = keyMap[qNum] || keyMap[idx + 1] || '';
+        const norm = normalizeAnswerChoice(rawKey);
+        if (norm) {
+          q.correct = `(${norm})`;
+          applied++;
+        }
+      }
+      return applied;
     }
 
     function extractAnswerKeyMap(text) {
@@ -2735,6 +3513,7 @@
       const matchedKeys = extracted.filter(q => q.correct).length;
       questions = extracted;
       renderQuestionBank();
+      saveFrontPageSessionState();
       setParseStatus(true, `Extracted ${questions.length} Questions (${matchedKeys}/${questions.length} Keys Matched)`, 'Ready for CBT test.', false, 100);
     }
 
@@ -2746,6 +3525,746 @@
     function clearRawText() {
       document.getElementById('rawTextInput').value = '';
       const ps = document.getElementById('parseStatusBox'); if (ps) ps.classList.add('hidden');
+    }
+
+    
+    const AUDIT_NOTE_STORAGE_KEY = 'nura2_audit_box_note_v1';
+    const NOTE_ATTACHMENTS_KEY = 'nura2_audit_note_attachments_v1';
+    const SUBJ_NOTES_KEY = 'nura2_subject_notes_v1';
+
+    const SUBJECT_META = [
+      { name: 'Physics',  code: 'phy', badgeCls: 'subj-badge-phy' },
+      { name: 'Chemistry',code: 'che', badgeCls: 'subj-badge-che' },
+      { name: 'Botany',   code: 'bot', badgeCls: 'subj-badge-bot' },
+      { name: 'Zoology',  code: 'zoo', badgeCls: 'subj-badge-zoo' }
+    ];
+
+    function saveAuditBoxNote(val) {
+      try { localStorage.setItem(AUDIT_NOTE_STORAGE_KEY, String(val || '')); } catch (e) {}
+      const st = document.getElementById('notePadSavedStatus');
+      if (st) { st.textContent = 'Saved ✓'; }
+    }
+
+    function loadAuditBoxNote() {
+      try { return localStorage.getItem(AUDIT_NOTE_STORAGE_KEY) || ''; } catch (e) { return ''; }
+    }
+
+    function loadSubjectNotesMap() {
+      const def = { Physics: '', Chemistry: '', Botany: '', Zoology: '' };
+      const saved = loadStorage(SUBJ_NOTES_KEY, def);
+      return { ...def, ...(saved || {}) };
+    }
+
+    function saveSubjectNoteText(subj, text) {
+      const map = loadSubjectNotesMap();
+      map[subj] = String(text || '');
+      saveStorage(SUBJ_NOTES_KEY, map);
+    }
+
+    function loadNoteAttachments() {
+      return loadStorage(NOTE_ATTACHMENTS_KEY, []);
+    }
+
+    function saveNoteAttachments(list) {
+      saveStorage(NOTE_ATTACHMENTS_KEY, Array.isArray(list) ? list.slice(0, 40) : []);
+    }
+
+    function insertNoteTimestampLine() {
+      const ta = document.getElementById('auditBoxNoteInput');
+      if (!ta) return;
+      const prefix = ta.value && !ta.value.endsWith('\n') ? '\n• ' : '• ';
+      ta.value = (ta.value || '') + prefix;
+      ta.focus();
+      saveAuditBoxNote(ta.value);
+    }
+
+    async function handleNoteFilesUpload(inputEl, forcedSubject = '') {
+      const files = Array.from(inputEl?.files || []);
+      if (!files.length) return;
+      const selEl = document.getElementById('noteTargetSubjectSelect');
+      const subject = forcedSubject || (selEl ? selEl.value : 'Physics') || 'Physics';
+      const currentList = loadNoteAttachments();
+
+      for (const file of files) {
+        const isImg = file.type.startsWith('image/') || /\.(png|jpe?g|webp|gif)$/i.test(file.name);
+        let dataUrl = '';
+        if (isImg) {
+          dataUrl = await readFileAsDataURLSafe(file);
+        } else if (file.size <= 350000) {
+          dataUrl = await readFileAsDataURLSafe(file);
+        }
+        currentList.unshift({
+          id: 'noteatt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          subject,
+          name: file.name,
+          sizeText: formatBytes(file.size),
+          isImage: isImg,
+          dataUrl,
+          addedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+
+      saveNoteAttachments(currentList);
+      if (inputEl) inputEl.value = '';
+      syncNoteBoxViews();
+    }
+
+    function deleteNoteAttachment(attId) {
+      const updated = loadNoteAttachments().filter(item => item.id !== attId);
+      saveNoteAttachments(updated);
+      renderSubjectNoteChipsAndFiles();
+    }
+
+    function renderSubjectNoteChipsAndFiles() {
+      const gridEl = document.getElementById('subjectNoteChipsGrid');
+      const filesEl = document.getElementById('uploadedNotesFilesList');
+      const subjNotes = loadSubjectNotesMap();
+      const attachments = loadNoteAttachments();
+
+      if (gridEl) {
+        gridEl.innerHTML = SUBJECT_META.map(sm => {
+          const sFiles = attachments.filter(a => a.subject === sm.name);
+          const sText = subjNotes[sm.name] || '';
+          return `
+            <div class="subj-card-chip ${sm.code}">
+              <div class="subj-card-top">
+                <span class="subj-badge-pill ${sm.badgeCls}">${sm.name}</span>
+                <span style="font-size:10.5px;font-weight:800;color:#334155;">${sFiles.length} File${sFiles.length === 1 ? '' : 's'}</span>
+              </div>
+              <textarea rows="2" placeholder="${sm.name} note..." oninput="saveSubjectNoteText('${sm.name}', this.value)" style="background:#ffffff;font-size:11.5px;padding:6px 8px;border-radius:8px;">${escapeHtml(sText)}</textarea>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
+                <label class="btn btn-outline" style="padding:3px 8px;font-size:10.5px;cursor:pointer;background:#ffffff;">
+                  + File / Img
+                  <input type="file" multiple accept="image/*,.pdf,.txt,.md,.json,.csv" class="hidden" onchange="handleNoteFilesUpload(this, '${sm.name}')" />
+                </label>
+                ${sFiles.length ? `<span style="font-size:10px;font-weight:800;color:#0f172a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(sFiles[0].name)}</span>` : '<span style="font-size:10px;color:#64748b;">No file</span>'}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (filesEl) {
+        if (!attachments.length) {
+          filesEl.innerHTML = '<div style="font-size:11px;color:#64748b;padding:4px 2px;">Koi notes file ya screenshot upload nahi hua hai.</div>';
+        } else {
+          filesEl.innerHTML = attachments.map(att => {
+            const sm = SUBJECT_META.find(x => x.name === att.subject) || SUBJECT_META[0];
+            const thumbHtml = (att.isImage && att.dataUrl)
+              ? `<img src="${att.dataUrl}" alt="${escapeHtml(att.name)}" class="note-attach-thumb" />`
+              : '';
+            const openLinkHtml = att.dataUrl
+              ? `<a href="${att.dataUrl}" download="${escapeHtml(att.name)}" class="btn btn-soft" style="padding:3px 8px;font-size:10.5px;">Open/Save</a>`
+              : '';
+            return `
+              <div class="note-attach-item">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <span class="subj-badge-pill ${sm.badgeCls}">${escapeHtml(att.subject)}</span>
+                  ${thumbHtml}
+                  <div>
+                    <div style="color:#0f172a;">${escapeHtml(att.name)}</div>
+                    <div style="font-size:10px;color:#64748b;">${escapeHtml(att.sizeText || '')} · ${escapeHtml(att.addedAt || '')}</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  ${openLinkHtml}
+                  <button type="button" class="btn-danger-soft" onclick="deleteNoteAttachment('${att.id}')" style="padding:3px 8px;font-size:10.5px;">✕</button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    
+    const QBOX_UPLOADED_CHIPS_KEY = 'nura2_qbox_uploaded_file_chips_v1';
+
+    function loadQboxUploadedChips() {
+      return loadStorage(QBOX_UPLOADED_CHIPS_KEY, []);
+    }
+
+    function saveQboxUploadedChips(chips) {
+      saveStorage(QBOX_UPLOADED_CHIPS_KEY, Array.isArray(chips) ? chips.slice(0, 60) : []);
+    }
+
+    function addUploadedFileChipsToQuestionBox(files) {
+      const list = Array.from(files || []);
+      if (!list.length) return;
+      const cur = loadQboxUploadedChips();
+      list.forEach(f => {
+        cur.unshift({
+          id: 'qfchip_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          name: f.name,
+          sizeText: formatBytes(f.size),
+          addedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      });
+      saveQboxUploadedChips(cur);
+      renderQuestionBoxUploadedChips();
+    }
+
+    function deleteQuestionBoxUploadedChip(chipId) {
+      const updated = loadQboxUploadedChips().filter(c => c.id !== chipId);
+      saveQboxUploadedChips(updated);
+      renderQuestionBoxUploadedChips();
+    }
+
+    
+    const UNMATCHED_CROPPED_TEST_KEY = 'nura2_each_test_unmatched_cropped_v1';
+
+    function loadEachTestUnmatchedCrops() {
+      return loadStorage(UNMATCHED_CROPPED_TEST_KEY, []);
+    }
+
+    function saveEachTestUnmatchedCrops(list) {
+      saveStorage(UNMATCHED_CROPPED_TEST_KEY, Array.isArray(list) ? list.slice(0, 50) : []);
+    }
+
+    function getCurrentActiveTestLabel() {
+      const titleInput = document.getElementById('testTitleInput');
+      const val = (titleInput && titleInput.value ? titleInput.value : '').trim();
+      return val || 'Current Test';
+    }
+
+    async function handleEachTestUnmatchedCropUpload(inputEl, explicitTestTitle = '') {
+      const files = Array.from(inputEl?.files || []);
+      if (!files.length) return;
+      const testTitle = (explicitTestTitle || getCurrentActiveTestLabel()).trim() || 'Current Test';
+      const qNumInput = document.getElementById('unmatchedCropQNumInput');
+      const typedQNum = qNumInput && parseInt(qNumInput.value, 10) > 0 ? parseInt(qNumInput.value, 10) : 0;
+
+      const curList = loadEachTestUnmatchedCrops();
+      let testGroup = curList.find(g => g.testTitle.toLowerCase() === testTitle.toLowerCase());
+      if (!testGroup) {
+        testGroup = {
+          id: 'utest_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          testTitle,
+          items: []
+        };
+        curList.unshift(testGroup);
+      }
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const dataUrl = await readFileAsDataURLSafe(file);
+        const nameMatch = file.name.match(/q[\s_\-]*(\d{1,3})/i);
+        const qNum = typedQNum || (nameMatch ? parseInt(nameMatch[1], 10) : (testGroup.items.length + 1));
+        const imgKey = `qimg_${Date.now()}_ut_${qNum}_${Math.random().toString(36).slice(2, 6)}`;
+        await idbPutImage(imgKey, dataUrl);
+
+        testGroup.items.unshift({
+          id: 'ucrop_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          qNum,
+          fileName: file.name,
+          imageKey: imgKey,
+          imageDataUrl: dataUrl,
+          addedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+
+      saveEachTestUnmatchedCrops(curList);
+      if (qNumInput) qNumInput.value = '';
+      if (inputEl) inputEl.value = '';
+      renderEachTestUnmatchedCrops();
+    }
+
+    function deleteSingleUnmatchedCropCard(testGroupId, itemId) {
+      const list = loadEachTestUnmatchedCrops();
+      const gIdx = list.findIndex(g => g.id === testGroupId);
+      if (gIdx < 0) return;
+      list[gIdx].items = (list[gIdx].items || []).filter(it => it.id !== itemId);
+      if (!list[gIdx].items.length) list.splice(gIdx, 1);
+      saveEachTestUnmatchedCrops(list);
+      renderEachTestUnmatchedCrops();
+    }
+
+    function deleteWholeTestUnmatchedCropGroup(testGroupId) {
+      const updated = loadEachTestUnmatchedCrops().filter(g => g.id !== testGroupId);
+      saveEachTestUnmatchedCrops(updated);
+      renderEachTestUnmatchedCrops();
+    }
+
+    function renderEachTestUnmatchedCrops() {
+      const mount = document.getElementById('eachTestUnmatchedCropMount');
+      if (!mount) return;
+      const groups = loadEachTestUnmatchedCrops();
+      const activeTestName = escapeHtml(getCurrentActiveTestLabel());
+
+      const groupsHtml = !groups.length
+        ? '<div style="font-size:11.5px;color:#64748b;padding:8px 4px;">Abhi kisi test ke liye unmatched cropped question upload nahi hua hai. Upar se screenshot/file upload karein.</div>'
+        : groups.map(g => {
+            const itemsHtml = (g.items || []).map(it => {
+              const imgSrc = it.imageDataUrl || (it.imageKey && questionImageMemoryCache[it.imageKey]) || '';
+              return `
+                <div style="background:#ffffff;border:1.5px solid #fda4af;border-radius:11px;padding:9px 11px;display:flex;flex-direction:column;gap:7px;box-shadow:0 2px 6px rgba(15,23,42,0.04);">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
+                    <span style="background:#e11d48;color:#ffffff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q${it.qNum}</span>
+                    <span style="font-size:10px;color:#64748b;font-weight:700;">${escapeHtml(it.addedAt || '')}</span>
+                    <button type="button" class="btn-danger-soft" onclick="deleteSingleUnmatchedCropCard('${g.id}', '${it.id}')" style="padding:2px 8px;font-size:10.5px;font-weight:900;">✕ Delete</button>
+                  </div>
+                  ${imgSrc ? `<img src="${imgSrc}" alt="Q${it.qNum}" style="max-width:100%;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid #e2e8f0;background:#ffffff;" />` : ''}
+                  <div style="font-size:10.5px;color:#334155;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(it.fileName || '')}</div>
+                </div>
+              `;
+            }).join('');
+
+            return `
+              <div style="border:1.5px solid #fb7185;border-radius:13px;padding:11px;background:#fff1f2;display:flex;flex-direction:column;gap:9px;">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+                    <span class="pill pill-rose">${(g.items || []).length} Qs</span>
+                    <strong style="font-size:13px;color:#881337;">${escapeHtml(g.testTitle)}</strong>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <label class="btn btn-soft" style="padding:4px 9px;font-size:11px;cursor:pointer;">
+                      + Add Q
+                      <input type="file" multiple accept="image/*,.pdf" class="hidden" onchange="handleEachTestUnmatchedCropUpload(this, '${escapeHtml(g.testTitle).replace(/'/g, "\'")}')" />
+                    </label>
+                    <button type="button" class="btn-danger-soft" onclick="deleteWholeTestUnmatchedCropGroup('${g.id}')" style="padding:4px 9px;font-size:11px;">🗑 Delete Test Group</button>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));gap:9px;">
+                  ${itemsHtml}
+                </div>
+              </div>
+            `;
+          }).join('');
+
+      mount.innerHTML = `
+        <div style="margin-top:12px;padding:12px;border-radius:13px;background:#ffffff;border:2px solid #e11d48;display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <div>
+              <div style="font-size:12.5px;font-weight:900;color:#881337;">
+                Each Test Unmatched Cropped Questions (Test: <span style="color:#0f766e;">${activeTestName}</span>)
+              </div>
+              <div style="font-size:11px;color:#64748b;">
+                Har test ke unmatched cropped question ka card yahan upload karein — har question card aur test group deletable hai.
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <input id="unmatchedCropQNumInput" type="number" min="1" max="300" placeholder="Q No." style="width:76px;padding:5px 8px;font-size:11px;" />
+              <label class="btn btn-danger" style="padding:5px 11px;font-size:11px;cursor:pointer;">
+                ⬆ Upload Cropped Q
+                <input type="file" multiple accept="image/*,.pdf" class="hidden" onchange="handleEachTestUnmatchedCropUpload(this)" />
+              </label>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            ${groupsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderQuestionBoxUploadedChips() {
+      const listEl = document.getElementById('qboxUploadedFilesChipsList');
+      const countEl = document.getElementById('qboxUploadedFilesCount');
+      const chips = loadQboxUploadedChips();
+      if (countEl) countEl.textContent = chips.length;
+      if (!listEl) return;
+
+      if (!chips.length) {
+        listEl.innerHTML = '<span style="font-size:11px;color:#64748b;">Abhi koi file chip add nahi hui hai. Upload karte hi har file ka alag card/chip yahan aayega.</span>';
+        return;
+      }
+
+      listEl.innerHTML = chips.map(ch => `
+        <div class="qbox-file-chip" title="${escapeHtml(ch.name)} (${escapeHtml(ch.sizeText || '')})">
+          <span>📄 ${escapeHtml(ch.name)}</span>
+          <span style="font-size:10px;color:#0f766e;">(${escapeHtml(ch.sizeText || '')})</span>
+          <button type="button" class="qbox-chip-del-btn" onclick="deleteQuestionBoxUploadedChip('${ch.id}')" title="Delete this file chip">✕ Delete</button>
+        </div>
+      `).join('');
+    }
+
+    async function handleQuestionBoxFileUpload(inputEl) {
+      const files = Array.from(inputEl?.files || []);
+      if (!files.length) return;
+      addUploadedFileChipsToQuestionBox(files);
+      renderUnmatchedQBoxSection(files.map(f => f.name).join(', '));
+      if (inputEl) inputEl.value = '';
+    }
+
+    function deleteQuestionAuditBoxSection() {
+      saveQboxUploadedChips([]);
+      renderQuestionBoxUploadedChips();
+      renderUnmatchedQBoxSection();
+    }
+
+    function deleteTopNoteBoxData() {
+      saveAuditBoxNote('');
+      saveStorage(SUBJ_NOTES_KEY, { Physics: '', Chemistry: '', Botany: '', Zoology: '' });
+      saveNoteAttachments([]);
+      const ta = document.getElementById('auditBoxNoteInput');
+      if (ta) ta.value = '';
+      syncNoteBoxViews();
+    }
+
+    function renderTopNoteBoxCard() {
+      const topMount = document.getElementById('topNoteBoxMount');
+      if (!topMount) return;
+      const curNoteVal = loadAuditBoxNote();
+      topMount.innerHTML = `
+        <div class="notepad-highlight-card">
+          <div class="notepad-toolbar">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:12px;font-weight:900;color:#0f766e;text-transform:uppercase;letter-spacing:0.04em;">
+                ★ Note Pad
+              </span>
+              <span id="notePadSavedStatus" style="font-size:11px;font-weight:800;color:#059669;">Auto-Saved</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <select id="noteTargetSubjectSelect" style="width:auto;padding:4px 8px;font-size:11px;font-weight:800;background:#ffffff;">
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Botany">Botany</option>
+                <option value="Zoology">Zoology</option>
+              </select>
+              <label class="btn btn-primary" style="padding:5px 10px;font-size:11px;cursor:pointer;">
+                ⬆ Upload Notes / Screenshot
+                <input type="file" multiple accept="image/*,.pdf,.txt,.md,.json,.csv" class="hidden" onchange="handleNoteFilesUpload(this)" />
+              </label>
+              <button type="button" class="btn-outline" onclick="insertNoteTimestampLine()" style="padding:5px 9px;font-size:11px;">+ Bullet</button>
+            </div>
+          </div>
+
+          <textarea id="auditBoxNoteInput" class="notepad-area" rows="5" placeholder="Notepad ki tarah yahan apne notes likhein... (har subject card mein bhi quick note ya screenshot upload kar sakte hain)" oninput="saveAuditBoxNote(this.value)"></textarea>
+
+          <div>
+            <div style="font-size:11px;font-weight:900;color:#0f172a;margin-bottom:4px;">
+              Respective Subject Cards &amp; Chips (Physics · Chemistry · Botany · Zoology):
+            </div>
+            <div id="subjectNoteChipsGrid" class="subj-chips-grid"></div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:900;color:#0f172a;margin-bottom:2px;">
+              Uploaded Notes Files &amp; Screenshots:
+            </div>
+            <div id="uploadedNotesFilesList" class="note-attach-list"></div>
+          </div>
+        </div>
+      `;
+      const ta = document.getElementById('auditBoxNoteInput');
+      if (ta && document.activeElement !== ta) {
+        ta.value = curNoteVal;
+      }
+      renderSubjectNoteChipsAndFiles();
+    }
+
+
+    async function handleSingleQuestionKeyUpload(qIdx, inputEl) {
+      const file = inputEl?.files?.[0];
+      if (!file || !questions[qIdx]) return;
+      const qNum = questions[qIdx].num || (qIdx + 1);
+      let keyText = '';
+      if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
+        const pdfRes = await extractTextFromPdfFile(file, 30, false, true);
+        keyText = pdfRes.text || '';
+      } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(file.name)) {
+        const dataUrl = await readFileAsDataURLSafe(file);
+        keyText = await Promise.race([
+          runFastImageOCR(dataUrl, 1.8),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 4000))
+        ]).catch(() => '');
+      } else {
+        keyText = await readFileAsTextSafe(file);
+      }
+
+      const keyMap = extractAnswerKeyMapFast(keyText);
+      const parsedChoice = keyMap[qNum] || keyMap[qIdx + 1] || '';
+      const norm = normalizeAnswerChoice(parsedChoice);
+      const finalAns = norm ? `(${norm})` : (parsedChoice ? String(parsedChoice).trim().toUpperCase() : '');
+
+      if (finalAns) {
+        questions[qIdx] = {
+          ...questions[qIdx],
+          correct: finalAns
+        };
+      } else {
+        const fallbackMatch = String(keyText || '').match(/\(?([1-4A-Da-d])\)?/);
+        if (fallbackMatch) {
+          const n2 = normalizeAnswerChoice(fallbackMatch[1]);
+          questions[qIdx] = {
+            ...questions[qIdx],
+            correct: n2 ? `(${n2})` : fallbackMatch[1].toUpperCase()
+          };
+        }
+      }
+
+      if (inputEl) inputEl.value = '';
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection(`Q${qNum} Answer Updated from Upload`);
+      if (lastReport) {
+        computeAndRenderResults(false);
+      }
+    }
+
+    function renderIncompleteCroppedQuestionsInCards(incompleteItems) {
+      const listEl = document.getElementById('qboxUploadedFilesChipsList');
+      const countEl = document.getElementById('qboxUploadedFilesCount');
+      const chips = loadQboxUploadedChips();
+      const totalBadgeCount = (incompleteItems || []).length + chips.length;
+      if (countEl) countEl.textContent = totalBadgeCount;
+      if (!listEl) return;
+
+      const incompleteCardsHtml = (incompleteItems || []).map(item => {
+        const cropUrl = getQuestionImageUrl(item.q);
+        const isVisuallyComplete = !!cropUrl && Array.isArray(item.q.imageDataUrls) && item.q.imageDataUrls.length >= 1;
+        return `
+          <div style="background:#ffffff;border:1.5px solid #f59e0b;border-radius:11px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-width:230px;flex:1;box-shadow:0 2px 6px rgba(15,23,42,0.05);">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="background:#0f172a;color:#ffffff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q${item.qNum}</span>
+                <span class="pill pill-amber">${isVisuallyComplete ? 'Visual Updated' : 'Needs Complete 4-Option Screenshot'}</span>
+              </div>
+              <label class="btn btn-warn" style="padding:4px 10px;font-size:10.5px;cursor:pointer;">
+                ⬆ Upload Screenshot
+                <input type="file" multiple accept="image/*" class="hidden" onchange="handlePerQuestionMultiScreenshotUpload(${item.idx}, this)" />
+              </label>
+            </div>
+            ${cropUrl
+              ? `<div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:6px;text-align:center;"><img src="${cropUrl}" alt="Q${item.qNum}" style="max-width:100%;max-height:150px;object-fit:contain;display:block;margin:0 auto;" /></div>`
+              : `<div style="font-size:11.5px;font-weight:700;color:#334155;background:#fffbeb;padding:7px 9px;border-radius:8px;border:1px dashed #fbbf24;">${escapeHtml(item.q.text || ('Q' + item.qNum))}</div>`
+            }
+          </div>
+        `;
+      }).join('');
+
+      const fileChipsHtml = chips.map(ch => `
+        <div class="qbox-file-chip" title="${escapeHtml(ch.name)} (${escapeHtml(ch.sizeText || '')})">
+          <span>📄 ${escapeHtml(ch.name)}</span>
+          <span style="font-size:10px;color:#0f766e;">(${escapeHtml(ch.sizeText || '')})</span>
+          <button type="button" class="qbox-chip-del-btn" onclick="deleteQuestionBoxUploadedChip('${ch.id}')" title="Delete this file chip">✕ Delete</button>
+        </div>
+      `).join('');
+
+      if (!incompleteCardsHtml && !fileChipsHtml) {
+        listEl.innerHTML = '<span style="font-size:11px;color:#64748b;">Abhi koi incomplete cropped question ya file chip nahi hai.</span>';
+        return;
+      }
+
+      listEl.innerHTML = `
+        ${incompleteCardsHtml ? `<div style="width:100%;display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:9px;margin-bottom:4px;">${incompleteCardsHtml}</div>` : ''}
+        ${fileChipsHtml}
+      `;
+    }
+
+    function renderUnmatchedQBoxSection(uploadLabel = '') {
+      const totalQ = (questions || []).length;
+      const incompleteVisualQs = (questions || [])
+        .map((q, idx) => ({ q, idx, qNum: q.num || (idx + 1) }))
+        .filter(item => {
+          const imgUrl = getQuestionImageUrl(item.q);
+          const hasMultiJoined = Array.isArray(item.q.imageDataUrls) && item.q.imageDataUrls.length > 0;
+          return !imgUrl && !hasMultiJoined;
+        });
+
+      const unmatchedQs = (questions || [])
+        .map((q, idx) => ({ q, idx, qNum: q.num || (idx + 1) }))
+        .filter(item => !normalizeAnswerChoice(item.q.correct));
+
+      const visualCount = Math.max(0, totalQ - incompleteVisualQs.length);
+      const matchedCount = Math.max(0, totalQ - unmatchedQs.length);
+
+      const pillEl = document.getElementById('auditLiveCountsPill');
+      if (pillEl) pillEl.textContent = `Visual: ${visualCount}/${totalQ} · Matched: ${matchedCount}/${totalQ}`;
+
+      const badge = document.getElementById('unmatchedQBoxBadge');
+      if (badge) badge.textContent = unmatchedQs.length + incompleteVisualQs.length;
+
+      const stEl = document.getElementById('unmatchedQBoxAutoStatus');
+      if (stEl) {
+        const chips = loadQboxUploadedChips();
+        const latestChip = chips.length ? chips[0].name : '';
+        const info = uploadLabel || latestChip;
+        stEl.textContent = info
+          ? `Auto-Updated on Upload: "${info}" · Incomplete Visual Qs: ${incompleteVisualQs.length} · Unmatched Ans: ${unmatchedQs.length} Qs`
+          : `Incomplete Visual Qs: ${incompleteVisualQs.length} · Unmatched Ans: ${unmatchedQs.length} Qs`;
+      }
+
+      renderIncompleteCroppedQuestionsInCards(incompleteVisualQs);
+
+      const umEl = document.getElementById('secUnmatchedAnsNumbers');
+      if (umEl) {
+        umEl.innerHTML = unmatchedQs.length
+          ? unmatchedQs.map(x => `<span class="qnum-chip-rose">Q${x.qNum}</span>`).join('')
+          : '<span style="color:#059669;">None</span>';
+      }
+
+
+    const pendingUnmatchedAnsMap = {};
+
+    function selectUnmatchedOptionChoice(qIdx, optVal) {
+      pendingUnmatchedAnsMap[qIdx] = optVal;
+      renderUnmatchedQBoxSection();
+    }
+
+    function saveUnmatchedQuestionAnswer(qIdx) {
+      if (!questions[qIdx]) return;
+      const chosen = pendingUnmatchedAnsMap[qIdx] || questions[qIdx].correct || '(1)';
+      questions[qIdx].correct = chosen;
+      delete pendingUnmatchedAnsMap[qIdx];
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection(`Q${questions[qIdx].num || (qIdx + 1)} Answer Saved as ${chosen}`);
+      if (lastReport) {
+        computeAndRenderResults(false);
+      }
+    }
+
+      const umListEl = document.getElementById('unmatchedAnsEditList');
+      if (umListEl) {
+        umListEl.innerHTML = unmatchedQs.map(item => {
+          const normSavedAns = normalizeAnswerChoice(item.q.correct);
+          const selectedChoice = pendingUnmatchedAnsMap[item.idx] || (normSavedAns ? `(${normSavedAns})` : '');
+          const fourOpts = ['(1)', '(2)', '(3)', '(4)'];
+          const optButtonsHtml = fourOpts.map(opt => {
+            const isSel = selectedChoice === opt;
+            return `<button type="button" onclick="selectUnmatchedOptionChoice(${item.idx}, '${opt}')" style="padding:5px 10px;border-radius:8px;font-size:11.5px;font-weight:900;border:1.5px solid ${isSel ? '#0d9488' : '#cbd5e1'};background:${isSel ? '#0d9488' : '#ffffff'};color:${isSel ? '#ffffff' : '#0f172a'};cursor:pointer;">${opt}</button>`;
+          }).join('');
+
+          return `
+            <div class="audit-hl-row">
+              <span>Q${item.qNum} (answer match nahi hua):</span>
+              <div style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;background:#fff1f2;border:1.5px solid #fda4af;border-radius:10px;padding:5px 8px;">
+                ${optButtonsHtml}
+                <button type="button" class="btn-success" onclick="saveUnmatchedQuestionAnswer(${item.idx})" style="padding:5px 12px;font-size:11px;font-weight:900;border-radius:8px;">Save</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function syncNoteBoxViews() {
+      renderTopNoteBoxCard();
+      renderQuestionBoxUploadedChips();
+      renderEachTestUnmatchedCrops();
+      renderUnmatchedQBoxSection();
+      const nbBadge = document.getElementById('noteBoxCountBadge');
+      const attCount = loadNoteAttachments().length;
+      if (nbBadge) nbBadge.textContent = attCount;
+    }
+
+    function refreshStatusBannerAndAuditBox() {
+      renderUnmatchedQBoxSection();
+    }
+
+    async function handleAuditScreenshotUpload(qIdx, inputEl) {
+      const file = inputEl?.files?.[0];
+      if (!file || !questions[qIdx]) return;
+      const dataUrl = await readFileAsDataURLSafe(file);
+      const qNum = questions[qIdx].num || (qIdx + 1);
+      const imgKey = questions[qIdx].imageKey || `qimg_${Date.now()}_audit_q${qNum}_${Math.random().toString(36).slice(2, 6)}`;
+      await idbPutImage(imgKey, dataUrl);
+      questions[qIdx] = {
+        ...questions[qIdx],
+        imageKey: imgKey,
+        imageDataUrl: dataUrl
+      };
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection(`Q${qNum} Visual Updated`);
+      if (inputEl) inputEl.value = '';
+    }
+
+    function handleAuditAnswerEdit(qIdx, newAns) {
+      if (!questions[qIdx]) return;
+      questions[qIdx].correct = newAns;
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection();
+      if (lastReport) {
+        computeAndRenderResults(false);
+      }
+    }
+
+    
+    const FRONT_PAGE_SESSION_KEY = 'nura2_front_page_active_session_v1';
+
+    function saveFrontPageSessionState() {
+      try {
+        if (!Array.isArray(questions) || !questions.length) {
+          localStorage.removeItem(FRONT_PAGE_SESSION_KEY);
+          return;
+        }
+        const psBox = document.getElementById('parseStatusBox');
+        const statusInfo = {
+          visible: psBox ? !psBox.classList.contains('hidden') : false,
+          isError: psBox ? psBox.classList.contains('error') : false,
+          isDone: psBox ? psBox.classList.contains('done') : false,
+          title: document.getElementById('parseStatusTitle')?.textContent || '',
+          sub: document.getElementById('parseStatusSub')?.textContent || '',
+          meta: document.getElementById('parseStatusMeta')?.textContent || ''
+        };
+        const titleVal = document.getElementById('testTitleInput')?.value || '';
+        const fnBadgeText = document.getElementById('selectedFileNameBadge')?.textContent || '';
+        const lightQs = questions.map(q => stripInlineImageForLocalStorage(q));
+        saveStorage(FRONT_PAGE_SESSION_KEY, {
+          questions: lightQs,
+          title: titleVal,
+          fileBadgeText: fnBadgeText,
+          statusInfo,
+          updatedAt: Date.now()
+        });
+      } catch (e) {}
+    }
+
+    function restoreFrontPageSessionState() {
+      const saved = loadStorage(FRONT_PAGE_SESSION_KEY, null);
+      if (!saved || !Array.isArray(saved.questions) || !saved.questions.length) return false;
+      questions = saved.questions.map((q, i) => enrichQuestionObj(q, i));
+      const titleInput = document.getElementById('testTitleInput');
+      if (titleInput && saved.title) titleInput.value = saved.title;
+      const fnBadge = document.getElementById('selectedFileNameBadge');
+      if (fnBadge && saved.fileBadgeText) {
+        fnBadge.textContent = saved.fileBadgeText;
+        fnBadge.classList.remove('hidden');
+      }
+      renderQuestionBank();
+      renderUnmatchedQBoxSection();
+      if (saved.statusInfo && saved.statusInfo.visible) {
+        setParseStatus(
+          true,
+          saved.statusInfo.title || `${questions.length} Questions Loaded`,
+          saved.statusInfo.sub || '',
+          !!saved.statusInfo.isError,
+          saved.statusInfo.isDone ? 100 : null,
+          saved.statusInfo.meta || `${questions.length} Qs`
+        );
+      }
+      return true;
+    }
+
+    function goToFrontPageDirect() {
+      if (questions.length) {
+        saveFrontPageSessionState();
+        renderQuestionBank();
+        renderUnmatchedQBoxSection();
+      } else {
+        restoreFrontPageSessionState();
+      }
+      switchView('upload');
+    }
+
+    function startNewTestSession() {
+      try { localStorage.removeItem(FRONT_PAGE_SESSION_KEY); } catch (e) {}
+      questions = [];
+      activeWrongBankTestId = null;
+      const titleInput = document.getElementById('testTitleInput');
+      if (titleInput) titleInput.value = '';
+      const fnBadge = document.getElementById('selectedFileNameBadge');
+      if (fnBadge) { fnBadge.textContent = ''; fnBadge.classList.add('hidden'); }
+      const rawTa = document.getElementById('rawTextInput');
+      if (rawTa) rawTa.value = '';
+      setParseStatus(false, '', '');
+      renderQuestionBank();
+      renderQuestionBoxUploadedChips();
+      renderUnmatchedQBoxSection();
+      switchView('upload');
     }
 
     function renderQuestionBank() {
@@ -2780,14 +4299,18 @@
                 '<option value="">Not Set<\/option>' +
                 ['(1)', '(2)', '(3)', '(4)', 'A', 'B', 'C', 'D'].map(opt => '<option value="' + opt + '" ' + (q.correct === opt ? 'selected' : '') + '>' + opt + '<\/option>').join('') +
               '<\/select>' +
-              '<button type="button" class="btn-danger-soft" onclick="deleteQuestion(' + idx + ')" style="padding:4px 8px;">✕<\/button>' +
+              '<label for="perQMultiShotInput_' + idx + '" class="btn btn-soft" style="padding:4px 9px;font-size:10.5px;cursor:pointer;" title="Upload complete cropped question screenshot(s)">' +
+                '📷 Upload Q Img' +
+              '<\/label>' +
+              '<input id="perQMultiShotInput_' + idx + '" type="file" multiple accept="image/*" onchange="handlePerQuestionMultiScreenshotUpload(' + idx + ', this)" style="position:fixed;left:-9999px;width:1px;height:1px;opacity:0;" />' +
+
             '<\/div>' +
           '<\/div>' +
           (cropUrl ? (
             '<div class="q-crop-frame">' +
               '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
                 '<span class="pill pill-green">Single-Question Visual Cut (Includes 4 Options)<\/span>' +
-                '<button type="button" class="btn-outline" onclick="removeQuestionCroppedImage(' + idx + ')" style="padding:2px 8px;font-size:10px;">Switch to Text Mode<\/button>' +
+
               '<\/div>' +
               '<img src="' + cropUrl + '" alt="Q' + (q.num || (idx + 1)) + '" />' +
             '<\/div>'
@@ -2839,8 +4362,12 @@
           { mode: 'all', questions: questions.map(q => stripInlineImageForLocalStorage(q)) }
         );
       }
+      try { localStorage.removeItem(FRONT_PAGE_SESSION_KEY); } catch (e) {}
       questions = [];
       renderQuestionBank();
+      renderQuestionBoxUploadedChips();
+      renderUnmatchedQBoxSection();
+      refreshStatusBannerAndAuditBox();
     }
     function addManualQuestion() {
       questions.push(enrichQuestionObj({
@@ -2912,7 +4439,7 @@
         statusEl.textContent = `Scanning file ${i + 1} of ${files.length} (${file.name}) with Offline OCR...`;
         let rawText = '';
         if (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') {
-          const pdfRes = await extractTextFromPdfFile(file, 20, false);
+          const pdfRes = await extractTextFromPdfFile(file, 20, false, true);
           rawText = pdfRes.text;
         } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(file.name)) {
           const dataUrl = await readFileAsDataURLSafe(file);
@@ -2957,7 +4484,7 @@
     }
 
     function applyBulkKeyString(str) {
-      const keyMap = extractAnswerKeyMap(str);
+      const keyMap = extractAnswerKeyMapFast(str);
       let applied = 0;
       questions.forEach((q, idx) => {
         const k = keyMap[q.num] || keyMap[idx + 1];
@@ -3744,44 +5271,229 @@
       updateHeaderBadges(); renderMasterWeakTracker();
     }
 
-    function saveCurrentSheetToLibrary() {
-      if (!questions.length) return;
-      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
-      const lightQuestions = questions.map(q => stripInlineImageForLocalStorage(q));
-      sheets.unshift({ id: 'sh_' + Date.now(), title: document.getElementById('testTitleInput').value.trim() || `Practice Sheet (${questions.length} Qs)`, date: new Date().toLocaleDateString(), questions: lightQuestions });
-      saveStorage(STORAGE_KEYS.SHEETS, sheets.slice(0, 30));
-      updateHeaderBadges();
-      setParseStatus(true, 'Practice Sheet Saved Locally!', 'Access anytime offline from Saved & History.', false, 100);
+    async function ensureCroppedQuestionsForSavedSheet(qList) {
+      const out = [];
+      for (let idx = 0; idx < (qList || []).length; idx++) {
+        const q = enrichQuestionObj(qList[idx], idx);
+        let imgUrl = getQuestionImageUrl(q);
+        if (!imgUrl) {
+          const canvas = document.createElement('canvas');
+          canvas.width = 960;
+          const opts = Array.isArray(q.options) && q.options.length === 4 ? q.options : ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'];
+          const stemLines = (q.text || `Question ${q.num || (idx + 1)}`).match(/.{1,82}(\s|$)/g) || [q.text || ''];
+          const optLines = opts.map((o, i) => `(${i + 1}) ${o}`);
+          const allLines = [...stemLines.map(s => s.trim()), ...optLines];
+          canvas.height = Math.max(150, 44 + allLines.length * 24);
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#0f172a';
+          ctx.font = 'bold 17px Arial, sans-serif';
+          ctx.fillText(`Q${q.num || (idx + 1)} (${q.subject || 'Subject'})`, 18, 28);
+          ctx.font = '15px Arial, sans-serif';
+          let curY = 54;
+          for (const ln of allLines) {
+            ctx.fillText(ln, 18, curY);
+            curY += 23;
+          }
+          imgUrl = canvas.toDataURL('image/jpeg', 0.88);
+          const imgKey = q.imageKey || `qimg_${Date.now()}_sheet_q${q.num || (idx + 1)}_${Math.random().toString(36).slice(2, 6)}`;
+          await idbPutImage(imgKey, imgUrl);
+          q.imageKey = imgKey;
+          q.imageDataUrl = imgUrl;
+        }
+        out.push({ ...q, imageDataUrl: imgUrl });
+      }
+      return out;
     }
 
-    function saveAllDataToJsonFile() {
-      const sheetsWithImages = loadStorage(STORAGE_KEYS.SHEETS, []).map(s => ({
-        ...s,
-        questions: (s.questions || []).map(q => ({ ...q, imageDataUrl: getQuestionImageUrl(q) || '' }))
-      }));
-      const wrongBankWithImages = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).map(b => ({
-        ...b,
-        questions: (b.questions || []).map(q => ({ ...q, imageDataUrl: getQuestionImageUrl(q) || '' }))
-      }));
-      const payload = {
-        app: 'NURA-2',
-        customAppName: localStorage.getItem(STORAGE_KEYS.APP_NAME) || '',
-        exportedAt: new Date().toISOString(),
-        sheets: sheetsWithImages,
-        history: loadStorage(STORAGE_KEYS.HISTORY, []),
-        marksGraph: loadStorage(STORAGE_KEYS.MARKS_GRAPH, []),
-        weakTracker: loadStorage(STORAGE_KEYS.WEAK_TRACKER, []),
-        wrongQsBank: wrongBankWithImages
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `NURA2_backup_${new Date().toISOString().slice(0, 10)}.json`;
-      a.click();
-      const lbl = document.getElementById('headerSaveBtnLabel');
-      if (lbl) {
-        lbl.textContent = '✓ Saved!';
-        setTimeout(() => { lbl.textContent = '⬇ Save'; }, 1800);
+    async function saveCurrentSheetToLibrary(navigateToSection = false) {
+      if (!questions.length) {
+        setParseStatus(true, 'No Questions to Save', 'Upload a practice sheet first, then tap Save Sheet.', true);
+        return;
+      }
+      const croppedFullQuestions = await ensureCroppedQuestionsForSavedSheet(questions);
+      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
+      const lightQuestions = croppedFullQuestions.map(q => stripInlineImageForLocalStorage(q));
+      const testTitle = document.getElementById('testTitleInput').value.trim() || `Practice Sheet (${croppedFullQuestions.length} Qs)`;
+      sheets.unshift({
+        id: 'sh_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+        title: testTitle,
+        date: new Date().toLocaleString(),
+        questions: lightQuestions
+      });
+      saveStorage(STORAGE_KEYS.SHEETS, sheets.slice(0, 30));
+      updateHeaderBadges();
+      renderSavedSheetsTopSection();
+      setParseStatus(
+        true,
+        `Saved Cropped Sheet: "${testTitle}"`,
+        `${croppedFullQuestions.length} cropped questions saved. Open "Save Sheet" to delete or start test directly.`,
+        false,
+        100,
+        `${croppedFullQuestions.length} Saved`
+      );
+      if (navigateToSection) {
+        switchView('savedSheetsSectionView');
+      }
+    }
+
+    function directStartSavedSheetTest(idx) {
+      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
+      const s = sheets[idx];
+      if (!s || !Array.isArray(s.questions) || !s.questions.length) return;
+      questions = s.questions.map((q, i) => enrichQuestionObj(q, i));
+      document.getElementById('testTitleInput').value = s.title || `Practice Sheet (${questions.length} Qs)`;
+      renderQuestionBank();
+      startCBTExam(false);
+    }
+
+    function renderSavedSheetsTopSection() {
+      const mount = document.getElementById('savedSheetsTopSectionList');
+      const badge = document.getElementById('savedSheetsSectionBadge');
+      const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
+      if (badge) badge.textContent = sheets.length;
+      if (!mount) return;
+
+      if (!sheets.length) {
+        mount.innerHTML = '<div style="text-align:center;padding:32px 16px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;">' +
+          '<div style="font-size:14px;font-weight:800;color:#475569;">No Saved Sheets Yet<\/div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-top:4px;">Uploaded sheet par "Save Sheet" button click karte hi har test yahan completely cropped save ho jayega.<\/div>' +
+          '<\/div>';
+        return;
+      }
+
+      mount.innerHTML = sheets.map((s, idx) => {
+        const qList = Array.isArray(s.questions) ? s.questions : [];
+        const qChipsBarHtml = qList.map((rq, qIdx) => {
+          const q = enrichQuestionObj(rq, qIdx);
+          return '<a href="#savedSheetQ_' + idx + '_' + qIdx + '" onclick="document.getElementById(\'savedSheetBody_' + idx + '\').open=true;" style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:#ffffff;border:1px solid #5eead4;color:#0f766e;font-size:11px;font-weight:900;text-decoration:none;">Q' + q.num + ' · ' + escapeHtml(q.subject || 'Sub') + '<\/a>';
+        }).join('');
+
+        const allQuestionsHtml = qList.map((rq, qIdx) => {
+          const q = enrichQuestionObj(rq, qIdx);
+          const cropUrl = getQuestionImageUrl(q);
+          return '<div id="savedSheetQ_' + idx + '_' + qIdx + '" style="background:#ffffff;border:1.5px solid #cbd5e1;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;">' +
+            '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px;">' +
+              '<span style="background:#0f172a;color:#ffffff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + q.num + ' · ' + escapeHtml(q.subject || '') + '<\/span>' +
+              '<span class="pill pill-teal">' + escapeHtml(q.chapter || '') + '<\/span>' +
+            '<\/div>' +
+            (cropUrl
+              ? '<div class="q-crop-frame" style="margin:0;"><img src="' + cropUrl + '" alt="Q' + q.num + '" /><\/div>'
+              : '<div style="font-size:12px;font-weight:600;color:#0f172a;white-space:pre-line;">' + escapeHtml(q.text || '') + '<\/div>' +
+                '<div class="grid-2" style="font-size:11px;">' +
+                  ['(1)', '(2)', '(3)', '(4)'].map((lbl, oIdx) => '<div style="padding:4px 8px;border-radius:6px;border:1px solid #e2e8f0;background:#f8fafc;"><strong>' + lbl + '<\/strong> ' + escapeHtml((q.options && q.options[oIdx]) || '') + '<\/div>').join('') +
+                '<\/div>') +
+          '<\/div>';
+        }).join('');
+
+        return '<div style="border:2px solid #0d9488;border-radius:16px;padding:15px;background:#f0fdfa;display:flex;flex-direction:column;gap:10px;box-shadow:0 3px 10px rgba(13,148,136,0.08);">' +
+          '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;">' +
+            '<div>' +
+              '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+                '<span style="background:#0d9488;color:#fff;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:900;">Test #' + (sheets.length - idx) + '<\/span>' +
+                '<strong style="font-size:15.5px;color:#0f172a;">' + escapeHtml(s.title) + '<\/strong> ' +
+                '<span class="pill pill-green">' + qList.length + ' / ' + qList.length + ' All Cropped Qs<\/span>' +
+              '<\/div>' +
+              '<div style="font-size:11px;color:var(--muted);margin-top:3px;">Saved: ' + escapeHtml(s.date || '') + '<\/div>' +
+            '<\/div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+              '<button type="button" class="btn-success" onclick="directStartSavedSheetTest(' + idx + ')" style="padding:7px 13px;font-size:12px;">▶ Re-Attempt / Start Test<\/button>' +
+              '<button type="button" class="btn-danger-soft" onclick="deleteSavedSheet(' + idx + ');renderSavedSheetsTopSection();" style="padding:7px 11px;font-size:12px;">🗑 Delete<\/button>' +
+            '<\/div>' +
+          '<\/div>' +
+          (qChipsBarHtml ? '<div style="display:flex;flex-wrap:wrap;gap:5px;padding:8px;border-radius:10px;background:#ccfbf155;border:1px dashed #5eead4;">' + qChipsBarHtml + '<\/div>' : '') +
+          '<details id="savedSheetBody_' + idx + '" open style="background:#ffffff;border:1px solid #99f6e4;border-radius:12px;padding:10px;">' +
+            '<summary style="cursor:pointer;font-size:12.5px;font-weight:900;color:#0f766e;user-select:none;">📂 View All ' + qList.length + ' Cropped Questions Inside This Test Card (Click to Collapse/Expand)<\/summary>' +
+            '<div style="margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:10px;max-height:620px;overflow-y:auto;padding-right:4px;">' + allQuestionsHtml + '<\/div>' +
+          '<\/details>' +
+        '<\/div>';
+      }).join('');
+    }
+
+    async function saveAllDataToJsonFile() {
+      try {
+        try { await hydrateAllSavedQuestionImages(); } catch (e) {}
+        saveFrontPageSessionState();
+
+        const attachImagesToQs = (qArr) => (Array.isArray(qArr) ? qArr : []).map((q, idx) => {
+          const enriched = enrichQuestionObj(q, idx);
+          const imgUrl = getQuestionImageUrl(enriched) || '';
+          const imgArr = Array.isArray(enriched.imageDataUrls) && enriched.imageDataUrls.length
+            ? enriched.imageDataUrls
+            : (imgUrl ? [imgUrl] : []);
+          return {
+            ...enriched,
+            imageDataUrl: imgUrl,
+            imageDataUrls: imgArr
+          };
+        });
+
+        const sheetsWithImages = loadStorage(STORAGE_KEYS.SHEETS, []).map(s => ({
+          ...s,
+          questions: attachImagesToQs(s.questions)
+        }));
+
+        const wrongBankWithImages = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []).map(b => ({
+          ...b,
+          questions: attachImagesToQs(b.questions)
+        }));
+
+        const historyWithImages = loadStorage(STORAGE_KEYS.HISTORY, []).map(h => ({
+          ...h,
+          questionsSnapshot: attachImagesToQs(h.questionsSnapshot)
+        }));
+
+        const currentActiveQs = attachImagesToQs(questions);
+        const currentTestTitle = (document.getElementById('testTitleInput')?.value || '').trim();
+
+        const payload = {
+          app: 'NURA-2',
+          version: '2.0',
+          customAppName: localStorage.getItem(STORAGE_KEYS.APP_NAME) || '',
+          exportedAt: new Date().toISOString(),
+          activeSession: {
+            title: currentTestTitle,
+            questions: currentActiveQs
+          },
+          sheets: sheetsWithImages,
+          history: historyWithImages,
+          marksGraph: loadStorage(STORAGE_KEYS.MARKS_GRAPH, []),
+          weakTracker: loadStorage(STORAGE_KEYS.WEAK_TRACKER, []),
+          wrongQsBank: wrongBankWithImages,
+          deletedBin: loadStorage(STORAGE_KEYS.DELETED_BIN, []),
+          noteBox: {
+            noteText: loadAuditBoxNote(),
+            subjectNotes: loadSubjectNotesMap(),
+            attachments: loadNoteAttachments()
+          },
+          qboxChips: loadQboxUploadedChips(),
+          unmatchedCroppedGroups: loadEachTestUnmatchedCrops()
+        };
+
+        const jsonStr = JSON.stringify(payload, null, 2);
+        const fileName = `NURA2_data_${new Date().toISOString().slice(0, 10)}.json`;
+        const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          if (a.parentNode) document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 6000);
+
+        const lbl = document.getElementById('headerSaveBtnLabel');
+        if (lbl) {
+          lbl.textContent = '✓ Saved!';
+          setTimeout(() => { lbl.textContent = '⬇ Save'; }, 2000);
+        }
+        showQuickToast(`✓ All Data Saved in ${fileName}`);
+      } catch (err) {
+        showQuickToast('Save JSON failed: ' + (err?.message || 'Error'), true);
       }
     }
 
@@ -4010,34 +5722,107 @@
       if (s) { questions = s.questions.map((q, i) => enrichQuestionObj(q, i)); document.getElementById('testTitleInput').value = s.title; renderQuestionBank(); closeHistoryDrawer(); switchView('upload'); }
     }
 
-    async function importFullBackupJson(inputEl) {
-      const file = inputEl?.files?.[0]; if (!file) return;
-      const data = JSON.parse(await readFileAsTextSafe(file));
+    async function restoreFullBackupDataObject(data) {
+      if (!data || typeof data !== 'object') throw new Error('Invalid JSON backup file.');
+
+      const hydrateAndStripList = async (qList) => {
+        const out = [];
+        for (let i = 0; i < (qList || []).length; i++) {
+          const q = qList[i];
+          const imgUrl = q.imageDataUrl || (Array.isArray(q.imageDataUrls) && q.imageDataUrls[0]) || '';
+          const imgKey = q.imageKey || (imgUrl ? `qimg_${Date.now()}_imp_${i}_${Math.random().toString(36).slice(2, 6)}` : '');
+          if (imgUrl && imgKey) {
+            questionImageMemoryCache[imgKey] = imgUrl;
+            await idbPutImage(imgKey, imgUrl);
+          }
+          out.push(stripInlineImageForLocalStorage({ ...q, imageKey: imgKey, imageDataUrl: imgUrl }));
+        }
+        return out;
+      };
+
       if (data.customAppName) localStorage.setItem(STORAGE_KEYS.APP_NAME, data.customAppName);
-      if (data.sheets) {
+
+      if (Array.isArray(data.sheets)) {
+        const restoredSheets = [];
         for (const s of data.sheets) {
-          for (const q of (s.questions || [])) {
-            if (q.imageDataUrl && q.imageKey) await idbPutImage(q.imageKey, q.imageDataUrl);
-          }
-          s.questions = (s.questions || []).map(q => stripInlineImageForLocalStorage(q));
+          restoredSheets.push({
+            ...s,
+            questions: await hydrateAndStripList(s.questions || [])
+          });
         }
-        saveStorage(STORAGE_KEYS.SHEETS, data.sheets);
+        saveStorage(STORAGE_KEYS.SHEETS, restoredSheets);
       }
-      if (data.history) saveStorage(STORAGE_KEYS.HISTORY, data.history);
-      if (data.marksGraph) saveStorage(STORAGE_KEYS.MARKS_GRAPH, data.marksGraph);
-      if (data.weakTracker) saveStorage(STORAGE_KEYS.WEAK_TRACKER, data.weakTracker);
-      if (data.wrongQsBank) {
+
+      if (Array.isArray(data.history)) {
+        const restoredHistory = [];
+        for (const h of data.history) {
+          restoredHistory.push({
+            ...h,
+            questionsSnapshot: await hydrateAndStripList(h.questionsSnapshot || [])
+          });
+        }
+        saveStorage(STORAGE_KEYS.HISTORY, restoredHistory);
+      }
+
+      if (Array.isArray(data.marksGraph)) saveStorage(STORAGE_KEYS.MARKS_GRAPH, data.marksGraph);
+      if (Array.isArray(data.weakTracker)) saveStorage(STORAGE_KEYS.WEAK_TRACKER, data.weakTracker);
+
+      if (Array.isArray(data.wrongQsBank)) {
+        const restoredWrong = [];
         for (const b of data.wrongQsBank) {
-          for (const q of (b.questions || [])) {
-            if (q.imageDataUrl && q.imageKey) await idbPutImage(q.imageKey, q.imageDataUrl);
-          }
-          b.questions = (b.questions || []).map(q => stripInlineImageForLocalStorage(q));
+          restoredWrong.push({
+            ...b,
+            questions: await hydrateAndStripList(b.questions || [])
+          });
         }
-        saveStorage(STORAGE_KEYS.WRONG_QS_BANK, data.wrongQsBank);
+        saveStorage(STORAGE_KEYS.WRONG_QS_BANK, restoredWrong);
       }
+
+      if (Array.isArray(data.deletedBin)) saveStorage(STORAGE_KEYS.DELETED_BIN, data.deletedBin);
+      if (Array.isArray(data.qboxChips)) saveStorage(STORAGE_KEYS.QBOX_CHIPS, data.qboxChips);
+      if (Array.isArray(data.unmatchedCroppedGroups)) saveStorage(STORAGE_KEYS.UNMATCHED_CROP_GROUPS || 'nura2_each_test_unmatched_cropped_v1', data.unmatchedCroppedGroups);
+
+      if (data.noteBox && typeof data.noteBox === 'object') {
+        if (typeof data.noteBox.noteText === 'string') saveAuditBoxNote(data.noteBox.noteText);
+        if (data.noteBox.subjectNotes) saveStorage(SUBJ_NOTES_KEY, data.noteBox.subjectNotes);
+        if (Array.isArray(data.noteBox.attachments)) saveNoteAttachments(data.noteBox.attachments);
+      }
+
+      if (data.activeSession && Array.isArray(data.activeSession.questions) && data.activeSession.questions.length) {
+        const hydratedActive = await hydrateAndStripList(data.activeSession.questions);
+        questions = hydratedActive.map((q, i) => enrichQuestionObj(q, i));
+        const titleInput = document.getElementById('testTitleInput');
+        if (titleInput && data.activeSession.title) titleInput.value = data.activeSession.title;
+        saveFrontPageSessionState();
+      } else if (Array.isArray(data.questions) && data.questions.length) {
+        const hydratedDirect = await hydrateAndStripList(data.questions);
+        questions = hydratedDirect.map((q, i) => enrichQuestionObj(q, i));
+        saveFrontPageSessionState();
+      }
+
       applyCustomAppNameToUI();
       updateHeaderBadges();
-      openHistoryDrawer();
+      renderSavedSheetsTopSection();
+      renderQuestionBank();
+      renderMarksBarGraphInto('resultMarksGraphMount');
+      renderMarksBarGraphInto('drawerMarksGraphMount');
+      syncNoteBoxViews();
+    }
+
+    async function importFullBackupJson(inputEl) {
+      const file = inputEl?.files?.[0];
+      if (!file) return;
+      try {
+        const text = await readFileAsTextSafe(file);
+        const data = JSON.parse(text);
+        await restoreFullBackupDataObject(data);
+        showQuickToast(`✓ Backup Restored from ${file.name}!`);
+        openHistoryDrawer();
+      } catch (err) {
+        showQuickToast('Import failed: ' + (err?.message || 'Invalid JSON file'), true);
+      } finally {
+        if (inputEl) inputEl.value = '';
+      }
     }
 
     function escapePdfText(str) {
@@ -4093,12 +5878,13 @@
       return bytes;
     }
 
-    // Build native PDF 1.4 report with Summary, 2-Column Unsolved Booklet (with JPEG crops), and Test-Wise Answer Key
+    // Build native PDF 1.4 report with Complete Solved Test Papers (Correct, Wrong & Skip highlighted)
     function buildNativeReportPdfBytes() {
       const appName = (localStorage.getItem(STORAGE_KEYS.APP_NAME) || 'NURA-2 · NEET CBT Simulator').trim();
       const marksEntries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
       const weakItems = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
       const wrongTests = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+      const historyTests = loadStorage(STORAGE_KEYS.HISTORY, []);
 
       const pageW = 595.28, pageH = 841.89, margin = 32;
       const pages = [{ cmds: [], xObjs: {} }];
@@ -4139,7 +5925,7 @@
       let p1 = curPage();
       addRect(p1, margin, pageH - 76, pageW - margin * 2, 46, [0.05, 0.58, 0.53]);
       addText(p1, margin + 12, pageH - 50, appName, 14, true, [1, 1, 1]);
-      addText(p1, margin + 12, pageH - 66, `Performance Summary & Sub-Topic Revision Guide · ${new Date().toLocaleString()}`, 8.5, false, [0.85, 0.99, 0.96]);
+      addText(p1, margin + 12, pageH - 66, `Complete Report Card & Solved Question Papers · ${new Date().toLocaleString()}`, 8.5, false, [0.85, 0.99, 0.96]);
 
       let y = pageH - 96;
       const totalTests = marksEntries.length;
@@ -4202,158 +5988,183 @@
         });
       }
 
-      const unsolvedPool = [];
-      wrongTests.forEach(t => {
-        (t.questions || []).forEach((rq, idx) => {
-          unsolvedPool.push({ testTitle: t.title, q: enrichQuestionObj(rq, idx) });
-        });
-      });
-
-      if (unsolvedPool.length) {
-        let bPage = newPage();
-        const colGap = 16;
-        const colW = (pageW - margin * 2 - colGap) / 2;
-        const leftX = margin;
-        const rightX = margin + colW + colGap;
-        const centerX = margin + colW + colGap / 2;
-        const topY = pageH - margin - 26;
-        const botY = margin + 18;
-        let bCol = 0;
-        let bY = topY;
-
-        const drawBookletHeader = (pg) => {
-          addText(pg, margin, pageH - margin - 6, `4. WRONG / WEAK QUESTION BANK (UNSOLVED PRACTICE BOOKLET) · ${appName}`, 9.5, true, [0.06, 0.46, 0.43]);
-          addLine(pg, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
-          addLine(pg, centerX, botY, centerX, pageH - margin - 14, [0.72, 0.76, 0.82], 0.7);
-        };
-        drawBookletHeader(bPage);
-
-        unsolvedPool.forEach((item) => {
-          const q = item.q;
-          const qCropUrl = getQuestionImageUrl(q);
-          const pdfImg = qCropUrl ? registerPdfJpeg(qCropUrl) : null;
-
-          if (pdfImg) {
-            const drawW = colW - 4;
-            const drawH = Math.min(230, Math.max(42, drawW * (pdfImg.height / Math.max(1, pdfImg.width))));
-            const blockH = drawH + 22;
-
-            if (bY - blockH < botY) {
-              if (bCol === 0) { bCol = 1; bY = topY; }
-              else { bPage = newPage(); drawBookletHeader(bPage); bCol = 0; bY = topY; }
-            }
-
-            const xBase = bCol === 0 ? leftX : rightX;
-            addText(bPage, xBase, bY - 9, `Q${q.num} (${q.subject} · ${q.subTopic})`, 7.8, true, [0.06, 0.46, 0.43]);
-            addImage(bPage, pdfImg, xBase + 2, bY - 14 - drawH, drawW, drawH);
-            addLine(bPage, xBase, bY - 18 - drawH, xBase + colW, bY - 18 - drawH, [0.88, 0.90, 0.93], 0.4);
-            bY -= (blockH + 4);
-            return;
-          }
-
-          const stemLines = wrapPdfText(`Q${q.num} (${q.subject} · ${q.subTopic}): ${q.text}`, 46);
-          const optPairs = [
-            [`(1) ${q.options[0]}`, `(2) ${q.options[1]}`],
-            [`(3) ${q.options[2]}`, `(4) ${q.options[3]}`]
-          ];
-          const wrappedPairs = optPairs.map(([a, b]) => [wrapPdfText(a, 22), wrapPdfText(b, 22)]);
-          const optH = wrappedPairs.reduce((sum, [lA, lB]) => sum + Math.max(lA.length, lB.length) * 10 + 3, 0);
-          const blockH = stemLines.length * 10.5 + optH + 10;
-
-          if (bY - blockH < botY) {
-            if (bCol === 0) { bCol = 1; bY = topY; }
-            else { bPage = newPage(); drawBookletHeader(bPage); bCol = 0; bY = topY; }
-          }
-
-          const xBase = bCol === 0 ? leftX : rightX;
-          let curY = bY - 9;
-          stemLines.forEach(sl => {
-            addText(bPage, xBase, curY, sl, 8.2, true);
-            curY -= 10.5;
-          });
-          curY -= 2;
-          wrappedPairs.forEach(([lA, lB]) => {
-            const rowLines = Math.max(lA.length, lB.length);
-            for (let r = 0; r < rowLines; r++) {
-              if (lA[r]) addText(bPage, xBase + 2, curY - r * 10, lA[r], 7.8, false, [0.15, 0.20, 0.28]);
-              if (lB[r]) addText(bPage, xBase + colW * 0.5 + 4, curY - r * 10, lB[r], 7.8, false, [0.15, 0.20, 0.28]);
-            }
-            curY -= rowLines * 10 + 2;
-          });
-          addLine(bPage, xBase, curY - 1, xBase + colW, curY - 1, [0.88, 0.90, 0.93], 0.4);
-          bY = curY - 7;
+      // 4. COMPLETE SOLVED TEST PAPERS (EACH TEST WITH CORRECT, WRONG & SKIP HIGHLIGHTED)
+      const solvedPapers = [];
+      if (lastReport && Array.isArray(lastReport.evaluatedQuestions) && lastReport.evaluatedQuestions.length) {
+        const currentQsSnap = lastReport.evaluatedQuestions.map(ev => ev.q);
+        const currentAnsSnap = {};
+        lastReport.evaluatedQuestions.forEach(ev => { if (ev.userAns) currentAnsSnap[ev.idx] = ev.userAns; });
+        solvedPapers.push({
+          title: `${lastReport.title} (Latest Attempt)`,
+          date: lastReport.date || new Date().toLocaleString(),
+          scoreText: `${lastReport.netScore}/${lastReport.maxMarks}`,
+          questionsSnapshot: currentQsSnap,
+          answersSnapshot: currentAnsSnap
         });
       }
+      (historyTests || []).forEach((h) => {
+        if (Array.isArray(h.questionsSnapshot) && h.questionsSnapshot.length) {
+          solvedPapers.push({
+            title: h.title || 'Attempted Test',
+            date: h.date || '',
+            scoreText: h.score || '',
+            questionsSnapshot: h.questionsSnapshot,
+            answersSnapshot: h.answersSnapshot || {}
+          });
+        }
+      });
 
-      const keyTests = wrongTests.filter(t => (t.questions || []).some(q => normalizeAnswerChoice(q.correct)));
-      if (keyTests.length) {
-        let kPage = newPage();
-        const pairCount = 4;
-        const totalW = pageW - margin * 2;
-        const pairW = totalW / pairCount;
-        const qColW = pairW * 0.52;
-        const aColW = pairW * 0.48;
-        const topK = pageH - margin - 26;
-        const botK = margin + 20;
-        const rowH = 13.5;
+      if (solvedPapers.length) {
+        let sPage = newPage();
+        let sY = pageH - margin - 14;
 
-        addText(kPage, margin, pageH - margin - 6, `5. ANSWER KEY SHEET (TEST-WISE · NEW COLUMN PER TEST)`, 10, true, [0.05, 0.58, 0.53]);
-        addLine(kPage, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
-
-        let curPair = 0;
-        let curY = topK;
-
-        const drawColumnPairHeader = (pg, pIdx, yTop, testLabel) => {
-          const x0 = margin + pIdx * pairW;
-          addRect(pg, x0, yTop - 14, pairW - 2, 14, [0.05, 0.58, 0.53], [0.04, 0.46, 0.42], 0.5);
-          addText(pg, x0 + 4, yTop - 10, testLabel.slice(0, 24), 7.5, true, [1, 1, 1]);
-          addRect(pg, x0, yTop - 27, qColW, 13, [0.94, 0.99, 0.98], [0.75, 0.82, 0.85], 0.5);
-          addRect(pg, x0 + qColW, yTop - 27, aColW - 2, 13, [0.94, 0.99, 0.98], [0.75, 0.82, 0.85], 0.5);
-          addText(pg, x0 + 4, yTop - 23, 'Q. No.', 7.2, true, [0.06, 0.46, 0.43]);
-          addText(pg, x0 + qColW + 4, yTop - 23, 'Answer', 7.2, true, [0.06, 0.46, 0.43]);
-          return yTop - 27;
+        const drawSolvedBanner = (pg, yTop, label) => {
+          addRect(pg, margin, yTop - 16, pageW - margin * 2, 18, [0.94, 0.99, 0.98], [0.05, 0.58, 0.53], 0.6);
+          addText(pg, margin + 8, yTop - 11, label, 9.2, true, [0.06, 0.46, 0.43]);
+          return yTop - 24;
         };
 
-        keyTests.forEach((t, tIdx) => {
-          const validQs = (t.questions || []).filter(q => normalizeAnswerChoice(q.correct));
-          if (!validQs.length) return;
-
-          if (curY !== topK) {
-            curPair += 1;
-            if (curPair >= pairCount) {
-              kPage = newPage();
-              addText(kPage, margin, pageH - margin - 6, `5. ANSWER KEY SHEET (TEST-WISE · CONTINUED)`, 10, true, [0.05, 0.58, 0.53]);
-              addLine(kPage, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
-              curPair = 0;
-            }
-            curY = topK;
+        solvedPapers.forEach((paper, pIdx) => {
+          if (sY < margin + 70) {
+            sPage = newPage();
+            sY = pageH - margin - 14;
           }
+          sY = drawSolvedBanner(
+            sPage,
+            sY,
+            `4. COMPLETE SOLVED TEST PAPER ${pIdx + 1}: ${paper.title} ${paper.scoreText ? `[Score: ${paper.scoreText}]` : ''}`
+          );
 
-          let yCursor = drawColumnPairHeader(kPage, curPair, curY, `${t.title || ('Test ' + (tIdx + 1))}`);
+          // Highlight Legend Bar for Correct (Green), Wrong (Red), Skip (Amber)
+          addRect(sPage, margin + 4, sY - 12, 10, 10, [0.82, 0.98, 0.89], [0.02, 0.59, 0.41], 0.6);
+          addText(sPage, margin + 18, sY - 10, 'CORRECT OPTION (Green)', 7.5, true, [0.02, 0.47, 0.34]);
+          addRect(sPage, margin + 150, sY - 12, 10, 10, [1.0, 0.88, 0.90], [0.88, 0.11, 0.28], 0.6);
+          addText(sPage, margin + 164, sY - 10, 'WRONG SELECTED (Red)', 7.5, true, [0.65, 0.05, 0.18]);
+          addRect(sPage, margin + 295, sY - 12, 10, 10, [1.0, 0.95, 0.78], [0.85, 0.47, 0.02], 0.6);
+          addText(sPage, margin + 309, sY - 10, 'SKIPPED / UNATTEMPTED (Amber)', 7.5, true, [0.60, 0.28, 0.02]);
+          sY -= 20;
 
-          validQs.forEach((rq, qIdx) => {
-            if (yCursor - rowH < botK) {
-              curPair += 1;
-              if (curPair >= pairCount) {
-                kPage = newPage();
-                addText(kPage, margin, pageH - margin - 6, `5. ANSWER KEY SHEET (TEST-WISE · CONTINUED)`, 10, true, [0.05, 0.58, 0.53]);
-                addLine(kPage, margin, pageH - margin - 12, pageW - margin, pageH - margin - 12, [0.05, 0.58, 0.53], 1.0);
-                curPair = 0;
-              }
-              yCursor = drawColumnPairHeader(kPage, curPair, topK, `${t.title || ('Test ' + (tIdx + 1))} (Contd.)`);
+          const pQs = paper.questionsSnapshot || [];
+          const pAns = paper.answersSnapshot || {};
+
+          pQs.forEach((rawQ, qIdx) => {
+            const q = enrichQuestionObj(rawQ, qIdx);
+            const qNum = q.num || (qIdx + 1);
+            const uNorm = normalizeAnswerChoice(pAns[qIdx] !== undefined ? pAns[qIdx] : (pAns[qNum] || ''));
+            const cNorm = normalizeAnswerChoice(q.correct || '');
+
+            let stateTag = 'SKIP';
+            let badgeFill = [1.0, 0.95, 0.78];
+            let badgeBorder = [0.85, 0.47, 0.02];
+            let badgeTextRgb = [0.60, 0.28, 0.02];
+
+            if (!uNorm) {
+              stateTag = 'SKIP (Unattempted)';
+              badgeFill = [1.0, 0.95, 0.78];
+              badgeBorder = [0.85, 0.47, 0.02];
+              badgeTextRgb = [0.60, 0.28, 0.02];
+            } else if (cNorm && uNorm === cNorm) {
+              stateTag = `CORRECT (${formatAnswerChoiceDisplay(uNorm)})`;
+              badgeFill = [0.82, 0.98, 0.89];
+              badgeBorder = [0.02, 0.59, 0.41];
+              badgeTextRgb = [0.02, 0.47, 0.34];
+            } else {
+              stateTag = `WRONG (Your: ${formatAnswerChoiceDisplay(uNorm)} · Key: ${cNorm ? formatAnswerChoiceDisplay(cNorm) : '-'})`;
+              badgeFill = [1.0, 0.88, 0.90];
+              badgeBorder = [0.88, 0.11, 0.28];
+              badgeTextRgb = [0.65, 0.05, 0.18];
             }
 
-            const x0 = margin + curPair * pairW;
-            const qNum = rq.num || (qIdx + 1);
-            const ansDisp = formatAnswerChoiceDisplay(rq.correct);
-            addRect(kPage, x0, yCursor - rowH, qColW, rowH, null, [0.85, 0.88, 0.91], 0.4);
-            addRect(kPage, x0 + qColW, yCursor - rowH, aColW - 2, rowH, null, [0.85, 0.88, 0.91], 0.4);
-            addText(kPage, x0 + 5, yCursor - rowH + 4, `Q${qNum}`, 7.5, true);
-            addText(kPage, x0 + qColW + 5, yCursor - rowH + 4, ansDisp, 7.5, true, [0.05, 0.58, 0.53]);
-            yCursor -= rowH;
-          });
+            const qCropUrl = getQuestionImageUrl(q);
+            const pdfImg = qCropUrl ? registerPdfJpeg(qCropUrl) : null;
+            const innerW = pageW - margin * 2 - 12;
 
-          curY = yCursor;
+            if (pdfImg) {
+              const drawW = Math.min(innerW, 430);
+              const drawH = Math.min(185, Math.max(38, drawW * (pdfImg.height / Math.max(1, pdfImg.width))));
+              const cardH = drawH + 34;
+
+              if (sY - cardH < margin + 14) {
+                sPage = newPage();
+                sY = drawSolvedBanner(sPage, pageH - margin - 14, `SOLVED PAPER: ${paper.title} (Contd.)`);
+              }
+
+              addRect(sPage, margin, sY - cardH, pageW - margin * 2, cardH, [1, 1, 1], badgeBorder, 0.9);
+              addRect(sPage, margin + 4, sY - 17, pageW - margin * 2 - 8, 14, badgeFill, null, 0.4);
+              addText(sPage, margin + 8, sY - 13, `Q${qNum} [${q.subject} · ${q.subTopic}]  -->  ${stateTag}`, 7.8, true, badgeTextRgb);
+              addImage(sPage, pdfImg, margin + 8, sY - 21 - drawH, drawW, drawH);
+              sY -= (cardH + 6);
+              return;
+            }
+
+            const stemLines = wrapPdfText(`Q${qNum} (${q.subject}): ${q.text}`, 82);
+            const optLabels = ['(1)', '(2)', '(3)', '(4)'];
+            const optRows = optLabels.map((lbl, oIdx) => {
+              const optNumStr = String(oIdx + 1);
+              const isCorrectOpt = cNorm === optNumStr;
+              const isWrongUserOpt = uNorm === optNumStr && (!cNorm || uNorm !== cNorm);
+              const isSkipHighlight = !uNorm && isCorrectOpt;
+              let rowFill = null;
+              let rowStroke = [0.88, 0.90, 0.93];
+              let rowTextRgb = [0.12, 0.16, 0.24];
+              let suffix = '';
+
+              if (isCorrectOpt) {
+                rowFill = [0.82, 0.98, 0.89];
+                rowStroke = [0.02, 0.59, 0.41];
+                rowTextRgb = [0.02, 0.47, 0.34];
+                suffix = ' [CORRECT]';
+              }
+              if (isWrongUserOpt) {
+                rowFill = [1.0, 0.88, 0.90];
+                rowStroke = [0.88, 0.11, 0.28];
+                rowTextRgb = [0.65, 0.05, 0.18];
+                suffix = ' [YOUR WRONG CHOICE]';
+              }
+              if (isSkipHighlight) {
+                rowFill = [1.0, 0.95, 0.78];
+                rowStroke = [0.85, 0.47, 0.02];
+                rowTextRgb = [0.60, 0.28, 0.02];
+                suffix = ' [SKIPPED · KEY]';
+              }
+
+              const wrappedOpt = wrapPdfText(`${lbl} ${q.options[oIdx] || ''}${suffix}`, 76);
+              return { wrappedOpt, rowFill, rowStroke, rowTextRgb };
+            });
+
+            const optsTotalH = optRows.reduce((acc, r) => acc + r.wrappedOpt.length * 10.5 + 4, 0);
+            const cardH = 20 + stemLines.length * 11 + optsTotalH + 8;
+
+            if (sY - cardH < margin + 14) {
+              sPage = newPage();
+              sY = drawSolvedBanner(sPage, pageH - margin - 14, `SOLVED PAPER: ${paper.title} (Contd.)`);
+            }
+
+            addRect(sPage, margin, sY - cardH, pageW - margin * 2, cardH, [1, 1, 1], badgeBorder, 0.9);
+            addRect(sPage, margin + 4, sY - 17, pageW - margin * 2 - 8, 14, badgeFill, null, 0.4);
+            addText(sPage, margin + 8, sY - 13, `Q${qNum} [${q.subject} · ${q.subTopic}]  -->  ${stateTag}`, 7.8, true, badgeTextRgb);
+
+            let curQY = sY - 27;
+            stemLines.forEach(sl => {
+              addText(sPage, margin + 8, curQY, sl, 8.2, true, [0.06, 0.09, 0.16]);
+              curQY -= 11;
+            });
+            curQY -= 2;
+
+            optRows.forEach(r => {
+              const rh = r.wrappedOpt.length * 10.5 + 2;
+              if (r.rowFill) {
+                addRect(sPage, margin + 8, curQY - rh + 7, innerW - 4, rh, r.rowFill, r.rowStroke, 0.7);
+              }
+              r.wrappedOpt.forEach((wl, wIdx) => {
+                addText(sPage, margin + 12, curQY - wIdx * 10.5, wl, 7.8, !!r.rowFill, r.rowTextRgb);
+              });
+              curQY -= (rh + 2);
+            });
+
+            sY -= (cardH + 6);
+          });
+          sY -= 8;
         });
       }
 
@@ -4374,11 +6185,13 @@
       pdfImages.forEach(im => { im.objId = allocId(); });
       const pageMeta = pages.map(() => ({ contentId: allocId(), pageId: allocId() }));
 
-      pushStr('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+      pushStr('%PDF-1.4\n%âãÏÓ\n');
 
       const writeObj = (id, headerStr, streamBytes = null) => {
         offsets[id] = byteLen;
         pushStr(`${id} 0 obj\n${headerStr}\n`);
+
+
         if (streamBytes) {
           pushStr('stream\n');
           pushBytes(streamBytes);
@@ -4433,9 +6246,386 @@
       await hydrateAllSavedQuestionImages();
       setupFileDropzone();
       updateHeaderBadges();
+      renderSavedSheetsTopSection();
       renderQuestionBank();
+      restoreFrontPageSessionState();
       renderMarksBarGraphInto('resultMarksGraphMount');
     });
-  </script>
+  
+
+    function extractAnswerKeyMapFast(text) {
+      const keyMap = {};
+      const raw = sanitizeExtractedMathText(String(text || ''));
+      if (!raw) return keyMap;
+      const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+      for (let i = 0; i < lines.length - 1; i++) {
+        const qNums = (lines[i].match(/\b(\d{1,3})\b/g) || []).map(Number).filter(n => n >= 1 && n <= 250);
+        const ansList = (lines[i + 1].match(/\(?([1-4A-Da-d])\)?/g) || []).map(s => s.replace(/[\(\)]/g, '').toUpperCase());
+        if (qNums.length >= 2 && qNums.length === ansList.length) {
+          for (let k = 0; k < qNums.length; k++) {
+            const norm = normalizeAnswerChoice(ansList[k]);
+            if (norm && !keyMap[qNums[k]]) keyMap[qNums[k]] = `(${norm})`;
+          }
+        }
+      }
+
+      const pairRx = /(?:Q\.?\s*)?(\d{1,3})\s*[\.\:\-\)\s]+\(?([1-4A-Da-d])\)?(?=\s|$|,|;)/gi;
+      let m;
+      while ((m = pairRx.exec(raw)) !== null) {
+        const qNum = parseInt(m[1], 10);
+        const norm = normalizeAnswerChoice(m[2]);
+        if (qNum >= 1 && qNum <= 300 && norm && !keyMap[qNum]) {
+          keyMap[qNum] = `(${norm})`;
+        }
+      }
+      return keyMap;
+    }
+
+    async function extractAnswerKeyFastFromFile(file) {
+      const name = String(file?.name || '').toLowerCase();
+      if (name.endsWith('.json')) {
+        const txt = await readFileAsTextSafe(file);
+        const parsed = JSON.parse(txt);
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          return extractAnswerKeyMapFast(Object.entries(parsed).map(([k, v]) => `Q${k} ${v}`).join(' '));
+        }
+      }
+      if (name.endsWith('.pdf') || file?.type === 'application/pdf') {
+        const buf = await readFileAsArrayBufferSafe(file);
+        const pdf = await loadPdfDocumentResilient(buf);
+        let txt = '';
+        for (let p = 1; p <= pdf.numPages; p++) {
+          const page = await pdf.getPage(p);
+          const vp = page.getViewport({ scale: 1.0 });
+          const tc = await page.getTextContent();
+          const nativeTxt = reconstructColumnAwareText(tc.items, vp.width, vp.height);
+          if (nativeTxt && nativeTxt.trim().length > 8) {
+            txt += '\n' + nativeTxt;
+          } else {
+            const cVp = page.getViewport({ scale: 1.3 });
+            const canvas = document.createElement('canvas');
+            canvas.width = cVp.width;
+            canvas.height = cVp.height;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            await page.render({ canvasContext: ctx, viewport: cVp }).promise;
+            const ocrTxt = await Promise.race([
+              runFastImageOCR(canvas.toDataURL('image/jpeg', 0.88), 1.0),
+              new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 1800))
+            ]).catch(() => '');
+            txt += '\n' + ocrTxt;
+          }
+        }
+        return extractAnswerKeyMapFast(txt);
+      }
+      if (file?.type?.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
+        const dataUrl = await readFileAsDataURLSafe(file);
+        const ocrTxt = await Promise.race([
+          runFastImageOCR(dataUrl, 1.0),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 1800))
+        ]).catch(() => '');
+        return extractAnswerKeyMapFast(ocrTxt);
+      }
+      return extractAnswerKeyMapFast(await readFileAsTextSafe(file));
+    }
+
+
+    // ==================== FAST & RELIABLE ANSWER KEY UPLOAD MODULE ====================
+    function parseAnswerKeyPairsFromText(rawText) {
+      const keyMap = {};
+      const cleaned = sanitizeExtractedMathText(String(rawText || ''))
+        .replace(/\b(202[0-9]|199[0-9]|NEET|JEE|NCERT)\b/gi, ' ');
+      if (!cleaned.trim()) return keyMap;
+
+      const lines = cleaned.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+      // Pattern A: Two-row table format (Q numbers on one row, choices on next row)
+      for (let i = 0; i < lines.length - 1; i++) {
+        const qNums = (lines[i].match(/\b(\d{1,3})\b/g) || [])
+          .map(Number)
+          .filter(n => n >= 1 && n <= 300);
+        const ansList = (lines[i + 1].match(/\(?([1-4A-Da-d])\)?/g) || [])
+          .map(s => s.replace(/[\(\)]/g, '').toUpperCase());
+        if (qNums.length >= 2 && qNums.length === ansList.length) {
+          for (let k = 0; k < qNums.length; k++) {
+            const norm = normalizeAnswerChoice(ansList[k]);
+            if (norm && !keyMap[qNums[k]]) {
+              keyMap[qNums[k]] = `(${norm})`;
+            }
+          }
+        }
+      }
+
+      // Pattern B: Inline / list pairs like "1. (3)", "Q2 A", "3 - 4", "4: 2", "5 (1)"
+      const pairRx = /(?:Q(?:uestion)?\.?\s*)?(\d{1,3})\s*[\.\:\-\)\s]+\(?([1-4A-Da-d])\)?(?=\s|$|,|;|\|)/gi;
+      let match;
+      while ((match = pairRx.exec(cleaned)) !== null) {
+        const qNum = parseInt(match[1], 10);
+        const norm = normalizeAnswerChoice(match[2]);
+        if (qNum >= 1 && qNum <= 300 && norm) {
+          keyMap[qNum] = `(${norm})`;
+        }
+      }
+
+      return keyMap;
+    }
+
+    function applyParsedAnswerKeys(keyMap) {
+      if (!Array.isArray(questions) || !questions.length || !keyMap) return 0;
+      let matched = 0;
+      for (let i = 0; i < questions.length; i++) {
+        const q = questions[i];
+        const qNum = parseInt(q.num, 10) || (i + 1);
+        const ans = keyMap[qNum] || keyMap[i + 1] || '';
+        if (ans) {
+          q.correct = ans;
+          matched++;
+        }
+      }
+      return matched;
+    }
+
+    async function readAnswerKeyFileFast(file) {
+      if (!file) return {};
+      const fname = String(file.name || '').toLowerCase();
+
+      // 1. JSON answer key
+      if (fname.endsWith('.json')) {
+        const text = await readFileAsTextSafe(file);
+        try {
+          const parsed = JSON.parse(text);
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+            const map = {};
+            Object.entries(parsed).forEach(([k, v]) => {
+              const num = parseInt(String(k).replace(/\D+/g, ''), 10);
+              const norm = normalizeAnswerChoice(v);
+              if (num >= 1 && num <= 300 && norm) map[num] = `(${norm})`;
+            });
+            if (Object.keys(map).length) return map;
+          }
+        } catch (e) {}
+        return parseAnswerKeyPairsFromText(text);
+      }
+
+      // 2. PDF answer key (native text first, quick OCR fallback if scanned)
+      if (fname.endsWith('.pdf') || file.type === 'application/pdf') {
+        const buf = await readFileAsArrayBufferSafe(file);
+        const pdf = await loadPdfDocumentResilient(buf);
+        let allText = '';
+        for (let p = 1; p <= pdf.numPages; p++) {
+          const page = await pdf.getPage(p);
+          const vp = page.getViewport({ scale: 1.0 });
+          const tc = await page.getTextContent();
+          const pageTxt = reconstructColumnAwareText(tc.items, vp.width, vp.height);
+          if (pageTxt && pageTxt.trim().length > 6) {
+            allText += '\n' + pageTxt;
+          } else {
+            const cVp = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            canvas.width = cVp.width;
+            canvas.height = cVp.height;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            await page.render({ canvasContext: ctx, viewport: cVp }).promise;
+            const ocrTxt = await Promise.race([
+              runFastImageOCR(canvas.toDataURL('image/jpeg', 0.90), 1.0),
+              new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2200))
+            ]).catch(() => '');
+            allText += '\n' + ocrTxt;
+          }
+        }
+        return parseAnswerKeyPairsFromText(allText);
+      }
+
+      // 3. Image answer key (PNG/JPG/WEBP)
+      if ((file.type && file.type.startsWith('image/')) || /\.(png|jpe?g|webp)$/i.test(fname)) {
+        const dataUrl = await readFileAsDataURLSafe(file);
+        const ocrTxt = await Promise.race([
+          runFastImageOCR(dataUrl, 1.2),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2200))
+        ]).catch(() => '');
+        return parseAnswerKeyPairsFromText(ocrTxt);
+      }
+
+      // 4. Plain text / CSV answer key (instant)
+      const txt = await readFileAsTextSafe(file);
+      return parseAnswerKeyPairsFromText(txt);
+    }
+
+    function extractAnswerKeyMapFast(text) {
+      return parseAnswerKeyPairsFromText(text);
+    }
+
+    function applyAnswerKeyMapInstant(keyMap) {
+      return applyParsedAnswerKeys(keyMap);
+    }
+
+    async function extractAnswerKeyFastFromFile(file) {
+      return readAnswerKeyFileFast(file);
+    }
+
+    async function processAnswerKeyFiles(fileList) {
+      const files = Array.from(fileList || []);
+      if (!files.length) return;
+
+      const statusEl = document.getElementById('bulkKeyOcrStatus');
+      const textareaEl = document.getElementById('bulkKeyTextarea');
+      if (statusEl) {
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = `Fast uploading ${files.length} answer key file(s)...`;
+      }
+
+      const existingMap = parseAnswerKeyPairsFromText(textareaEl ? textareaEl.value : '');
+      const combinedMap = { ...existingMap };
+
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i];
+        if (statusEl) statusEl.textContent = `Reading key ${i + 1}/${files.length}: ${f.name}...`;
+        const fileMap = await readAnswerKeyFileFast(f);
+        Object.assign(combinedMap, fileMap);
+      }
+
+      const sortedEntries = Object.entries(combinedMap).sort((a, b) => Number(a[0]) - Number(b[0]));
+      const formattedText = sortedEntries.map(([num, ans]) => `Q${num} ${ans}`).join(', ');
+      if (textareaEl) textareaEl.value = formattedText;
+
+      const appliedCount = applyParsedAnswerKeys(combinedMap);
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection(files.map(f => f.name).join(', '));
+
+      if (statusEl) {
+        statusEl.textContent = `Done in a flash: ${sortedEntries.length} keys parsed, ${appliedCount}/${questions.length} questions updated!`;
+      }
+      if (bulkKeyFromResults || (document.getElementById('resultView') && !document.getElementById('resultView').classList.contains('hidden'))) {
+        computeAndRenderResults(false);
+      }
+    }
+
+
+
+    function enrichQuestionObj(q, idx = 0, fallbackSub = '', coverSyllabusMap = {}) {
+      const qNum = parseInt(q?.num, 10) || (idx + 1);
+      const rawText = q?.text || '';
+      const split = splitInlineNumberedOrLetteredOptions(rawText, q?.options);
+      const tax = classifyQuestionTaxonomy(split.text + ' ' + split.options.join(' '), qNum, q?.subject || fallbackSub, coverSyllabusMap);
+      const imgKey = q?.imageKey || '';
+      const imgUrl = (q?.imageDataUrl && String(q.imageDataUrl).startsWith('data:image/'))
+        ? q.imageDataUrl
+        : ((imgKey && questionImageMemoryCache[imgKey]) ? questionImageMemoryCache[imgKey] : '');
+      if (imgKey && imgUrl) questionImageMemoryCache[imgKey] = imgUrl;
+      const normCorr = normalizeAnswerChoice(q?.correct);
+      return {
+        id: q?.id || ('q_' + Date.now() + '_' + idx),
+        num: qNum,
+        subject: ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(q?.subject) ? q.subject : tax.subject,
+        chapter: (q?.chapter && String(q.chapter).trim()) ? sanitizeExtractedMathText(q.chapter) : tax.chapter,
+        topic: (q?.topic && String(q.topic).trim()) ? sanitizeExtractedMathText(q.topic) : tax.topic,
+        subTopic: (q?.subTopic && String(q.subTopic).trim()) ? sanitizeExtractedMathText(q.subTopic) : tax.subTopic,
+        text: split.text || `Question ${qNum}`,
+        options: split.options,
+        imageKey: imgKey,
+        imageDataUrl: imgUrl,
+        imageDataUrls: Array.isArray(q?.imageDataUrls) ? q.imageDataUrls : undefined,
+        correct: normCorr ? `(${normCorr})` : ''
+      };
+    }
+
+    function showQuickToast(msg, isError = false) {
+      let toast = document.getElementById('nuraQuickToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'nuraQuickToast';
+        toast.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:900;box-shadow:0 8px 24px rgba(15,23,42,0.22);transition:opacity 0.25s;';
+        document.body.appendChild(toast);
+      }
+      toast.style.background = isError ? '#e11d48' : '#059669';
+      toast.style.color = '#ffffff';
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      clearTimeout(toast._hideTimer);
+      toast._hideTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2800);
+    }
+
+    async function saveCurrentSheetToLibrary(navigateToSection = false, triggerBtn = null) {
+      try {
+        if (!Array.isArray(questions) || !questions.length) {
+          setParseStatus(true, 'No Questions to Save', 'Upload a practice sheet first, then tap Save Sheet.', true);
+          showQuickToast('Pehle practice sheet upload karein!', true);
+          return;
+        }
+        if (triggerBtn) {
+          triggerBtn.disabled = true;
+          triggerBtn.textContent = 'Saving...';
+        }
+        const croppedFullQuestions = await ensureCroppedQuestionsForSavedSheet(questions);
+        const sheets = loadStorage(STORAGE_KEYS.SHEETS, []);
+        const lightQuestions = croppedFullQuestions.map(q => stripInlineImageForLocalStorage(q));
+        const testTitle = (document.getElementById('testTitleInput')?.value || '').trim()
+          || (document.getElementById('cbtExamTitle')?.textContent || '').trim()
+          || `Practice Sheet (${croppedFullQuestions.length} Qs)`;
+
+        sheets.unshift({
+          id: 'sh_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+          title: testTitle,
+          date: new Date().toLocaleString(),
+          questions: lightQuestions
+        });
+        saveStorage(STORAGE_KEYS.SHEETS, sheets.slice(0, 30));
+        updateHeaderBadges();
+        renderSavedSheetsTopSection();
+
+        setParseStatus(
+          true,
+          `Saved Cropped Sheet: "${testTitle}"`,
+          `${croppedFullQuestions.length} cropped questions saved. Open "📁 Save Sheet" to start or delete.`,
+          false,
+          100,
+          `${croppedFullQuestions.length} Saved`
+        );
+        showQuickToast(`✓ Sheet Saved (${croppedFullQuestions.length} Qs)!`);
+        if (triggerBtn) {
+          triggerBtn.disabled = false;
+          triggerBtn.textContent = '✓ Saved!';
+          setTimeout(() => { triggerBtn.textContent = '💾 Save Sheet'; }, 2000);
+        }
+        if (navigateToSection) {
+          switchView('savedSheetsSectionView');
+        }
+      } catch (err) {
+        if (triggerBtn) {
+          triggerBtn.disabled = false;
+          triggerBtn.textContent = '💾 Save Sheet';
+        }
+        showQuickToast('Save Sheet error: ' + (err?.message || 'Try again'), true);
+      }
+    }
+
+    function exportFullReportPdf() {
+      try {
+        const blob = buildNativeReportPdfBytes();
+        const fileName = `NURA2_Report_${new Date().toISOString().slice(0, 10)}.pdf`;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          if (a.parentNode) document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 5000);
+        showQuickToast(`✓ PDF Downloaded: ${fileName}`);
+      } catch (err) {
+        showQuickToast('Opening print/PDF fallback...', true);
+        setTimeout(() => window.print(), 300);
+      }
+    }
+
+</script>
 </body>
 </html>
