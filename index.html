@@ -566,11 +566,12 @@
       overflow-x: auto;
     }
     .q-crop-frame img {
-      image-rendering: auto;
-      max-width: 100%;
-      width: auto;
-      max-height: 460px;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+      width: 100%;
+      max-width: 780px;
       height: auto;
+      max-height: none;
       display: block;
       margin: 0 auto;
       border-radius: 8px;
@@ -1498,8 +1499,13 @@
 
 
       <div class="audit-um-card" style="margin-top:12px;">
-        <div style="font-size:12px;font-weight:900;color:#881337;margin-bottom:4px;">
-          Unmatched Answer Question Numbers:
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+          <div style="font-size:12px;font-weight:900;color:#881337;">
+            Unmatched Answer Question Numbers:
+          </div>
+          <button type="button" class="btn-danger-soft" onclick="clearAllUnmatchedAnswerNumbers()" style="padding:4px 10px;font-size:11px;font-weight:900;">
+            🗑 Delete All
+          </button>
         </div>
         <div id="secUnmatchedAnsNumbers" style="font-size:12px;font-weight:800;color:#9f1239;">None</div>
         <div id="unmatchedAnsEditList"></div>
@@ -2000,25 +2006,64 @@
       return isAnswerKeyGridOrPage(text);
     }
 
-    function isAnswerKeyGridOrPage(text) {
+    function isAnswerKeyGridOrPage(text, mappedItems = []) {
       const clean = sanitizeExtractedMathText(text || '');
       if (!clean) return false;
       const hasKeyHeading = /\b(?:Answer\s*Key|Ans\.?\s*Key|Correct\s*Answer|Solutions?\s*Key)\b/i.test(clean);
       const keyPairs = clean.match(/(?:Q\.?\s*\d{1,3}|\b\d{1,3})\s*[\.\-\:\)]?\s*\(?[A-Da-d1-4]\)?/gi) || [];
-      const hasOptionChoices = /\(\s*[1-4A-Da-d]\s*\)\s+[A-Za-z0-9\\+\-\\(\[]/i.test(clean) && clean.length > 260;
+      const hasOptionChoices = /\(\s*[1-4A-Da-d]\s*\)\s+[A-Za-z0-9\\+\-\(\[]{2,}/i.test(clean) && clean.length > 320;
       if (hasKeyHeading && !hasOptionChoices) return true;
-      if (!hasOptionChoices && keyPairs.length >= 6 && clean.length < 700) return true;
+      if (!hasOptionChoices && keyPairs.length >= 6 && clean.length < 850) return true;
+
+      // Block 4-column Answer Key tables where multiple Q# anchors sit on the same horizontal Y line (e.g., Q1 (A)   Q16 (C))
+      if (Array.isArray(mappedItems) && mappedItems.length >= 4) {
+        const qMarkers = mappedItems.filter(it => /^Q\.?\s*\d{1,3}$/i.test(it.str.trim()));
+        let sameRowPairs = 0;
+        for (let i = 0; i < qMarkers.length; i++) {
+          for (let j = i + 1; j < qMarkers.length; j++) {
+            if (Math.abs(qMarkers[i].topY - qMarkers[j].topY) <= 12 && Math.abs(qMarkers[i].x - qMarkers[j].x) > 80) {
+              sameRowPairs++;
+            }
+          }
+        }
+        if (sameRowPairs >= 3) return true;
+      }
       return false;
     }
 
-    // Slice a crisp JPEG data URL from a rendered canvas, trimming excess whitespace
+    function isHorizontalDividerLine(canvas, x0, x1, y0, y1) {
+      try {
+        const sx = Math.max(0, Math.floor(x0));
+        const sw = Math.max(20, Math.min(canvas.width - sx, Math.ceil(x1 - x0)));
+        const topY = Math.max(0, Math.floor(y0));
+        const botY = Math.max(topY + 2, Math.min(canvas.height, Math.ceil(y1)));
+        const sh = botY - topY;
+        if (sh <= 1 || sh > 18) return false;
+        const ctx = canvas.getContext('2d');
+        const px = ctx.getImageData(sx, topY, sw, sh).data;
+        for (let ry = 0; ry < sh; ry++) {
+          let darkCols = 0, sampled = 0;
+          const rowOff = ry * sw * 4;
+          for (let rx = 0; rx < sw; rx += 4) {
+            sampled++;
+            const idx = rowOff + rx * 4;
+            if (px[idx] < 215 || px[idx + 1] < 215 || px[idx + 2] < 215) darkCols++;
+          }
+          if (sampled > 0 && (darkCols / sampled) >= 0.68) return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    // Slice a crisp 720p+ JPEG data URL from a rendered canvas, excluding divider lines & outer blank margins
     function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.96) {
-      const padX = 8, padTop = 6, padBot = 6;
+      if (isHorizontalDividerLine(srcCanvas, x0, x1, y0, y1)) return '';
+      const padX = 10, padTop = 6, padBot = 8;
       const sx = Math.max(0, Math.floor(x0 - padX));
       const sy = Math.max(0, Math.floor(y0 - padTop));
       const sw = Math.min(srcCanvas.width - sx, Math.ceil((x1 - x0) + padX * 2));
       const sh = Math.min(srcCanvas.height - sy, Math.ceil((y1 - y0) + padTop + padBot));
-      if (sw < 36 || sh < 22) return '';
+      if (sw < 40 || sh < 28) return '';
 
       const tmp = document.createElement('canvas');
       tmp.width = sw;
@@ -2028,13 +2073,14 @@
       tctx.fillRect(0, 0, sw, sh);
       tctx.drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
 
+      let cropX = 0, cropY = 0, cropW = sw, cropH = sh;
       try {
         const imgData = tctx.getImageData(0, 0, sw, sh).data;
         let minX = sw, minY = sh, maxX = 0, maxY = 0, foundDark = false;
         for (let py = 0; py < sh; py += 2) {
           for (let px = 0; px < sw; px += 2) {
             const idx = (py * sw + px) * 4;
-            if (imgData[idx] < 242 || imgData[idx + 1] < 242 || imgData[idx + 2] < 242) {
+            if (imgData[idx] < 244 || imgData[idx + 1] < 244 || imgData[idx + 2] < 244) {
               foundDark = true;
               if (px < minX) minX = px;
               if (px > maxX) maxX = px;
@@ -2044,41 +2090,75 @@
           }
         }
         if (foundDark && maxX > minX && maxY > minY) {
-          const trimPad = 8;
-          const tx0 = Math.max(0, minX - trimPad);
-          const ty0 = Math.max(0, minY - trimPad);
-          const tw = Math.min(sw - tx0, (maxX - minX) + trimPad * 2);
-          const th = Math.min(sh - ty0, (maxY - minY) + trimPad * 2);
-          if (tw > 36 && th > 18) {
-            const trimmed = document.createElement('canvas');
-            trimmed.width = tw;
-            trimmed.height = th;
-            const trCtx = trimmed.getContext('2d');
-            trCtx.fillStyle = '#ffffff';
-            trCtx.fillRect(0, 0, tw, th);
-            trCtx.drawImage(tmp, tx0, ty0, tw, th, 0, 0, tw, th);
-            return trimmed.toDataURL('image/jpeg', quality);
+          const trimPad = 10;
+          cropX = Math.max(0, minX - trimPad);
+          cropY = Math.max(0, minY - trimPad);
+          cropW = Math.min(sw - cropX, (maxX - minX) + trimPad * 2);
+          cropH = Math.min(sh - cropY, (maxY - minY) + trimPad * 2);
+        }
+      } catch (e) {}
+      if (cropW < 40 || cropH < 24) return '';
+
+      // Upscale to >= 1280px width so small math symbols, chemical structures & diagrams stay 720p+ sharp
+      const targetMinW = 1280;
+      const upScale = cropW < targetMinW ? Math.min(2.2, targetMinW / cropW) : 1.0;
+      const outW = Math.round(cropW * upScale);
+      const outH = Math.round(cropH * upScale);
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = outW;
+      finalCanvas.height = outH;
+      const fctx = finalCanvas.getContext('2d');
+      fctx.fillStyle = '#ffffff';
+      fctx.fillRect(0, 0, outW, outH);
+      fctx.imageSmoothingEnabled = true;
+      fctx.imageSmoothingQuality = 'high';
+      fctx.drawImage(tmp, cropX, cropY, cropW, cropH, 0, 0, outW, outH);
+      return finalCanvas.toDataURL('image/jpeg', quality);
+    }
+
+    // Strict 2-column split detector (via question anchors or vertical white center gutter)
+    function detectTwoColumnSplitX(canvas, items, headerCutoffY = 0, footerCutoffY = 0) {
+      const w = canvas.width;
+      const qMarkerRx = /^(?:Q(?:uestion)?\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
+      const leftQs = items.filter(it => it.x < w * 0.45 && qMarkerRx.test(it.str));
+      const rightQs = items.filter(it => it.x >= w * 0.46 && it.x <= w * 0.66 && qMarkerRx.test(it.str));
+      if (leftQs.length && rightQs.length) {
+        const sortedRightX = rightQs.map(r => r.x).sort((a, b) => a - b);
+        const rightStartX = sortedRightX[Math.floor(sortedRightX.length / 2)];
+        return Math.max(w * 0.46, Math.min(w * 0.56, rightStartX - 10));
+      }
+
+      try {
+        const topY = Math.max(0, Math.floor(headerCutoffY || canvas.height * 0.06));
+        const botY = Math.min(canvas.height, Math.floor(footerCutoffY || canvas.height * 0.94));
+        const sh = botY - topY;
+        if (sh > 60) {
+          const xStart = Math.floor(w * 0.44);
+          const xEnd = Math.floor(w * 0.56);
+          const sw = xEnd - xStart;
+          const ctx = canvas.getContext('2d');
+          const px = ctx.getImageData(xStart, topY, sw, sh).data;
+          let bestCol = -1, minInk = Infinity;
+          for (let rx = 0; rx < sw; rx += 2) {
+            let ink = 0;
+            for (let ry = 0; ry < sh; ry += 4) {
+              const idx = (ry * sw + rx) * 4;
+              if (px[idx] < 235 || px[idx + 1] < 235 || px[idx + 2] < 235) ink++;
+            }
+            if (ink < minInk) { minInk = ink; bestCol = xStart + rx; }
+          }
+          if (bestCol > 0 && minInk <= Math.floor((sh / 4) * 0.02)) {
+            const leftHasInk = items.some(it => it.x < bestCol - 20);
+            const rightHasInk = items.some(it => it.x > bestCol + 20);
+            if (leftHasInk && rightHasInk) return bestCol;
           }
         }
       } catch (e) {}
-      return tmp.toDataURL('image/jpeg', quality);
+      return null;
     }
 
-    // Strict horizontal 2-column split detector so left & right columns never bleed into each other
-    function detectTwoColumnSplitX(canvas, items) {
-      const w = canvas.width;
-      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
-      const leftQs = items.filter(it => it.x < w * 0.45 && qMarkerRx.test(it.str));
-      const rightQs = items.filter(it => it.x >= w * 0.46 && it.x <= w * 0.65 && qMarkerRx.test(it.str));
-      if (!leftQs.length || !rightQs.length) return null;
-
-      const sortedRightX = rightQs.map(r => r.x).sort((a, b) => a - b);
-      const rightStartX = sortedRightX[Math.floor(sortedRightX.length / 2)];
-      return Math.max(w * 0.46, Math.min(w * 0.56, rightStartX - 10));
-    }
-
-    // Expand vertical slice boundary to include dark pixels (diagrams/chemical structures/options) up to hardCeilNextY
-    function findDarkInkBottomInBand(canvas, x0, x1, startY, hardCeilNextY, minBottomY) {
+    // Scan bottom-up inside a single question band so diagrams + all 4 options are included completely
+    function findCompleteQuestionBottomY(canvas, x0, x1, startY, hardCeilNextY, minBottomY) {
       try {
         const sx = Math.max(0, Math.floor(x0));
         const sw = Math.max(10, Math.min(canvas.width - sx, Math.ceil(x1 - x0)));
@@ -2089,52 +2169,164 @@
 
         const ctx = canvas.getContext('2d');
         const pixels = ctx.getImageData(sx, topScan, sw, sh).data;
-        let lastDarkRelY = -1;
-
-        // Fast bottom-up scan so diagrams/options below text are included quickly
-        for (let ry = sh - 1; ry >= 0; ry -= 8) {
+        for (let ry = sh - 1; ry >= 0; ry -= 4) {
           let darkCount = 0;
           const rowOff = ry * sw * 4;
-          for (let rx = 0; rx < sw; rx += 10) {
+          for (let rx = 0; rx < sw; rx += 6) {
             const idx = rowOff + rx * 4;
-            if (pixels[idx] < 225 || pixels[idx + 1] < 225 || pixels[idx + 2] < 225) {
+            if (pixels[idx] < 232 || pixels[idx + 1] < 232 || pixels[idx + 2] < 232) {
               darkCount++;
               if (darkCount >= 2) break;
             }
           }
           if (darkCount >= 2) {
-            lastDarkRelY = ry;
-            break;
+            return Math.min(hardCeilNextY, Math.max(minBottomY, topScan + ry + 14));
           }
-        }
-
-        if (lastDarkRelY >= 0) {
-          const candidateY = topScan + lastDarkRelY + 12;
-          return Math.min(hardCeilNextY, Math.max(minBottomY, candidateY));
         }
       } catch (e) {}
       return hardCeilNextY;
     }
 
-    // Slice single-column questions strictly from Q# top down to option (4) / diagram bottom / above next Q#
-    function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix) {
+    // Detect all horizontal green separator lines (including double green lines) across a column/page
+    function detectGreenSeparatorBoundaries(canvas, x0, x1, searchTopY = 0, searchBotY = canvas.height) {
+      const rawRuns = [];
+      try {
+        const sx = Math.max(0, Math.floor(x0));
+        const sw = Math.max(40, Math.min(canvas.width - sx, Math.ceil(x1 - x0)));
+        const yStart = Math.max(0, Math.floor(searchTopY));
+        const yEnd = Math.min(canvas.height, Math.floor(searchBotY));
+        const sh = yEnd - yStart;
+        if (sh < 6) return [];
+
+        const ctx = canvas.getContext('2d');
+        const px = ctx.getImageData(sx, yStart, sw, sh).data;
+        let runStart = -1;
+
+        for (let ry = 0; ry < sh; ry++) {
+          let greenCols = 0, sampled = 0;
+          const rowOff = ry * sw * 4;
+          for (let rx = 0; rx < sw; rx += 3) {
+            sampled++;
+            const idx = rowOff + rx * 4;
+            const r = px[idx], g = px[idx + 1], b = px[idx + 2];
+            // Detect green line strokes (e.g. #059669, #16a34a, #22c55e, #0d9488, #10b981, RGB green dominant)
+            if (g >= 95 && (g - r) >= 22 && (g - b) >= 12) {
+              greenCols++;
+            }
+          }
+          const isGreenRow = sampled > 0 && (greenCols / sampled) >= 0.35;
+          if (isGreenRow && runStart < 0) {
+            runStart = ry;
+          } else if (!isGreenRow && runStart >= 0) {
+            rawRuns.push({ topY: yStart + runStart, botY: yStart + ry - 1 });
+            runStart = -1;
+          }
+        }
+        if (runStart >= 0) {
+          rawRuns.push({ topY: yStart + runStart, botY: yStart + sh - 1 });
+        }
+      } catch (e) {}
+
+      if (!rawRuns.length) return [];
+
+      // Cluster double green lines (two green strokes separated by <= 28px white gap) into a single separator boundary
+      const boundaries = [];
+      let cur = { topY: rawRuns[0].topY, botY: rawRuns[0].botY };
+      for (let i = 1; i < rawRuns.length; i++) {
+        if ((rawRuns[i].topY - cur.botY) <= 28) {
+          cur.botY = rawRuns[i].botY;
+        } else {
+          boundaries.push(cur);
+          cur = { topY: rawRuns[i].topY, botY: rawRuns[i].botY };
+        }
+      }
+      boundaries.push(cur);
+      return boundaries;
+    }
+
+    // Core cutter: crops ONLY the area strictly BETWEEN topGreenBoundary.botY and bottomGreenBoundary.topY
+    function cutCompleteQuestionBetweenTwoGreenLines(canvas, x0, x1, topBoundaryBotY, bottomBoundaryTopY, quality = 0.96) {
+      const yTop = Math.max(0, Math.ceil(topBoundaryBotY + 3));
+      const yBot = Math.min(canvas.height, Math.floor(bottomBoundaryTopY - 3));
+      if ((yBot - yTop) < 32) return '';
+      return sliceQuestionCropFromCanvas(canvas, x0, yTop, x1, yBot, quality);
+    }
+
+    // Extract Q# inside a between-green-lines band using mapped text items
+    function detectQNumInYBand(colItems, yTop, yBot, fallbackNum) {
+      const qMarkerRx = /^(?:Q(?:uestion)?\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
+      const inBand = (colItems || [])
+        .filter(it => it.topY >= (yTop - 6) && it.botY <= (yBot + 6))
+        .sort((a, b) => (Math.abs(a.topY - b.topY) > 10 ? a.topY - b.topY : a.x - b.x));
+      for (const it of inBand) {
+        const m = it.str.match(qMarkerRx);
+        if (m) {
+          const n = parseInt(m[1] || m[2], 10);
+          if (n >= 1 && n <= 300) return n;
+        }
+      }
+      return fallbackNum;
+    }
+
+    // Slice questions strictly BETWEEN every pair of consecutive green horizontal lines
+    function sliceColumnBetweenGreenLines(canvas, colItems, x0, x1, fallbackStartQ, keyPrefix) {
+      const greenBounds = detectGreenSeparatorBoundaries(canvas, x0, x1, 0, canvas.height);
+      if (greenBounds.length < 2) return null;
+
       const crops = {};
-      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
+      let runningQ = fallbackStartQ;
+
+      for (let i = 0; i < greenBounds.length - 1; i++) {
+        const topGreen = greenBounds[i];
+        const botGreen = greenBounds[i + 1];
+        const bandTopY = topGreen.botY + 3;
+        const bandBotY = botGreen.topY - 3;
+        if ((bandBotY - bandTopY) < 34) continue;
+
+        const dataUrl = cutCompleteQuestionBetweenTwoGreenLines(canvas, x0, x1, topGreen.botY, botGreen.topY, 0.96);
+        if (dataUrl) {
+          const detectedNum = detectQNumInYBand(colItems, bandTopY, bandBotY, runningQ);
+          const finalNum = crops[detectedNum] ? runningQ : detectedNum;
+          crops[finalNum] = {
+            imageKey: `${keyPrefix}_q${finalNum}_${Math.random().toString(36).slice(2, 6)}`,
+            imageDataUrl: dataUrl
+          };
+          runningQ = Math.max(runningQ + 1, finalNum + 1);
+        }
+      }
+      return Object.keys(crops).length > 0 ? crops : null;
+    }
+
+    // Slice single-column questions: prioritizes Between-Two-Green-Lines cutter first, then Q# anchor fallback
+    function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix, fallbackStartQ = 1) {
+      // 1. Primary: Strict Between-Two-Green-Lines Cutter
+      const greenCrops = sliceColumnBetweenGreenLines(canvas, colItems, x0, x1, fallbackStartQ, keyPrefix + '_GL');
+      if (greenCrops && Object.keys(greenCrops).length > 0) {
+        return greenCrops;
+      }
+
+      // 2. Fallback when sheet has no green lines: Q(n) top down to just above Q(n+1)
+      const crops = {};
+      const qMarkerRx = /^(?:Q(?:uestion)?\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
       const opt4Rx = /^(?:\([4Dd]\)|[4Dd][\.\)])(?:\s|$)/;
       const markers = [];
       let stopY = footerCutoffY;
 
+      const colWidth = Math.max(80, x1 - x0);
+      const maxLeftMarginX = x0 + Math.min(180, colWidth * 0.36);
+
       colItems.forEach(it => {
         if (it.topY < headerCutoffY || it.topY > footerCutoffY) return;
         if (/^(?:Hints\s*&?\s*Solutions|Answer\s*Key|Video\s*Solution|Text\s*Solution)/i.test(it.str)) {
-          if (it.topY < stopY) stopY = it.topY - 6;
+          if (it.topY < stopY) stopY = it.topY - 8;
           return;
         }
+        if (it.x > maxLeftMarginX) return;
         const m = it.str.match(qMarkerRx);
         if (m) {
           const qNum = parseInt(m[1] || m[2], 10);
           if (qNum >= 1 && qNum <= 300) {
-            const dup = markers.find(mk => mk.qNum === qNum && Math.abs(mk.y - it.topY) < 18);
+            const dup = markers.find(mk => mk.qNum === qNum && Math.abs(mk.y - it.topY) < 22);
             if (!dup) markers.push({ qNum, y: it.topY });
           }
         }
@@ -2144,7 +2336,7 @@
       for (let i = 0; i < markers.length; i++) {
         const cur = markers[i];
         const nextTop = (i + 1 < markers.length) ? markers[i + 1].y : stopY;
-        const hardCeilNextY = Math.max(cur.y + 24, nextTop - 10);
+        const hardCeilNextY = Math.max(cur.y + 32, nextTop - 8);
 
         const qItems = colItems.filter(it => it.topY >= cur.y - 3 && it.botY <= hardCeilNextY);
         const opt4Items = qItems.filter(it => opt4Rx.test(it.str));
@@ -2153,14 +2345,12 @@
           const lastOpt4 = opt4Items[opt4Items.length - 1];
           const postOpt4Items = qItems.filter(it => it.topY >= lastOpt4.topY - 4 && it.botY <= hardCeilNextY);
           const maxBotAfterOpt4 = postOpt4Items.reduce((mx, it) => Math.max(mx, it.botY), lastOpt4.botY);
-          textBottomY = Math.min(hardCeilNextY, maxBotAfterOpt4 + 12);
+          textBottomY = Math.min(hardCeilNextY, maxBotAfterOpt4 + 14);
         }
 
-        // Also check actual rendered pixels up to hardCeilNextY so diagrams/structures below option (4) are included
-        const finalBottomY = findDarkInkBottomInBand(canvas, x0, x1, cur.y, hardCeilNextY, textBottomY);
-
-        if (finalBottomY - cur.y >= 26) {
-          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, finalBottomY, 0.98);
+        const inkBottomY = findCompleteQuestionBottomY(canvas, x0, x1, cur.y, hardCeilNextY, textBottomY);
+        if (inkBottomY - cur.y >= 30) {
+          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, inkBottomY, 0.96);
           if (dataUrl) {
             crops[cur.qNum] = {
               imageKey: `${keyPrefix}_q${cur.qNum}_${Math.random().toString(36).slice(2, 6)}`,
@@ -2172,44 +2362,132 @@
       return crops;
     }
 
-    // Crop every question (stem + diagrams + all 4 options) strictly 1-by-1 from a rendered PDF page
-    function cropQuestionsFromRenderedPageCanvas(canvas, textItems, pdfWidth, pdfHeight, scale, pageIndex) {
-      if (!textItems || !textItems.length) return {};
+    // Visual-pixel horizontal whitespace band splitter when PDF has no green lines & no selectable text
+    function sliceColumnByVisualBands(canvas, x0, x1, topY, botY, startQNum, keyPrefix) {
+      const crops = {};
+      try {
+        const sx = Math.max(0, Math.floor(x0));
+        const sw = Math.max(40, Math.min(canvas.width - sx, Math.ceil(x1 - x0)));
+        const yStart = Math.max(0, Math.floor(topY));
+        const yEnd = Math.min(canvas.height, Math.floor(botY));
+        const sh = yEnd - yStart;
+        if (sh < 60) return crops;
 
-      const mapped = textItems.map(it => {
+        const ctx = canvas.getContext('2d');
+        const px = ctx.getImageData(sx, yStart, sw, sh).data;
+        const rowDark = new Uint8Array(sh);
+
+        for (let ry = 0; ry < sh; ry++) {
+          let dark = 0;
+          const off = ry * sw * 4;
+          for (let rx = 0; rx < sw; rx += 4) {
+            const idx = off + rx * 4;
+            if (px[idx] < 232 || px[idx + 1] < 232 || px[idx + 2] < 232) {
+              dark++;
+              if (dark >= 2) { rowDark[ry] = 1; break; }
+            }
+          }
+        }
+
+        const minGapH = Math.max(24, Math.round(canvas.height * 0.015));
+        const bands = [];
+        let inBlock = false, blockStart = 0, gapCount = 0;
+
+        for (let ry = 0; ry < sh; ry++) {
+          if (rowDark[ry]) {
+            if (!inBlock) {
+              inBlock = true;
+              blockStart = ry;
+            }
+            gapCount = 0;
+          } else if (inBlock) {
+            gapCount++;
+            if (gapCount >= minGapH) {
+              const blockEnd = ry - gapCount;
+              if (blockEnd - blockStart >= 45) {
+                bands.push({ y0: yStart + blockStart, y1: yStart + blockEnd });
+              }
+              inBlock = false;
+              gapCount = 0;
+            }
+          }
+        }
+        if (inBlock && (sh - blockStart) >= 45) {
+          bands.push({ y0: yStart + blockStart, y1: yStart + sh });
+        }
+
+        const merged = [];
+        for (let i = 0; i < bands.length; i++) {
+          const b = bands[i];
+          if ((b.y1 - b.y0) < 75 && merged.length > 0) {
+            merged[merged.length - 1].y1 = b.y1;
+          } else {
+            merged.push({ ...b });
+          }
+        }
+
+        let qNum = startQNum;
+        merged.forEach(b => {
+          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, b.y0, x1, b.y1, 0.96);
+          if (dataUrl) {
+            crops[qNum] = {
+              imageKey: `${keyPrefix}_q${qNum}_${Math.random().toString(36).slice(2, 6)}`,
+              imageDataUrl: dataUrl
+            };
+            qNum++;
+          }
+        });
+      } catch (e) {}
+      return crops;
+    }
+
+    function cropQuestionsFromRenderedPageCanvas(canvas, textItems, pdfWidth, pdfHeight, scale, pageIndex, fallbackStartQ = 1) {
+      const mapped = (textItems || []).map(it => {
         const xPdf = it.transform[4];
         const yPdfBottom = it.transform[5];
         const hPdf = Math.abs(it.height || it.transform[3] || 11);
-        const topCanvasY = (pdfHeight - (yPdfBottom + hPdf)) * scale;
-        const botCanvasY = (pdfHeight - yPdfBottom) * scale;
         return {
           str: sanitizeExtractedMathText(it.str || ''),
           x: xPdf * scale,
-          topY: topCanvasY,
-          botY: botCanvasY
+          topY: (pdfHeight - (yPdfBottom + hPdf)) * scale,
+          botY: (pdfHeight - yPdfBottom) * scale
         };
       }).filter(it => it.str && !/^(Android App|iOS App|PW Website|CUSTOMER|SPACE FOR ROUGH WORK)$/i.test(it.str));
 
-      const fullRaw = mapped.map(m => m.str).join(' ');
-      if (isAnswerKeyGridOrPage(fullRaw)) return {};
+      if (mapped.length && isAnswerKeyGridOrPage(mapped.map(m => m.str).join(' '), mapped)) return {};
 
-      const headerCutoffY = canvas.height * 0.045;
+      // Check full-width Between-Two-Green-Lines first (single-column sheets with green horizontal dividers)
+      const fullWidthGreenCrops = sliceColumnBetweenGreenLines(canvas, mapped, 8, canvas.width - 8, fallbackStartQ, `qimg_${Date.now()}_p${pageIndex}_FWG`);
+      if (fullWidthGreenCrops && Object.keys(fullWidthGreenCrops).length > 0) {
+        return fullWidthGreenCrops;
+      }
+
+      const headerCutoffY = canvas.height * 0.055;
       const footerCutoffY = canvas.height * 0.96;
-      const splitX = detectTwoColumnSplitX(canvas, mapped);
+      const splitX = detectTwoColumnSplitX(canvas, mapped, headerCutoffY, footerCutoffY);
 
       if (splitX !== null) {
         const leftItems = mapped.filter(it => it.x < splitX - 4);
         const rightItems = mapped.filter(it => it.x >= splitX + 4);
-        const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 10, splitX - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_L`);
-        const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_R`);
+        let leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 10, splitX - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_L`, fallbackStartQ);
+        if (!Object.keys(leftCrops).length) {
+          leftCrops = sliceColumnByVisualBands(canvas, 10, splitX - 8, headerCutoffY, footerCutoffY, fallbackStartQ, `qimg_${Date.now()}_p${pageIndex}_LV`);
+        }
+        const nextQAfterLeft = Object.keys(leftCrops).length ? (Math.max(...Object.keys(leftCrops).map(Number)) + 1) : fallbackStartQ;
+        let rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_R`, nextQAfterLeft);
+        if (!Object.keys(rightCrops).length) {
+          rightCrops = sliceColumnByVisualBands(canvas, splitX + 8, canvas.width - 10, headerCutoffY, footerCutoffY, nextQAfterLeft, `qimg_${Date.now()}_p${pageIndex}_RV`);
+        }
         return { ...leftCrops, ...rightCrops };
       }
 
-      return sliceSingleColumnQuestions(canvas, mapped, 10, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_S`);
+      const singleCrops = sliceSingleColumnQuestions(canvas, mapped, 10, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_S`, fallbackStartQ);
+      if (Object.keys(singleCrops).length > 0) return singleCrops;
+
+      return sliceColumnByVisualBands(canvas, 10, canvas.width - 10, headerCutoffY, footerCutoffY, fallbackStartQ, `qimg_${Date.now()}_p${pageIndex}_SV`);
     }
 
-    // Crop questions from an uploaded PNG/JPG screenshot using OCR bounding boxes + 2-column detection
-    async function cropQuestionsFromImageDataUrl(dataUrl, fileIndex = 0) {
+    async function cropQuestionsFromImageDataUrl(dataUrl, fileIndex = 0, fallbackStartQ = 1) {
       try {
         const img = await new Promise((res, rej) => {
           const im = new Image();
@@ -2217,7 +2495,7 @@
           im.onerror = rej;
           im.src = dataUrl;
         });
-        const scale = img.width > 1350 ? (1350 / img.width) : (img.width < 1000 ? 1.35 : 1.0);
+        const scale = img.width < 1280 ? Math.min(2.0, 1280 / Math.max(1, img.width)) : 1.0;
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(img.width * scale);
         canvas.height = Math.round(img.height * scale);
@@ -2226,55 +2504,68 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        const worker = await Promise.race([
-          getSharedOcrWorker(),
-          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 4500))
-        ]);
-        const ocrRes = await Promise.race([
-          worker.recognize(canvas.toDataURL('image/jpeg', 0.85)),
-          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 4500))
-        ]);
-        const ocrFullText = ocrRes?.data?.text || '';
-        if (isAnswerKeyGridOrPage(ocrFullText)) return {};
+        let mapped = [];
+        let ocrFullText = '';
+        try {
+          const worker = await Promise.race([
+            getSharedOcrWorker(),
+            new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 5000))
+          ]);
+          const ocrRes = await Promise.race([
+            worker.recognize(canvas.toDataURL('image/jpeg', 0.92)),
+            new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 5000))
+          ]);
+          ocrFullText = ocrRes?.data?.text || '';
+          const words = ocrRes?.data?.words || [];
+          mapped = words.map(w => ({
+            str: sanitizeExtractedMathText(w.text || ''),
+            x: (w.bbox?.x0 || 0),
+            topY: (w.bbox?.y0 || 0),
+            botY: (w.bbox?.y1 || 20)
+          })).filter(it => it.str);
+        } catch (e) {}
 
-        const words = ocrRes?.data?.words || [];
-        const mapped = words.map(w => ({
-          str: sanitizeExtractedMathText(w.text || ''),
-          x: (w.bbox?.x0 || 0),
-          topY: (w.bbox?.y0 || 0),
-          botY: (w.bbox?.y1 || 20)
-        })).filter(it => it.str);
+        if (ocrFullText && isAnswerKeyGridOrPage(ocrFullText, mapped)) return {};
 
-        const splitX = detectTwoColumnSplitX(canvas, mapped);
+        // 1. Primary: Strict Between-Two-Green-Lines Cutter across full screenshot width
+        const fullWidthGreenCrops = sliceColumnBetweenGreenLines(canvas, mapped, 6, canvas.width - 6, fallbackStartQ, `qimg_${Date.now()}_img${fileIndex}_FWG`);
+        if (fullWidthGreenCrops && Object.keys(fullWidthGreenCrops).length > 0) {
+          return fullWidthGreenCrops;
+        }
+
+        const headerCutoffY = canvas.height * 0.04;
+        const footerCutoffY = canvas.height * 0.97;
+        const splitX = detectTwoColumnSplitX(canvas, mapped, headerCutoffY, footerCutoffY);
+
         if (splitX !== null) {
           const leftItems = mapped.filter(it => it.x < splitX - 4);
           const rightItems = mapped.filter(it => it.x >= splitX + 4);
-          const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 8, splitX - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_L`);
-          const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_R`);
+          let leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 8, splitX - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_img${fileIndex}_L`, fallbackStartQ);
+          if (!Object.keys(leftCrops).length) {
+            leftCrops = sliceColumnByVisualBands(canvas, 8, splitX - 8, headerCutoffY, footerCutoffY, fallbackStartQ, `qimg_${Date.now()}_img${fileIndex}_LV`);
+          }
+          const nextQ = Object.keys(leftCrops).length ? (Math.max(...Object.keys(leftCrops).map(Number)) + 1) : fallbackStartQ;
+          let rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_img${fileIndex}_R`, nextQ);
+          if (!Object.keys(rightCrops).length) {
+            rightCrops = sliceColumnByVisualBands(canvas, splitX + 8, canvas.width - 8, headerCutoffY, footerCutoffY, nextQ, `qimg_${Date.now()}_img${fileIndex}_RV`);
+          }
           const combined = { ...leftCrops, ...rightCrops };
           if (Object.keys(combined).length > 0) return combined;
         }
 
-        const singleCrops = sliceSingleColumnQuestions(canvas, mapped, 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_S`);
+        const singleCrops = sliceSingleColumnQuestions(canvas, mapped, 8, canvas.width - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_img${fileIndex}_S`, fallbackStartQ);
         if (Object.keys(singleCrops).length > 0) return singleCrops;
 
-        const fallbackQNum = fileIndex + 1;
-        const fullUrl = sliceQuestionCropFromCanvas(canvas, 4, 4, canvas.width - 4, canvas.height - 4, 0.98);
-        if (fullUrl) {
-          return {
-            [fallbackQNum]: {
-              imageKey: `qimg_${Date.now()}_img${fileIndex}_full_${Math.random().toString(36).slice(2, 6)}`,
-              imageDataUrl: fullUrl
-            }
-          };
-        }
-        return {};
+        const visualBands = sliceColumnByVisualBands(canvas, 8, canvas.width - 8, headerCutoffY, footerCutoffY, fallbackStartQ, `qimg_${Date.now()}_img${fileIndex}_SV`);
+        if (Object.keys(visualBands).length > 0) return visualBands;
+
+        const fullUrl = sliceQuestionCropFromCanvas(canvas, 4, 4, canvas.width - 4, canvas.height - 4, 0.96);
+        return fullUrl ? { [fallbackStartQ]: { imageKey: `qimg_${Date.now()}_img${fileIndex}_full_${Math.random().toString(36).slice(2, 6)}`, imageDataUrl: fullUrl } } : {};
       } catch (e) {
         return {};
       }
     }
 
-    
     function getQuestionImagesArray(q) {
       if (!q) return [];
       if (Array.isArray(q.imageDataUrls) && q.imageDataUrls.length) {
@@ -2528,12 +2819,12 @@
       return /^%PDF-/i.test(sample.trim()) || (/\d+\s+0\s+obj/i.test(sample) && /\/(MediaBox|Contents|Font|Resources|Type\s*\/Page)/i.test(sample));
     }
 
-    // ==================== FAST COMPLETE QUESTION CROPPER & FAST ANSWER KEY UPLOAD ====================
+    // ==================== PURE VISUAL COMPLETE QUESTION CROPPER (NO TEXT EXTRACTION) ====================
     function openDeviceFilePickerDirect() {
       const inp = document.getElementById('fileInput');
       if (!inp) return;
       try { inp.value = ''; } catch (e) {}
-      setParseStatus(true, 'Opening File Chooser...', 'Select practice sheet (PDF/Image/JSON/TXT) or Answer Key.', false, 5, 'Fast Upload');
+      setParseStatus(true, 'Opening File Chooser...', 'Select practice sheet (PDF/Image/JSON) or Answer Key.', false, 5, 'Fast Crop');
       try {
         if (typeof inp.showPicker === 'function') {
           inp.showPicker();
@@ -2572,7 +2863,7 @@
           badge.classList.remove('hidden');
         }
 
-        setParseStatus(true, `Fast Uploading & Cropping: ${firstFile.name}`, 'Extracting stem + diagram + all 4 options per question...', false, 15, sizeLabel);
+        setParseStatus(true, `Cropping Complete Questions: ${firstFile.name}`, 'Cutting each complete question (stem + diagram + 4 options) at 720p+ clarity...', false, 15, sizeLabel);
         try {
           await handleUploadedFiles(files);
         } catch (err) {
@@ -2712,253 +3003,6 @@
       return sharedOcrWorker;
     }
 
-    // Trim outer blank margins while preserving full stem + diagrams + all 4 options
-    function trimCropWhitespace(canvas, quality = 0.98) {
-      try {
-        const w = canvas.width, h = canvas.height;
-        const ctx = canvas.getContext('2d');
-        const px = ctx.getImageData(0, 0, w, h).data;
-        let minX = w, minY = h, maxX = 0, maxY = 0, anyInk = false;
-        for (let y = 0; y < h; y += 3) {
-          for (let x = 0; x < w; x += 3) {
-            const idx = (y * w + x) * 4;
-            if (px[idx] < 246 || px[idx + 1] < 246 || px[idx + 2] < 246) {
-              anyInk = true;
-              if (x < minX) minX = x;
-              if (x > maxX) maxX = x;
-              if (y < minY) minY = y;
-              if (y > maxY) maxY = y;
-            }
-          }
-        }
-        if (anyInk && maxX > minX && maxY > minY) {
-          const padX = 10, padTop = 8, padBot = 10;
-          const x0 = Math.max(0, minX - padX);
-          const y0 = Math.max(0, minY - padTop);
-          const cw = Math.min(w - x0, (maxX - minX) + padX * 2);
-          const ch = Math.min(h - y0, (maxY - minY) + padTop + padBot);
-          if (cw >= 32 && ch >= 20) {
-            const out = document.createElement('canvas');
-            out.width = cw;
-            out.height = ch;
-            const octx = out.getContext('2d');
-            octx.fillStyle = '#ffffff';
-            octx.fillRect(0, 0, cw, ch);
-            octx.drawImage(canvas, x0, y0, cw, ch, 0, 0, cw, ch);
-            return out.toDataURL('image/jpeg', quality);
-          }
-        }
-      } catch (e) {}
-      return canvas.toDataURL('image/jpeg', quality);
-    }
-
-    function sliceQuestionCropFromCanvas(srcCanvas, x0, y0, x1, y1, quality = 0.98) {
-      const padX = 10, padTop = 8, padBot = 10;
-      const sx = Math.max(0, Math.floor(x0 - padX));
-      const sy = Math.max(0, Math.floor(y0 - padTop));
-      const sw = Math.min(srcCanvas.width - sx, Math.ceil((x1 - x0) + padX * 2));
-      const sh = Math.min(srcCanvas.height - sy, Math.ceil((y1 - y0) + padTop + padBot));
-      if (sw < 34 || sh < 20) return '';
-
-      const boxCanvas = document.createElement('canvas');
-      boxCanvas.width = sw;
-      boxCanvas.height = sh;
-      const bctx = boxCanvas.getContext('2d');
-      bctx.fillStyle = '#ffffff';
-      bctx.fillRect(0, 0, sw, sh);
-      bctx.drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
-      return trimCropWhitespace(boxCanvas, quality);
-    }
-
-    function detectTwoColumnSplitX(canvas, items) {
-      const w = canvas.width;
-      const qRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)])(?:\s|$)/i;
-      const leftQs = items.filter(it => it.x < w * 0.45 && qRx.test(it.str));
-      const rightQs = items.filter(it => it.x >= w * 0.46 && it.x <= w * 0.66 && qRx.test(it.str));
-      if (!leftQs.length || !rightQs.length) return null;
-      const sortedX = rightQs.map(r => r.x).sort((a, b) => a - b);
-      const midRight = sortedX[Math.floor(sortedX.length / 2)];
-      return Math.max(w * 0.46, Math.min(w * 0.56, midRight - 10));
-    }
-
-    // Ensure complete question capture: stem + diagram + all 4 options up to just above next question
-    function findCompleteQuestionBottomY(canvas, x0, x1, startY, hardCeilNextY, minBottomY) {
-      try {
-        const sx = Math.max(0, Math.floor(x0));
-        const sw = Math.max(10, Math.min(canvas.width - sx, Math.ceil(x1 - x0)));
-        const topY = Math.max(0, Math.floor(startY));
-        const botY = Math.max(topY + 4, Math.min(canvas.height, Math.ceil(hardCeilNextY)));
-        const sh = botY - topY;
-        if (sh <= 4) return hardCeilNextY;
-
-        const ctx = canvas.getContext('2d');
-        const pixels = ctx.getImageData(sx, topY, sw, sh).data;
-        for (let ry = sh - 1; ry >= 0; ry -= 6) {
-          const rowOff = ry * sw * 4;
-          let dark = 0;
-          for (let rx = 0; rx < sw; rx += 8) {
-            const idx = rowOff + rx * 4;
-            if (pixels[idx] < 230 || pixels[idx + 1] < 230 || pixels[idx + 2] < 230) {
-              dark++;
-              if (dark >= 2) break;
-            }
-          }
-          if (dark >= 2) {
-            return Math.min(hardCeilNextY, Math.max(minBottomY, topY + ry + 14));
-          }
-        }
-      } catch (e) {}
-      return hardCeilNextY;
-    }
-
-    function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix) {
-      const crops = {};
-      const qMarkerRx = /^(?:Q\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
-      const opt4Rx = /^(?:\([4Dd]\)|[4Dd][\.\)])(?:\s|$)/;
-      const markers = [];
-      let stopY = footerCutoffY;
-
-      colItems.forEach(it => {
-        if (it.topY < headerCutoffY || it.topY > footerCutoffY) return;
-        if (/^(?:Hints\s*&?\s*Solutions|Answer\s*Key|Video\s*Solution|Text\s*Solution)/i.test(it.str)) {
-          if (it.topY < stopY) stopY = it.topY - 6;
-          return;
-        }
-        const m = it.str.match(qMarkerRx);
-        if (m) {
-          const qNum = parseInt(m[1] || m[2], 10);
-          if (qNum >= 1 && qNum <= 300) {
-            const dup = markers.find(mk => mk.qNum === qNum && Math.abs(mk.y - it.topY) < 18);
-            if (!dup) markers.push({ qNum, y: it.topY });
-          }
-        }
-      });
-
-      markers.sort((a, b) => a.y - b.y);
-      for (let i = 0; i < markers.length; i++) {
-        const cur = markers[i];
-        const nextTop = (i + 1 < markers.length) ? markers[i + 1].y : stopY;
-        const hardCeilNextY = Math.max(cur.y + 24, nextTop - 8);
-
-        const qItems = colItems.filter(it => it.topY >= cur.y - 3 && it.botY <= hardCeilNextY);
-        const opt4Items = qItems.filter(it => opt4Rx.test(it.str));
-        let textBottomY = hardCeilNextY;
-        if (opt4Items.length) {
-          const lastOpt4 = opt4Items[opt4Items.length - 1];
-          const postOpt4 = qItems.filter(it => it.topY >= lastOpt4.topY - 4 && it.botY <= hardCeilNextY);
-          const maxBot = postOpt4.reduce((mx, it) => Math.max(mx, it.botY), lastOpt4.botY);
-          textBottomY = Math.min(hardCeilNextY, maxBot + 14);
-        }
-
-        const finalBottomY = findCompleteQuestionBottomY(canvas, x0, x1, cur.y, hardCeilNextY, textBottomY);
-        if (finalBottomY - cur.y >= 26) {
-          const dataUrl = sliceQuestionCropFromCanvas(canvas, x0, cur.y, x1, finalBottomY, 0.86);
-          if (dataUrl) {
-            crops[cur.qNum] = {
-              imageKey: `${keyPrefix}_q${cur.qNum}_${Math.random().toString(36).slice(2, 6)}`,
-              imageDataUrl: dataUrl
-            };
-          }
-        }
-      }
-      return crops;
-    }
-
-    function cropQuestionsFromRenderedPageCanvas(canvas, textItems, pdfWidth, pdfHeight, scale, pageIndex) {
-      if (!textItems || !textItems.length) return {};
-      const mapped = textItems.map(it => {
-        const xPdf = it.transform[4];
-        const yPdfBottom = it.transform[5];
-        const hPdf = Math.abs(it.height || it.transform[3] || 11);
-        return {
-          str: sanitizeExtractedMathText(it.str || ''),
-          x: xPdf * scale,
-          topY: (pdfHeight - (yPdfBottom + hPdf)) * scale,
-          botY: (pdfHeight - yPdfBottom) * scale
-        };
-      }).filter(it => it.str && !/^(Android App|iOS App|PW Website|CUSTOMER|SPACE FOR ROUGH WORK)$/i.test(it.str));
-
-      if (isAnswerKeyGridOrPage(mapped.map(m => m.str).join(' '))) return {};
-
-      const headerCutoffY = canvas.height * 0.045;
-      const footerCutoffY = canvas.height * 0.96;
-      const splitX = detectTwoColumnSplitX(canvas, mapped);
-
-      if (splitX !== null) {
-        const leftItems = mapped.filter(it => it.x < splitX - 4);
-        const rightItems = mapped.filter(it => it.x >= splitX + 4);
-        const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 10, splitX - 8, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_L`);
-        const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_R`);
-        return { ...leftCrops, ...rightCrops };
-      }
-
-      return sliceSingleColumnQuestions(canvas, mapped, 10, canvas.width - 10, headerCutoffY, footerCutoffY, `qimg_${Date.now()}_p${pageIndex}_S`);
-    }
-
-    async function cropQuestionsFromImageDataUrl(dataUrl, fileIndex = 0) {
-      try {
-        const img = await new Promise((res, rej) => {
-          const im = new Image();
-          im.onload = () => res(im);
-          im.onerror = rej;
-          im.src = dataUrl;
-        });
-        const scale = img.width > 1200 ? (1200 / img.width) : (img.width < 900 ? 1.25 : 1.0);
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        const worker = await Promise.race([
-          getSharedOcrWorker(),
-          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2800))
-        ]);
-        const ocrRes = await Promise.race([
-          worker.recognize(canvas.toDataURL('image/jpeg', 0.82)),
-          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2800))
-        ]);
-        const ocrFullText = ocrRes?.data?.text || '';
-        if (isAnswerKeyGridOrPage(ocrFullText)) return {};
-
-        const words = ocrRes?.data?.words || [];
-        const mapped = words.map(w => ({
-          str: sanitizeExtractedMathText(w.text || ''),
-          x: (w.bbox?.x0 || 0),
-          topY: (w.bbox?.y0 || 0),
-          botY: (w.bbox?.y1 || 20)
-        })).filter(it => it.str);
-
-        const splitX = detectTwoColumnSplitX(canvas, mapped);
-        if (splitX !== null) {
-          const leftItems = mapped.filter(it => it.x < splitX - 4);
-          const rightItems = mapped.filter(it => it.x >= splitX + 4);
-          const leftCrops = sliceSingleColumnQuestions(canvas, leftItems, 8, splitX - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_L`);
-          const rightCrops = sliceSingleColumnQuestions(canvas, rightItems, splitX + 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_R`);
-          const combined = { ...leftCrops, ...rightCrops };
-          if (Object.keys(combined).length > 0) return combined;
-        }
-
-        const singleCrops = sliceSingleColumnQuestions(canvas, mapped, 8, canvas.width - 8, 4, canvas.height - 6, `qimg_${Date.now()}_img${fileIndex}_S`);
-        if (Object.keys(singleCrops).length > 0) return singleCrops;
-
-        const fallbackUrl = sliceQuestionCropFromCanvas(canvas, 4, 4, canvas.width - 4, canvas.height - 4, 0.86);
-        if (fallbackUrl) {
-          return {
-            [fileIndex + 1]: {
-              imageKey: `qimg_${Date.now()}_img${fileIndex}_full_${Math.random().toString(36).slice(2, 6)}`,
-              imageDataUrl: fallbackUrl
-            }
-          };
-        }
-        return {};
-      } catch (e) {
-        return {};
-      }
-    }
-
     async function extractAnswerKeyFastFromFile(file) {
       const name = file.name.toLowerCase();
       if (name.endsWith('.json')) {
@@ -3037,9 +3081,9 @@
         return;
       }
 
-      let combinedText = '';
-      const enableAutoCrop = document.getElementById('autoCropQuestionsToggle')?.checked !== false;
+      let combinedKeyText = '';
       const allCropsByQNum = {};
+      let runningQCounter = 1;
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -3080,82 +3124,74 @@
             return;
           }
         } else if (name.endsWith('.pdf') || file.type === 'application/pdf') {
-          const pdfRes = await extractTextFromPdfFile(file, pct, enableAutoCrop, false);
-          combinedText += '\n' + pdfRes.text;
+          const pdfRes = await extractTextFromPdfFile(file, pct, true, false, runningQCounter);
+          combinedKeyText += '\n' + pdfRes.text;
           Object.assign(allCropsByQNum, pdfRes.cropsByQNum);
+          const foundNums = Object.keys(pdfRes.cropsByQNum).map(Number);
+          if (foundNums.length) runningQCounter = Math.max(...foundNums) + 1;
         } else if (file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(name)) {
-          setParseStatus(true, `Fast Cropping Image ${i + 1}/${files.length}`, file.name, false, pct);
+          setParseStatus(true, `Cropping Complete Questions (${i + 1}/${files.length})`, file.name, false, pct);
           const dataUrl = await readFileAsDataURLSafe(file);
-          if (enableAutoCrop) {
-            const imgCrops = await cropQuestionsFromImageDataUrl(dataUrl, i);
-            if (Object.keys(imgCrops).length > 0) {
-              await idbPutImagesBatch(imgCrops);
-              Object.assign(allCropsByQNum, imgCrops);
-            } else {
-              const fbObj = {
-                [i + 1]: {
-                  imageKey: `qimg_${Date.now()}_img${i}_${Math.random().toString(36).slice(2, 6)}`,
-                  imageDataUrl: dataUrl
-                }
-              };
-              await idbPutImagesBatch(fbObj);
-              allCropsByQNum[i + 1] = fbObj[i + 1];
-            }
+          const imgCrops = await cropQuestionsFromImageDataUrl(dataUrl, i, runningQCounter);
+          if (Object.keys(imgCrops).length > 0) {
+            await idbPutImagesBatch(imgCrops);
+            Object.assign(allCropsByQNum, imgCrops);
+            const foundNums = Object.keys(imgCrops).map(Number);
+            runningQCounter = Math.max(...foundNums) + 1;
+          } else {
+            const fbObj = {
+              [runningQCounter]: {
+                imageKey: `qimg_${Date.now()}_img${i}_${Math.random().toString(36).slice(2, 6)}`,
+                imageDataUrl: dataUrl
+              }
+            };
+            await idbPutImagesBatch(fbObj);
+            allCropsByQNum[runningQCounter] = fbObj[runningQCounter];
+            runningQCounter++;
           }
           try {
             const ocrTxt = await Promise.race([
               runFastImageOCR(dataUrl, 1.0),
               new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2200))
             ]);
-            combinedText += '\n' + ocrTxt;
+            combinedKeyText += '\n' + ocrTxt;
           } catch (e) {}
         } else {
           const txt = await readFileAsTextSafe(file);
           if (isRawPdfSyntax(txt)) throw new Error('Raw PDF binary detected.');
-          combinedText += '\n' + txt;
+          combinedKeyText += '\n' + txt;
         }
       }
 
-      const cleanText = truncateBeforeSolutions(combinedText.trim());
+      const cleanText = truncateBeforeSolutions(combinedKeyText.trim());
       if (isRawPdfSyntax(cleanText)) {
         throw new Error('Raw PDF binary detected. Choose a valid PDF or image file.');
       }
 
       document.getElementById('rawTextInput').value = cleanText;
-      const extracted = cleanText ? parsePracticeSheetText(cleanText) : [];
       const cropKeys = Object.keys(allCropsByQNum).map(Number).sort((a, b) => a - b);
 
-      if (!extracted.length && !cropKeys.length) {
-        setParseStatus(true, 'No Questions Found', 'Could not extract questions or crops from the selected file.', true);
+      if (!cropKeys.length) {
+        setParseStatus(true, 'No Questions Cropped', 'Could not detect question boundaries in the uploaded file.', true);
         return;
       }
 
+      // Pure visual cropped question cards — never overwrite with text extraction
       const keyMapFromText = extractAnswerKeyMapFast(cleanText);
-      const qByNum = {};
-      extracted.forEach(q => { qByNum[q.num] = q; });
-
-      cropKeys.forEach(qNum => {
+      const finalQuestions = cropKeys.map((qNum, idx) => {
         const cropObj = allCropsByQNum[qNum];
-        if (qByNum[qNum]) {
-          qByNum[qNum].imageKey = cropObj.imageKey;
-          qByNum[qNum].imageDataUrl = cropObj.imageDataUrl;
-        } else {
-          qByNum[qNum] = enrichQuestionObj({
-            id: 'q_' + Date.now() + '_' + qNum,
-            num: qNum,
-            text: `Visual Question Q${qNum} (Complete Crop: Stem + Diagram + 4 Options)`,
-            options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'],
-            imageKey: cropObj.imageKey,
-            imageDataUrl: cropObj.imageDataUrl,
-            correct: keyMapFromText[qNum] || ''
-          }, qNum - 1);
-        }
+        return enrichQuestionObj({
+          id: 'q_' + Date.now() + '_' + qNum,
+          num: qNum,
+          text: `Cropped Question Q${qNum}`,
+          options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'],
+          imageKey: cropObj.imageKey,
+          imageDataUrl: cropObj.imageDataUrl,
+          correct: keyMapFromText[qNum] || ''
+        }, idx);
       });
 
-      const finalQuestions = Object.values(qByNum).sort((a, b) => a.num - b.num);
       const matchedKeys = finalQuestions.filter(q => q.correct).length;
-      const croppedCount = finalQuestions.filter(q => getQuestionImageUrl(q)).length;
-
       addUploadedFileChipsToQuestionBox(files);
       questions = finalQuestions;
       renderUnmatchedQBoxSection(files.map(f => f.name).join(', '));
@@ -3163,19 +3199,18 @@
       saveFrontPageSessionState();
       setParseStatus(
         true,
-        `Fast Done: ${questions.length} Questions (${croppedCount} Complete Crops · ${matchedKeys}/${questions.length} Keys Matched)`,
-        'Each question includes stem + diagram + all 4 options and is ready for CBT.',
+        `Cropped ${questions.length} Complete Questions (720p+ Clear · ${matchedKeys}/${questions.length} Keys Matched)`,
+        'Every question card shows the complete visual crop (stem + diagram + all 4 options).',
         false,
         100,
-        `${questions.length} Qs`
+        `${questions.length} Cropped Qs`
       );
     }
 
-    async function extractTextFromPdfFile(file, startPct = 10, enableAutoCrop = true, fastKeyOnly = false) {
+    async function extractTextFromPdfFile(file, startPct = 10, enableAutoCrop = true, fastKeyOnly = false, startQNum = 1) {
       const buf = await readFileAsArrayBufferSafe(file);
       if (!buf || buf.byteLength === 0) throw new Error('Empty PDF file.');
       const pdf = await loadPdfDocumentResilient(buf);
-      const forceOcr = fastKeyOnly ? false : (document.getElementById('forcePdfOcrToggle')?.checked || false);
       const skipSolutions = document.getElementById('skipSolutionsToggle')?.checked !== false;
       const fileLooksLikeKey = fastKeyOnly || isAnswerKeyFileNameOrText(file.name);
 
@@ -3183,10 +3218,11 @@
       let sawQuestions = false;
       let sawAnswerKey = false;
       const cropsByQNum = {};
+      let nextFallbackQ = startQNum;
 
       for (let p = 1; p <= pdf.numPages; p++) {
         const pct = Math.min(92, startPct + Math.round((p / pdf.numPages) * 70));
-        setParseStatus(true, `Fast Cropping PDF Page ${p}/${pdf.numPages}`, file.name, false, pct);
+        setParseStatus(true, `Cropping PDF Page ${p}/${pdf.numPages}`, file.name, false, pct);
 
         const page = await pdf.getPage(p);
         const viewport = page.getViewport({ scale: 1.0 });
@@ -3196,7 +3232,12 @@
         const isHintsPage = /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText);
         if (skipSolutions && isHintsPage) break;
 
-        const isKeyOnlyPage = fileLooksLikeKey || isAnswerKeyGridOrPage(pageText);
+        const mappedForKeyCheck = (textContent.items || []).map(it => ({
+          str: sanitizeExtractedMathText(it.str || ''),
+          x: it.transform[4],
+          topY: viewport.height - it.transform[5]
+        })).filter(it => it.str);
+        const isKeyOnlyPage = fileLooksLikeKey || isAnswerKeyGridOrPage(pageText, mappedForKeyCheck);
 
         if (enableAutoCrop && !fileLooksLikeKey && !isKeyOnlyPage && !isHintsPage) {
           const cropScale = 2.5;
@@ -3209,15 +3250,17 @@
           cropCtx.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
           await page.render({ canvasContext: cropCtx, viewport: cropVp }).promise;
 
-          const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, cropScale, p);
+          const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, cropScale, p, nextFallbackQ);
           if (Object.keys(pageCrops).length) {
             await idbPutImagesBatch(pageCrops);
             Object.assign(cropsByQNum, pageCrops);
+            const nums = Object.keys(pageCrops).map(Number);
+            nextFallbackQ = Math.max(...nums) + 1;
           }
         }
 
-        if (forceOcr || (!isExtractedPageTextUsable(pageText) && !Object.keys(cropsByQNum).length)) {
-          const scale = 1.15;
+        if (!isExtractedPageTextUsable(pageText) && isKeyOnlyPage) {
+          const scale = 1.25;
           const hiVp = page.getViewport({ scale });
           const canvas = document.createElement('canvas');
           canvas.width = hiVp.width;
@@ -3226,21 +3269,12 @@
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           await page.render({ canvasContext: ctx, viewport: hiVp }).promise;
-          const pageDataUrl = canvas.toDataURL('image/jpeg', 0.80);
           try {
             pageText = await Promise.race([
-              runFastImageOCR(pageDataUrl, 1.0),
+              runFastImageOCR(canvas.toDataURL('image/jpeg', 0.85), 1.0),
               new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 2500))
             ]);
           } catch (e) {}
-
-          if (enableAutoCrop && !Object.keys(cropsByQNum).length && !isAnswerKeyGridOrPage(pageText)) {
-            const ocrCrops = await cropQuestionsFromImageDataUrl(pageDataUrl, p);
-            if (Object.keys(ocrCrops).length) {
-              await idbPutImagesBatch(ocrCrops);
-              Object.assign(cropsByQNum, ocrCrops);
-            }
-          }
         }
 
         if (skipSolutions && /\b(?:Hints\s*&?\s*Solutions|Video\s*Solution\s*:|Text\s*Solution\s*:)\b/i.test(pageText)) {
@@ -4090,10 +4124,34 @@
       const umEl = document.getElementById('secUnmatchedAnsNumbers');
       if (umEl) {
         umEl.innerHTML = unmatchedQs.length
-          ? unmatchedQs.map(x => `<span class="qnum-chip-rose">Q${x.qNum}</span>`).join('')
+          ? unmatchedQs.map(x => `<span class="qnum-chip-rose" style="display:inline-flex;align-items:center;gap:5px;">Q${x.qNum} <button type="button" onclick="deleteSingleUnmatchedAnswerNumber(${x.idx})" style="background:#e11d48;color:#fff;border:none;border-radius:999px;padding:0 5px;font-size:10px;font-weight:900;cursor:pointer;" title="Delete Q${x.qNum}">✕</button></span>`).join('')
           : '<span style="color:#059669;">None</span>';
       }
 
+      const umListEl = document.getElementById('unmatchedAnsEditList');
+      if (umListEl) {
+        umListEl.innerHTML = unmatchedQs.map(item => {
+          const normSavedAns = normalizeAnswerChoice(item.q.correct);
+          const selectedChoice = pendingUnmatchedAnsMap[item.idx] || (normSavedAns ? `(${normSavedAns})` : '');
+          const fourOpts = ['(1)', '(2)', '(3)', '(4)'];
+          const optButtonsHtml = fourOpts.map(opt => {
+            const isSel = selectedChoice === opt;
+            return `<button type="button" onclick="selectUnmatchedOptionChoice(${item.idx}, '${opt}')" style="padding:5px 10px;border-radius:8px;font-size:11.5px;font-weight:900;border:1.5px solid ${isSel ? '#0d9488' : '#cbd5e1'};background:${isSel ? '#0d9488' : '#ffffff'};color:${isSel ? '#ffffff' : '#0f172a'};cursor:pointer;">${opt}</button>`;
+          }).join('');
+
+          return `
+            <div class="audit-hl-row">
+              <span>Q${item.qNum} (answer match nahi hua):</span>
+              <div style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;background:#fff1f2;border:1.5px solid #fda4af;border-radius:10px;padding:5px 8px;">
+                ${optButtonsHtml}
+                <button type="button" class="btn-success" onclick="saveUnmatchedQuestionAnswer(${item.idx})" style="padding:5px 12px;font-size:11px;font-weight:900;border-radius:8px;">Save</button>
+                <button type="button" class="btn-danger-soft" onclick="deleteSingleUnmatchedAnswerNumber(${item.idx})" style="padding:5px 10px;font-size:11px;font-weight:900;border-radius:8px;">✕ Delete</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
 
     const pendingUnmatchedAnsMap = {};
 
@@ -4115,28 +4173,23 @@
       }
     }
 
-      const umListEl = document.getElementById('unmatchedAnsEditList');
-      if (umListEl) {
-        umListEl.innerHTML = unmatchedQs.map(item => {
-          const normSavedAns = normalizeAnswerChoice(item.q.correct);
-          const selectedChoice = pendingUnmatchedAnsMap[item.idx] || (normSavedAns ? `(${normSavedAns})` : '');
-          const fourOpts = ['(1)', '(2)', '(3)', '(4)'];
-          const optButtonsHtml = fourOpts.map(opt => {
-            const isSel = selectedChoice === opt;
-            return `<button type="button" onclick="selectUnmatchedOptionChoice(${item.idx}, '${opt}')" style="padding:5px 10px;border-radius:8px;font-size:11.5px;font-weight:900;border:1.5px solid ${isSel ? '#0d9488' : '#cbd5e1'};background:${isSel ? '#0d9488' : '#ffffff'};color:${isSel ? '#ffffff' : '#0f172a'};cursor:pointer;">${opt}</button>`;
-          }).join('');
+    function deleteSingleUnmatchedAnswerNumber(qIdx) {
+      if (!questions[qIdx]) return;
+      const qNum = questions[qIdx].num || (qIdx + 1);
+      delete pendingUnmatchedAnsMap[qIdx];
+      deleteQuestion(qIdx);
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection(`Deleted Unmatched Q${qNum}`);
+    }
 
-          return `
-            <div class="audit-hl-row">
-              <span>Q${item.qNum} (answer match nahi hua):</span>
-              <div style="display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;background:#fff1f2;border:1.5px solid #fda4af;border-radius:10px;padding:5px 8px;">
-                ${optButtonsHtml}
-                <button type="button" class="btn-success" onclick="saveUnmatchedQuestionAnswer(${item.idx})" style="padding:5px 12px;font-size:11px;font-weight:900;border-radius:8px;">Save</button>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
+    function clearAllUnmatchedAnswerNumbers() {
+      const hasUnmatched = (questions || []).some(q => !normalizeAnswerChoice(q.correct));
+      if (!hasUnmatched) return;
+      questions = (questions || []).filter(q => !!normalizeAnswerChoice(q.correct));
+      Object.keys(pendingUnmatchedAnsMap).forEach(k => delete pendingUnmatchedAnsMap[k]);
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection('Deleted All Unmatched Answer Questions');
     }
 
     function syncNoteBoxViews() {
