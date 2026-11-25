@@ -906,11 +906,11 @@
       </div>
 
       <div class="nav-actions">
+        <button id="navUploadBtn" type="button" onclick="startNewTestSession()" style="background:linear-gradient(135deg,#f59e0b 0%,#e11d48 100%);color:#ffffff;border:1.5px solid #be123c;border-radius:999px;padding:6px 15px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(225,29,72,0.28);cursor:pointer;">✦ Start New Test</button>
         <button id="navFrontPageBtn" type="button" class="front-page-nav-btn" onclick="goToFrontPageDirect()">🏠 Front Page</button>
         <button type="button" class="pill-save" onclick="saveAllDataToJsonFile()"><span id="headerSaveBtnLabel">⬇ Save</span></button>
         <button type="button" class="pill-pdf" onclick="exportFullReportPdf()">PDF</button>
         <button id="installAppBtn" type="button" class="btn-warn hidden" onclick="triggerInstallApp()">⬇ Install</button>
-        <button id="navUploadBtn" type="button" class="btn-soft" onclick="startNewTestSession()">+ New Test</button>
         <button id="navGraphBtn" type="button" class="btn-soft" onclick="switchView('marksGraphView')">📊 Marks Graph</button>
         <button id="navWrongQsBtn" type="button" class="btn-warn" onclick="switchView('wrongQsPage')">
           <span>Wrong Qs Bank</span>
@@ -932,6 +932,10 @@
         <button id="navUnmatchedQBoxBtn" type="button" class="btn-danger-soft" onclick="switchView('unmatchedQBoxSectionView')">
           <span>❓ Unmatched Qs</span>
           <span id="unmatchedQBoxBadge" style="background:#e11d48;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
+        </button>
+        <button id="navSavedResultsSectionBtn" type="button" class="btn-primary" onclick="switchView('savedResultsSectionView')">
+          <span>📋 Results</span>
+          <span id="savedResultsSectionBadge" style="background:#0f172a;color:#fff;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;">0</span>
         </button>
         <button id="navSaveSheetSectionBtn" type="button" class="btn-soft" onclick="switchView('savedSheetsSectionView')">
           <span>📁 Save Sheet</span>
@@ -1105,7 +1109,8 @@
               <span id="cbtQTopicBadge" style="background:#f1f5f9;color:#475569;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:700;">Topic</span>
               <span id="cbtQSubTopicBadge" class="pill pill-rose">Sub-Topic</span>
             </div>
-            <div style="display:flex;gap:10px;font-size:12px;font-weight:700;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;">
+              <button type="button" class="btn-soft" onclick="openCurrentCbtQuestionZoom()" style="padding:4px 9px;font-size:11px;font-weight:900;">🔍 Zoom</button>
               <span>Q Time: <strong id="cbtQTimer" style="font-family:monospace;">0s</strong></span>
               <span id="cbtMarkingBadge" style="color:#059669;">+4 / -1</span>
             </div>
@@ -1169,6 +1174,7 @@
           <div id="resTestTimestamp" style="font-size:12px;color:var(--muted);"></div>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button type="button" onclick="reattemptFullResultTest('current')" style="background:linear-gradient(135deg,#059669 0%,#0d9488 100%);color:#ffffff;border:1.5px solid #047857;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(5,150,105,0.28);cursor:pointer;">▶ Re-Attempt Test</button>
           <button type="button" class="pill-pdf" onclick="exportFullReportPdf()">Download PDF Report</button>
           <button type="button" class="btn-warn" onclick="switchView('wrongQsPage')">View Saved Wrong Qs Page →</button>
           <button type="button" class="btn-danger-soft" onclick="switchView('weakTracker')">Open Master Weak Chapter &amp; Topic Page →</button>
@@ -1283,7 +1289,7 @@
         <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" class="btn-danger-soft" onclick="clearAllMarksGraphEntries()">🗑 Clear Graph</button><button type="button" class="btn-outline" onclick="switchView('upload')">+ New Test</button></div>
       </div>
 
-      <div class="grid-3" style="margin-top:14px;margin-bottom:14px;">
+      <div class="grid-4" style="margin-top:14px;margin-bottom:14px;">
         <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
           <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted);">Tests Plotted</div>
           <div id="mgTotalTests" style="font-size:22px;font-weight:900;margin-top:2px;">0</div>
@@ -1296,6 +1302,10 @@
           <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--success);">Highest Obtained Marks</div>
           <div id="mgHighestMarks" style="font-size:22px;font-weight:900;color:#064e3b;margin-top:2px;">0 / 0</div>
         </div>
+        <div style="background:var(--warn-soft);border:1px solid var(--warn-border);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--warn);">Total Spent Time</div>
+          <div id="mgTotalSpentTime" style="font-size:22px;font-weight:900;color:#78350f;margin-top:2px;">0m 0s</div>
+        </div>
       </div>
 
       <div id="dedicatedMarksGraphMount"></div>
@@ -1303,7 +1313,7 @@
       <div style="margin-top:16px;overflow-x:auto;">
         <table>
           <thead>
-            <tr><th>Test #</th><th>Test Name</th><th>Obtained Marks</th><th>Score %</th><th>Accuracy</th><th>Date</th></tr>
+            <tr><th>Test #</th><th>Test Name</th><th>Obtained Marks</th><th>Score %</th><th>Accuracy</th><th>Total Spent Time</th><th>Date</th></tr>
           </thead>
           <tbody id="marksGraphTableBody"></tbody>
         </table>
@@ -1321,7 +1331,7 @@
             Har test ke galat questions ke <strong>Chapter Name</strong>, <strong>Topic</strong>, aur <strong>Specific Sub-Topic</strong> yahan automatically add hote hain. Jab topic <strong>Strong</strong> ho jaye toh checkbox par <strong>Tick ✓</strong> karein!
           </p>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" class="btn-danger-soft" onclick="clearAllWeakTopics()">🗑 Delete All Weak Topics</button><button type="button" class="btn-primary" onclick="openAddWeakTopicForm()">+ Add Chapter, Topic &amp; Sub-Topic</button></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" onclick="analyzeAllWrongQuestionsTaxonomy(this)" style="background:linear-gradient(135deg,#0d9488 0%,#2563eb 100%);color:#ffffff;border:none;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:900;box-shadow:0 3px 10px rgba(13,148,136,0.25);cursor:pointer;">🔍 Deep Scan All Wrong Qs</button><button type="button" class="btn-danger-soft" onclick="clearAllWeakTopics()">🗑 Delete All Weak Topics</button><button type="button" class="btn-primary" onclick="openAddWeakTopicForm()">+ Add Chapter, Topic &amp; Sub-Topic</button></div>
       </div>
 
       <div class="grid-3" style="margin-top:14px;">
@@ -1388,7 +1398,7 @@
             Har test ke galat questions unke <strong>exact original Question No. (Q1, Q5, Q14...)</strong>, <strong>Chapter</strong>, <strong>Topic</strong>, aur <strong>Specific Sub-Topic</strong> ke saath yahan save hote hain.
           </p>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" class="btn-danger-soft" onclick="clearAllSavedWrongBank()">🗑 Clear All Wrong Qs</button><button type="button" class="btn-primary" onclick="reattemptAllSavedWrongQuestions()">Re-Attempt All Saved Wrong Qs</button></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;"><button type="button" onclick="analyzeAllWrongQuestionsTaxonomy(this)" style="background:linear-gradient(135deg,#0d9488 0%,#2563eb 100%);color:#ffffff;border:none;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:900;box-shadow:0 3px 10px rgba(13,148,136,0.25);cursor:pointer;">🔍 Analyze &amp; Map to Weak Topics</button><button type="button" class="btn-danger-soft" onclick="clearAllSavedWrongBank()">🗑 Clear All Wrong Qs</button><button type="button" class="btn-primary" onclick="reattemptAllSavedWrongQuestions()">Re-Attempt All Saved Wrong Qs</button></div>
       </div>
 
       <div id="wrongQsTestsContainer" style="margin-top:14px;display:flex;flex-direction:column;gap:14px;"></div>
@@ -1489,8 +1499,11 @@
       </div>
 
       <div id="qboxUploadedFilesChipsArea" class="qbox-uploaded-chips-wrap">
-        <div style="font-size:11.5px;font-weight:900;color:#0f766e;">
-          Uploaded Files Cards / Chips (<span id="qboxUploadedFilesCount">0</span>):
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <div style="font-size:11.5px;font-weight:900;color:#0f766e;">
+            Uploaded Files Cards / Chips (<span id="qboxUploadedFilesCount">0</span>):
+          </div>
+          <button type="button" class="btn-danger-soft" onclick="deleteAllQuestionBoxUploadedChips()" style="padding:3px 9px;font-size:10.5px;font-weight:900;">🗑 Delete All</button>
         </div>
         <div id="qboxUploadedFilesChipsList" class="qbox-chips-row"></div>
       </div>
@@ -1510,6 +1523,26 @@
         <div id="secUnmatchedAnsNumbers" style="font-size:12px;font-weight:800;color:#9f1239;">None</div>
         <div id="unmatchedAnsEditList"></div>
       </div>
+    </div>
+  </section>
+
+  <section id="savedResultsSectionView" class="container hidden" style="max-width:1120px;display:flex;flex-direction:column;gap:18px;">
+    <div class="card" style="border:2px solid #0d9488;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <span class="pill pill-teal">Complete Test Results · Auto-Saved on Every Submit</span>
+          <h2 style="margin:4px 0 2px;font-size:20px;font-weight:900;">Submitted Tests Complete Results (Each Test Separate Box)</h2>
+          <p style="margin:0;font-size:12px;color:var(--muted);">
+            Har test submit karne ke baad uska <strong>complete as-it-is result</strong> (Net Score, Accuracy, <strong>Complete Time + Per-Question Time Spent</strong>, Subject Table, Weak/Moderate/Strong Topics, aur Question-by-Question Review) yahan alag deletable box mein save hota hai.
+          </p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <button type="button" class="btn-danger-soft" onclick="clearAllSavedResultBoxes()">🗑 Delete All Results</button>
+          <button type="button" class="btn-outline" onclick="switchView('upload')">← Back to Test</button>
+        </div>
+      </div>
+
+      <div id="savedResultsBoxesContainer" style="margin-top:16px;display:flex;flex-direction:column;gap:20px;"></div>
     </div>
   </section>
 
@@ -1648,8 +1681,77 @@
       }
       return map;
     }
+    const NEET_SYLLABUS_TAXONOMY = [
+      // PHYSICS
+      { subject: 'Physics', chapter: 'Units, Dimensions & Measurement', topic: 'Dimensional Analysis & Error Propagation', subTopic: 'Dimensional Formula, Vernier Callipers & Percentage Error', rx: /\b(dimension|dimensional|vernier|screw\s*gauge|significant\s*figure|percentage\s*error|least\s*count|parallax|unit\s*of)\b/i },
+      { subject: 'Physics', chapter: 'Kinematics (Motion in 1D & 2D)', topic: 'Projectile, Relative Velocity & Graphs', subTopic: 'Equations of Motion, Trajectory, Range & v-t / x-t Graphs', rx: /\b(projectile|trajectory|horizontal\s*range|time\s*of\s*flight|relative\s*velocity|river\s*boat|rain\s*man|acceleration|retardation|displacement|uniform\s*velocity)\b/i },
+      { subject: 'Physics', chapter: 'Laws of Motion & Friction', topic: 'Newton Laws, Pulley & Friction', subTopic: 'Free Body Diagram, Tension, Banking of Roads & Limiting Friction', rx: /\b(newton|pulley|tension|friction|coefficient\s*of\s*friction|banking\s*of\s*road|pseudo\s*force|impulse|momentum\s*conservation|recoil|inclined\s*plane)\b/i },
+      { subject: 'Physics', chapter: 'Work, Energy & Power', topic: 'Work-Energy Theorem & Collisions', subTopic: 'Conservative Forces, Potential Energy Curve, Elastic & Inelastic Collision', rx: /\b(work\s*energy|kinetic\s*energy|potential\s*energy|collision|restitution|elastic\s*collision|inelastic|power\s*delivered|conservative\s*force|spring\s*constant)\b/i },
+      { subject: 'Physics', chapter: 'System of Particles & Rotational Motion', topic: 'Moment of Inertia, Torque & Rolling', subTopic: 'Parallel/Perpendicular Axis Theorem, Angular Momentum & Pure Rolling', rx: /\b(moment\s*of\s*inertia|torque|angular\s*momentum|rotational|rolling|radius\s*of\s*gyration|centre\s*of\s*mass|center\s*of\s*mass|angular\s*velocity)\b/i },
+      { subject: 'Physics', chapter: 'Gravitation', topic: 'Orbital Velocity, Escape Speed & g Variation', subTopic: 'Kepler Laws, Gravitational Potential & Satellite Energy', rx: /\b(gravitation|gravitational|escape\s*velocity|orbital\s*velocity|kepler|geostationary|satellite|acceleration\s*due\s*to\s*gravity)\b/i },
+      { subject: 'Physics', chapter: 'Mechanical Properties of Solids & Fluids', topic: 'Elasticity, Bernoulli & Surface Tension', subTopic: 'Young Modulus, Viscosity, Terminal Velocity & Capillary Rise', rx: /\b(young.?s\s*modulus|bulk\s*modulus|stress|strain|bernoulli|surface\s*tension|capillary|viscosity|terminal\s*velocity|reynold|pascal|archimedes)\b/i },
+      { subject: 'Physics', chapter: 'Thermal Properties, Thermodynamics & KTG', topic: 'Laws of Thermodynamics, Carnot & KTG', subTopic: 'Isothermal/Adiabatic Processes, Carnot Efficiency, RMS Speed & Degrees of Freedom', rx: /\b(carnot|isothermal|adiabatic|isobaric|isochoric|thermodynamics|specific\s*heat|latent\s*heat|rms\s*speed|degrees\s*of\s*freedom|blackbody|wien|stefan|conduction|convection)\b/i },
+      { subject: 'Physics', chapter: 'Oscillations (SHM) & Waves', topic: 'Simple Harmonic Motion & Sound Waves', subTopic: 'Time Period of Pendulum/Spring, Organ Pipes, Beats & Doppler Effect', rx: /\b(simple\s*harmonic|shm|pendulum|oscillation|organ\s*pipe|doppler|standing\s*wave|stationary\s*wave|resonance|wavelength|frequency|amplitude|beats)\b/i },
+      { subject: 'Physics', chapter: 'Electrostatics & Capacitance', topic: 'Gauss Law, Electric Dipole & Capacitors', subTopic: 'Electric Flux, Potential Energy of Dipole & Dielectric Capacitor Combinations', rx: /\b(coulomb|electric\s*field|electric\s*flux|gauss.?s\s*law|electric\s*dipole|equipotential|capacitor|capacitance|dielectric|electrostatic)\b/i },
+      { subject: 'Physics', chapter: 'Current Electricity', topic: 'Kirchhoff Laws, Wheatstone & Instruments', subTopic: 'Drift Velocity, Combination of Cells, Potentiometer & Meter Bridge', rx: /\b(kirchhoff|wheatstone|potentiometer|meter\s*bridge|drift\s*velocity|resistivity|ohm.?s\s*law|internal\s*resistance|galvanometer|ammeter|voltmeter)\b/i },
+      { subject: 'Physics', chapter: 'Moving Charges, Magnetism & Matter', topic: 'Biot-Savart, Ampere Law & Magnetic Force', subTopic: 'Cyclotron Motion, Solenoid/Toroid Field, Moving Coil Galvanometer & Dia/Para/Ferro', rx: /\b(biot\s*savart|ampere.?s\s*law|solenoid|toroid|lorentz\s*force|cyclotron|magnetic\s*dipole|diamagnetic|paramagnetic|ferromagnetic|susceptibility|hysteresis)\b/i },
+      { subject: 'Physics', chapter: 'Electromagnetic Induction & Alternating Current', topic: 'Faraday Law, Lenz Law & LCR Circuits', subTopic: 'Self/Mutual Inductance, AC Resonance, Power Factor & Transformer', rx: /\b(faraday|lenz|induced\s*emf|inductance|solenoid\s*induction|alternating\s*current|lcr|impedance|reactance|power\s*factor|transformer|eddy\s*current)\b/i },
+      { subject: 'Physics', chapter: 'Ray Optics & Wave Optics', topic: 'Lenses, Mirrors, Interference & Diffraction', subTopic: 'Lens Maker Formula, Prism Deviation, YDSE Fringe Width & Polarization', rx: /\b(refraction|reflection|lens\s*maker|concave|convex|prism|total\s*internal\s*reflection|tir|ydse|young.?s\s*double|interference|diffraction|polarization|brewster|refractive\s*index)\b/i },
+      { subject: 'Physics', chapter: 'Dual Nature, Atoms & Nuclei', topic: 'Photoelectric Effect, Bohr Model & Radioactivity', subTopic: 'de Broglie Wavelength, Hydrogen Spectral Series, Binding Energy & Half-Life', rx: /\b(photoelectric|work\s*function|stopping\s*potential|de\s*broglie|bohr|lyman|balmer|paschen|binding\s*energy|mass\s*defect|radioactive|half\s*life|fission|fusion)\b/i },
+      { subject: 'Physics', chapter: 'Semiconductor Electronics', topic: 'p-n Junction Diodes, Zener & Logic Gates', subTopic: 'Forward/Reverse Bias, Rectifier, Zener Voltage Regulator & Boolean Truth Tables', rx: /\b(semiconductor|p\-n\s*junction|diode|zener|rectifier|logic\s*gate|nand|nor|xor|and\s*gate|or\s*gate|depletion\s*layer|transistor)\b/i },
+
+      // CHEMISTRY
+      { subject: 'Chemistry', chapter: 'Some Basic Concepts of Chemistry (Mole Concept)', topic: 'Stoichiometry, Limiting Reagent & Concentration', subTopic: 'Molarity, Molality, Empirical Formula & Limiting Reactant Calculations', rx: /\b(mole\s*concept|molarity|molality|mole\s*fraction|limiting\s*reagent|stoichiometry|empirical\s*formula|avogadro|equivalent\s*weight)\b/i },
+      { subject: 'Chemistry', chapter: 'Structure of Atom', topic: 'Quantum Numbers, Electronic Configuration & Spectra', subTopic: 'Bohr Radius/Energy, Heisenberg Uncertainty, Orbitals & Pauli/Hund Rules', rx: /\b(quantum\s*number|azimuthal|magnetic\s*quantum|spin\s*quantum|orbital|heisenberg|aufbau|pauli|hund.?s\s*rule|electronic\s*configuration|radial\s*node|angular\s*node)\b/i },
+      { subject: 'Chemistry', chapter: 'Chemical Bonding & Molecular Structure', topic: 'VSEPR, Hybridization & Molecular Orbital Theory', subTopic: 'Bond Order, Paramagnetism (MOT), Dipole Moment & Hydrogen Bonding', rx: /\b(hybridization|sp3|sp2|vsepr|molecular\s*orbital|bond\s*order|dipole\s*moment|hydrogen\s*bonding|fajan|lattice\s*enthalpy|resonance\s*structure)\b/i },
+      { subject: 'Chemistry', chapter: 'Chemical Thermodynamics & Thermochemistry', topic: 'Enthalpy, Entropy & Gibbs Free Energy', subTopic: 'Hess Law, Bond Enthalpy, Spontaneity (ΔG = ΔH - TΔS) & First Law', rx: /\b(enthalpy|entropy|gibbs|spontaneous|hess.?s\s*law|bond\s*dissociation|calorimetry|standard\s*enthalpy|internal\s*energy)\b/i },
+      { subject: 'Chemistry', chapter: 'Chemical & Ionic Equilibrium', topic: 'Le Chatelier Principle, pH, Buffers & Ksp', subTopic: 'Kp vs Kc, Acid-Base Buffer Solutions, Salt Hydrolysis & Solubility Product', rx: /\b(equilibrium|le\s*chatelier|buffer|solubility\s*product|ksp|hydrolysis|henderson|conjugate\s*acid|conjugate\s*base|ostwald|ph\s*of)\b/i },
+      { subject: 'Chemistry', chapter: 'Redox Reactions & Electrochemistry', topic: 'Nernst Equation, Conductance & Electrolysis', subTopic: 'Standard Electrode Potential, Kohlrausch Law, Molar Conductivity & Faraday Laws', rx: /\b(nernst|electrode\s*potential|galvanic|electrolysis|kohlrausch|molar\s*conductivity|oxidation\s*number|disproportionation|redox|salt\s*bridge)\b/i },
+      { subject: 'Chemistry', chapter: 'Solutions & Colligative Properties', topic: 'Raoult Law, Elevation/Depression & Osmotic Pressure', subTopic: 'Abnormal Molar Mass, van t Hoff Factor (i), Azeotropes & Henry Law', rx: /\b(raoult|colligative|osmotic\s*pressure|boiling\s*point\s*elevation|freezing\s*point\s*depression|van.?t\s*hoff|azeotrope|henry.?s\s*law|ideal\s*solution)\b/i },
+      { subject: 'Chemistry', chapter: 'Chemical Kinetics', topic: 'Order of Reaction, Integrated Rate Laws & Arrhenius', subTopic: 'First-Order Half-Life, Rate Constant Units, Activation Energy & Molecularity', rx: /\b(rate\s*law|order\s*of\s*reaction|first\s*order|zero\s*order|arrhenius|activation\s*energy|rate\s*constant|molecularity|pseudo\s*first)\b/i },
+      { subject: 'Chemistry', chapter: 'Coordination Compounds', topic: 'IUPAC Naming, VBT, CFT & Isomerism', subTopic: 'Crystal Field Splitting (Δo/Δt), Spectrochemical Series, Magnetic Moment & Chelates', rx: /\b(coordination|ligand|chelate|crystal\s*field|spectrochemical|werner|denticity|ambidentate|isomerism\s*in\s*complex|cft)\b/i },
+      { subject: 'Chemistry', chapter: 'd- and f-Block & p-Block Elements', topic: 'Transition Metals, KMnO4/K2Cr2O7 & Lanthanoids', subTopic: 'Lanthanoid Contraction, Variable Oxidation States, Interstitial Compounds & Oxoacids', rx: /\b(lanthanoid|actinoid|kmno4|k2cr2o7|permanganate|dichromate|transition\s*metal|oxoacid|inert\s*pair|allotrope|interhalogen)\b/i },
+      { subject: 'Chemistry', chapter: 'General Organic Chemistry (GOC) & Hydrocarbons', topic: 'Electronic Effects, Aromatics & Reaction Intermediates', subTopic: 'Inductive, Resonance, Hyperconjugation, Carbocation Stability, Markovnikov & Ozonolysis', rx: /\b(carbocation|carbanion|hyperconjugation|inductive\s*effect|mesomeric|aromaticity|huckel|markovnikov|ozonolysis|friedel\s*crafts|tautomerism|isomerism|chiral|enantiomer)\b/i },
+      { subject: 'Chemistry', chapter: 'Haloalkanes, Alcohols, Phenols & Ethers', topic: 'SN1/SN2 Mechanisms, Reimer-Tiemann & Williamson Synthesis', subTopic: 'Nucleophilic Substitution Stereochemistry, Lucas Test, Kolbe & Acidity of Phenols', rx: /\b(sn1|sn2|haloalkane|wurtz|lucas\s*test|reimer\s*tiemann|kolbe|williamson|phenol|alcohol|ether|dehydration\s*of\s*alcohol)\b/i },
+      { subject: 'Chemistry', chapter: 'Aldehydes, Ketones, Carboxylic Acids & Amines', topic: 'Aldol, Cannizzaro, Hoffmann Bromamide & Diazonium Salts', subTopic: 'Nucleophilic Addition, Tollen/Fehling Test, Gabriel Phthalimide & Basicity of Amines', rx: /\b(aldol|cannizzaro|clemmensen|wolff\s*kishner|tollen|fehling|carboxylic|esterification|hoffmann\s*bromamide|gabriel\s*phthalimide|diazonium|carbylamine|hinsberg|amine|aniline)\b/i },
+      { subject: 'Chemistry', chapter: 'Biomolecules (Organic Chemistry)', topic: 'Carbohydrates, Amino Acids, Proteins & Nucleic Acids', subTopic: 'Glucose Anomers, Peptide Linkage, Enzyme Denaturation & DNA/RNA Bases', rx: /\b(glucose|fructose|sucrose|maltose|lactose|anomer|glycosidic|zwitterion|peptide\s*bond|denaturation|nucleoside|nucleotide|vitamin)\b/i },
+
+      // BOTANY
+      { subject: 'Botany', chapter: 'Cell: The Unit of Life & Cell Cycle', topic: 'Organelles, Mitosis & Meiosis', subTopic: 'Endomembrane System, Mitochondria/Chloroplast, Prophase-I Substages & Checkpoints', rx: /\b(mitochondria|chloroplast|endoplasmic\s*reticulum|golgi|lysosome|ribosome|prophase|metaphase|anaphase|telophase|meiosis|mitosis|crossing\s*over|synaptonemal|chiasmata|centromere)\b/i },
+      { subject: 'Botany', chapter: 'Biological Classification & Plant Kingdom', topic: 'Monera, Fungi, Algae, Bryophytes, Pteridophytes & Gymnosperms', subTopic: 'Mycoplasma, Ascomycetes/Basidiomycetes, Alternation of Generations & Double Fertilization', rx: /\b(monera|protista|fungi|ascomycetes|basidiomycetes|mycoplasma|lichen|viroid|prion|bryophyte|pteridophyte|gymnosperm|angiosperm|archegonium|prothallus|double\s*fertilization)\b/i },
+      { subject: 'Botany', chapter: 'Morphology & Anatomy of Flowering Plants', topic: 'Inflorescence, Placentation, Tissues & Secondary Growth', subTopic: 'Phyllotaxy, Aestivation, Vascular Bundles (Dicot vs Monocot) & Stomatal Apparatus', rx: /\b(phyllotaxy|aestivation|placentation|inflorescence|racemose|cymose|xylem|phloem|vascular\s*bundle|cambium|stomata|casparian|periderm|lenticel)\b/i },
+      { subject: 'Botany', chapter: 'Photosynthesis in Higher Plants', topic: 'Light Reaction, Z-Scheme, Calvin (C3) & C4 Pathways', subTopic: 'Chemiosmotic ATP Synthesis, RuBisCO, Kranz Anatomy & Photorespiration', rx: /\b(photosynthesis|photosystem|z\-scheme|chemiosmotic|calvin\s*cycle|rubisco|kranz\s*anatomy|c4\s*pathway|photorespiration|hatch\s*and\s*slack|photophosphorylation)\b/i },
+      { subject: 'Botany', chapter: 'Respiration in Plants & Plant Growth Regulators', topic: 'Glycolysis, Krebs Cycle, ETS & Phytohormones', subTopic: 'EMP Pathway, RQ Value, Auxin, Gibberellin, Cytokinin, Ethylene & ABA', rx: /\b(glycolysis|krebs\s*cycle|tca\s*cycle|electron\s*transport|respiratory\s*quotient|auxin|gibberellin|cytokinin|ethylene|abscisic|vernalization|photoperiodism)\b/i },
+      { subject: 'Botany', chapter: 'Sexual Reproduction in Flowering Plants', topic: 'Microsporogenesis, Embryo Sac, Pollination & Apomixis', subTopic: 'Tapetum, 7-Celled 8-Nucleate Embryo Sac, Outbreeding Devices & Polyembryony', rx: /\b(microsporogenesis|megasporogenesis|tapetum|pollen|embryo\s*sac|synergid|antipodal|pollination|geitonogamy|xenogamy|endosperm|apomixis|polyembryony)\b/i },
+      { subject: 'Botany', chapter: 'Principles of Inheritance & Molecular Basis of Inheritance', topic: 'Mendelian Crosses, Linkage, DNA Replication & Operon', subTopic: 'Monohybrid/Dihybrid Ratios, Pedigree Analysis, Transcription, Genetic Code & Lac Operon', rx: /\b(mendel|allele|dihybrid|test\s*cross|incomplete\s*dominance|codominance|pleiotropy|linkage|recombination|pedigree|dna\s*replication|transcription|translation|lac\s*operon|okazaki|genetic\s*code)\b/i },
+      { subject: 'Botany', chapter: 'Ecology: Organisms, Populations, Ecosystem & Biodiversity', topic: 'Population Interactions, Ecological Pyramids & Conservation', subTopic: 'Mutualism/Commensalism, Logistic Growth, Energy Flow (10% Law) & Hotspots', rx: /\b(ecosystem|ecological\s*pyramid|trophic\s*level|primary\s*productivity|decomposition|mutualism|commensalism|parasitism|amensalism|logistic\s*growth|biodiversity|hotspot|in\-situ|ex\-situ)\b/i },
+
+      // ZOOLOGY
+      { subject: 'Zoology', chapter: 'Animal Kingdom & Structural Organisation', topic: 'Phylum Characteristics & Animal Tissues', subTopic: 'Coelom, Symmetry, Chordata vs Non-Chordata & Epithelial/Connective Tissues', rx: /\b(porifera|cnidaria|platyhelminthes|aschelminthes|annelida|arthropoda|mollusca|echinodermata|chordata|coelom|notochord|epithelial|connective\s*tissue|cartilage|cockroach|frog)\b/i },
+      { subject: 'Zoology', chapter: 'Biomolecules (Zoology) & Enzymes', topic: 'Enzyme Kinetics, Km, Inhibition & Macromolecules', subTopic: 'Competitive vs Non-Competitive Inhibition, Cofactors, Apoenzymes & Polysaccharides', rx: /\b(enzyme|apoenzyme|coenzyme|cofactor|prosthetic\s*group|competitive\s*inhibition|michaelis|activation\s*energy\s*of\s*enzyme|chitin|cellulose|glycogen|phospholipid)\b/i },
+      { subject: 'Zoology', chapter: 'Breathing & Exchange of Gases', topic: 'Respiratory Volumes, Oxygen Dissociation Curve & Transport', subTopic: 'Tidal Volume, Vital Capacity, Bohr Effect & CO2 Transport as Bicarbonate', rx: /\b(tidal\s*volume|vital\s*capacity|residual\s*volume|spirometer|oxygen\s*dissociation|oxyhaemoglobin|bohr\s*effect|alveoli|diaphragm|carbonic\s*anhydrase)\b/i },
+      { subject: 'Zoology', chapter: 'Body Fluids & Circulation', topic: 'Cardiac Cycle, ECG, Blood Groups & Double Circulation', subTopic: 'SA Node, Joint Diastole, P-QRS-T Waves, Erythroblastosis Foetalis & Blood Clotting', rx: /\b(cardiac\s*cycle|electrocardiogram|ecg|qrs|sa\s*node|av\s*node|erythroblastosis|abo\s*blood|rh\s*factor|systole|diastole|double\s*circulation|lymph)\b/i },
+      { subject: 'Zoology', chapter: 'Excretory Products & Their Elimination', topic: 'Nephron Structure, Counter-Current Mechanism & RAAS', subTopic: 'GFR, Juxtaglomerular Apparatus, ADH, Aldosterone & Micturition', rx: /\b(nephron|glomerular|gfr|counter\s*current|loop\s*of\s*henle|juxtaglomerular|raas|aldosterone|adh|vasopressin|micturition|ureotelic|uricotelic)\b/i },
+      { subject: 'Zoology', chapter: 'Locomotion & Movement', topic: 'Sarcomere Structure, Sliding Filament Theory & Joints', subTopic: 'Actin/Myosin Cross-Bridge, Calcium Role, Synovial Joints & Myasthenia Gravis', rx: /\b(sarcomere|actin|myosin|sliding\s*filament|troponin|tropomyosin|synovial\s*joint|hinge\s*joint|ball\s*and\s*socket|myasthenia|osteoporosis|gout)\b/i },
+      { subject: 'Zoology', chapter: 'Neural Control & Chemical Coordination', topic: 'Nerve Impulse, Brain Parts & Endocrine Hormones', subTopic: 'Resting/Action Potential, Synaptic Transmission, Hypothalamus/Pituitary & Thyroid/Adrenal Hormones', rx: /\b(neuroglia|neural|brain|neuron|axon|synapse|action\s*potential|resting\s*potential|depolarization|cerebrum|cerebellum|medulla|hypothalamus|pituitary|thyroid|adrenal|insulin|glucagon|cortisol)\b/i },
+      { subject: 'Zoology', chapter: 'Human Reproduction & Reproductive Health', topic: 'Gametogenesis, Menstrual Cycle, Fertilization & Contraceptives', subTopic: 'Spermatogenesis/Oogenesis, LH Surge, Implantation, Placenta & ART (IVF/ZIFT/GIFT)', rx: /\b(spermatogenesis|oogenesis|menstrual\s*cycle|lh\s*surge|corpus\s*luteum|implantation|placenta|parturition|colostrum|contraceptive|iud|ivf|zift|gift|amniocentesis)\b/i },
+      { subject: 'Zoology', chapter: 'Evolution, Human Health & Biotechnology', topic: 'Hardy-Weinberg, Immunity, PCR & Recombinant DNA', subTopic: 'Homologous/Analogous Organs, Innate/Acquired Immunity, ELISA, Restriction Enzymes & Gel Electrophoresis', rx: /\b(hardy\s*weinberg|homologous|analogous|adaptive\s*radiation|natural\s*selection|immunity|antibody|immunoglobulin|malaria|plasmodium|hiv|aids|pcr|restriction\s*enzyme|plasmid|gel\s*electrophoresis|bt\s*cotton|elisa)\b/i }
+    ];
+
     function classifyQuestionTaxonomy(qText, qNum = 1, fallbackSub = '', coverSyllabusMap = {}) {
-      let sub = ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(fallbackSub) ? fallbackSub : '';
+      const cleanText = sanitizeExtractedMathText(String(qText || ''));
+      let matchedRule = null;
+      // Always match actual question content/chapter keywords across ALL 4 subjects first
+      for (let i = 0; i < NEET_SYLLABUS_TAXONOMY.length; i++) {
+        if (NEET_SYLLABUS_TAXONOMY[i].rx.test(cleanText)) {
+          matchedRule = NEET_SYLLABUS_TAXONOMY[i];
+          break;
+        }
+      }
+
+      let sub = matchedRule
+        ? matchedRule.subject
+        : (['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(fallbackSub) ? fallbackSub : '');
       if (!sub) {
         if (qNum >= 1 && qNum <= 45) sub = 'Physics';
         else if (qNum >= 46 && qNum <= 90) sub = 'Chemistry';
@@ -1657,13 +1759,202 @@
         else if (qNum >= 136 && qNum <= 180) sub = 'Zoology';
         else sub = 'Physics';
       }
+
       const coverCh = coverSyllabusMap[sub] || '';
+      if (matchedRule) {
+        return {
+          subject: sub,
+          chapter: coverCh || matchedRule.chapter,
+          topic: matchedRule.topic,
+          subTopic: matchedRule.subTopic
+        };
+      }
+
+      const firstSnippet = cleanText
+        .replace(/^Cropped\s*Question\s*Q\d+/i, '')
+        .replace(/^Q\.?\s*\d+[\.\)\:]?\s*/i, '')
+        .replace(/\(\s*[1-4A-Da-d]\s*\).*$/s, '')
+        .trim()
+        .slice(0, 64);
+
       return {
         subject: sub,
         chapter: coverCh || `${sub} Practice Chapter`,
-        topic: `${sub} Core Topic`,
-        subTopic: 'Concept & Numerical Application'
+        topic: `${sub} Core Concept`,
+        subTopic: firstSnippet ? `Concept: ${firstSnippet}` : 'Concept & Numerical Application'
       };
+    }
+
+    async function extractQuestionStemFromImageForAnalysis(q) {
+      const existingTxt = sanitizeExtractedMathText(String(q?.text || ''));
+      if (existingTxt && !/^Cropped\s*Question\s*Q\d+$/i.test(existingTxt) && !/^Question\s*\d+$/i.test(existingTxt) && existingTxt.length > 22) {
+        return existingTxt;
+      }
+      const imgUrl = getQuestionImageUrl(q);
+      if (!imgUrl) return existingTxt;
+      try {
+        const ocrTxt = await Promise.race([
+          runFastImageOCR(imgUrl, 1.0),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 3200))
+        ]);
+        const cleanOcr = sanitizeExtractedMathText(ocrTxt || '');
+        if (cleanOcr && cleanOcr.length > 12) return cleanOcr;
+      } catch (e) {}
+      return existingTxt;
+    }
+
+    async function analyzeAllWrongQuestionsTaxonomy(triggerBtn = null) {
+      try {
+        if (triggerBtn) {
+          triggerBtn.disabled = true;
+          triggerBtn.textContent = '🔍 Scanning Wrong Qs...';
+        }
+        await hydrateAllSavedQuestionImages();
+
+        const wrongBank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
+        const savedResults = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+        const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+
+        const wrongItemsPool = [];
+
+        // 1. Collect from Wrong Qs Bank
+        wrongBank.forEach(testEntry => {
+          (testEntry.questions || []).forEach((q, qIdx) => {
+            wrongItemsPool.push({
+              source: 'wrongBank',
+              testTitle: testEntry.title || 'Practice Test',
+              q,
+              qIdx
+            });
+          });
+        });
+
+        // 2. Collect from Submitted Results (`incorrect` items)
+        savedResults.forEach(rep => {
+          (rep.evaluatedQuestions || []).forEach(ev => {
+            if (ev.status === 'incorrect' && ev.q) {
+              wrongItemsPool.push({
+                source: 'savedResult',
+                testTitle: rep.title || 'Practice Test',
+                q: ev.q,
+                qIdx: ev.idx || 0
+              });
+            }
+          });
+        });
+
+        // 3. Collect from current active `lastReport` if any
+        if (lastReport && Array.isArray(lastReport.evaluatedQuestions)) {
+          lastReport.evaluatedQuestions.forEach(ev => {
+            if (ev.status === 'incorrect' && ev.q) {
+              wrongItemsPool.push({
+                source: 'lastReport',
+                testTitle: lastReport.title || 'Latest Test',
+                q: ev.q,
+                qIdx: ev.idx || 0
+              });
+            }
+          });
+        }
+
+        if (!wrongItemsPool.length) {
+          showQuickToast('Abhi koi wrong question nahi mila — pehle test attempt karein.', true);
+          return;
+        }
+
+        let analyzedCount = 0;
+        for (let i = 0; i < wrongItemsPool.length; i++) {
+          const item = wrongItemsPool[i];
+          const q = item.q;
+          const qNum = parseInt(q.num, 10) || (item.qIdx + 1);
+          const scannedText = await extractQuestionStemFromImageForAnalysis(q);
+          if (scannedText && scannedText.length > 15) {
+            q.text = scannedText;
+          }
+          const combinedScan = `${scannedText} ${q.chapter || ''} ${q.topic || ''} ${q.subTopic || ''}`;
+          const tax = classifyQuestionTaxonomy(combinedScan, qNum, q.subject || '');
+
+          q.subject = tax.subject;
+          q.chapter = tax.chapter;
+          q.topic = tax.topic;
+          q.subTopic = tax.subTopic;
+          analyzedCount++;
+
+          const safeTestName = String(item.testTitle || 'Practice Test').trim();
+          const existing = tracker.find(t =>
+            (t.lastTest || '').trim().toLowerCase() === safeTestName.toLowerCase() &&
+            t.subject === tax.subject &&
+            (t.chapter || '').toLowerCase() === tax.chapter.toLowerCase() &&
+            (t.topic || '').toLowerCase() === tax.topic.toLowerCase() &&
+            (t.subTopic || '').toLowerCase() === tax.subTopic.toLowerCase()
+          );
+
+          const qTag = `Q${qNum}`;
+          if (existing) {
+            existing.subject = tax.subject;
+            existing.chapter = tax.chapter;
+            existing.topic = tax.topic;
+            existing.subTopic = tax.subTopic;
+            existing.mastered = false;
+            existing.lastTest = safeTestName;
+            existing.updatedAt = new Date().toLocaleDateString();
+            
+            const prevQs = Array.isArray(existing.wrongQRefs)
+              ? existing.wrongQRefs.map(r => String(r).replace(/\s*\([^)]*\)\s*$/, '').trim())
+              : [];
+            if (!prevQs.includes(qTag)) {
+              existing.wrongQRefs = [...prevQs, qTag];
+              existing.wrongCount = existing.wrongQRefs.length;
+            }
+          } else {
+            tracker.unshift({
+              id: 'wt_' + Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2, 5),
+              subject: tax.subject,
+              chapter: tax.chapter,
+              topic: tax.topic,
+              subTopic: tax.subTopic,
+              wrongCount: 1,
+              wrongQRefs: [qTag],
+              mastered: false,
+              note: '',
+              lastTest: safeTestName,
+              updatedAt: new Date().toLocaleDateString()
+            });
+          }
+        }
+
+        // Remove generic placeholder entries if specific analyzed entries exist for the same test
+        const cleanedTracker = tracker.filter((item, idx, arr) => {
+          const isGeneric = /Practice Chapter$/i.test(item.chapter || '') && /Core Topic$/i.test(item.topic || '');
+          if (!isGeneric) return true;
+          const hasSpecificSameTest = arr.some((other, oIdx) =>
+            oIdx !== idx &&
+            other.subject === item.subject &&
+            other.lastTest === item.lastTest &&
+            !/Practice Chapter$/i.test(other.chapter || '')
+          );
+          return !hasSpecificSameTest;
+        });
+
+        saveStorage(STORAGE_KEYS.WRONG_QS_BANK, wrongBank.map(b => ({
+          ...b,
+          questions: (b.questions || []).map(q => stripInlineImageForLocalStorage(q))
+        })));
+        saveStorage(STORAGE_KEYS.SAVED_RESULTS, savedResults);
+        saveStorage(STORAGE_KEYS.WEAK_TRACKER, cleanedTracker);
+
+        updateHeaderBadges();
+        renderMasterWeakTracker();
+        renderWrongQsBankPage();
+        showQuickToast(`✓ ${analyzedCount} Wrong Qs Scanned & Arranged by Chapter → Topic → Sub-Topic!`);
+      } catch (err) {
+        showQuickToast('Analysis error: ' + (err?.message || 'Try again'), true);
+      } finally {
+        if (triggerBtn) {
+          triggerBtn.disabled = false;
+          triggerBtn.textContent = '🔍 Deep Scan All Wrong Qs';
+        }
+      }
     }
 
     let deferredInstallPrompt = null;
@@ -1698,7 +1989,8 @@
       HISTORY: 'nura2_test_history_v1',
       MARKS_GRAPH: 'nura2_marks_graph_history_v1',
       WEAK_TRACKER: 'nura2_weak_tracker_v1',
-      WRONG_QS_BANK: 'nura2_wrong_qs_bank_v1'
+      WRONG_QS_BANK: 'nura2_wrong_qs_bank_v1',
+      SAVED_RESULTS: 'nura2_saved_complete_results_v1'
     };
 
     STORAGE_KEYS.DELETED_BIN = 'nura2_deleted_sections_bin_v1';
@@ -2099,9 +2391,11 @@
       } catch (e) {}
       if (cropW < 40 || cropH < 24) return '';
 
-      // Upscale to >= 1280px width so small math symbols, chemical structures & diagrams stay 720p+ sharp
+      // Guaranteed 720p+ & HD crisp output (1280px–1920px width) so all 200 questions are sharp & clearly visible
       const targetMinW = 1280;
-      const upScale = cropW < targetMinW ? Math.min(2.2, targetMinW / cropW) : 1.0;
+      const targetHdW = 1920;
+      const desiredW = cropW < targetMinW ? targetMinW : Math.min(targetHdW, Math.round(cropW * 1.4));
+      const upScale = Math.min(2.6, Math.max(1.0, desiredW / Math.max(1, cropW)));
       const outW = Math.round(cropW * upScale);
       const outH = Math.round(cropH * upScale);
       const finalCanvas = document.createElement('canvas');
@@ -2113,7 +2407,12 @@
       fctx.imageSmoothingEnabled = true;
       fctx.imageSmoothingQuality = 'high';
       fctx.drawImage(tmp, cropX, cropY, cropW, cropH, 0, 0, outW, outH);
-      return finalCanvas.toDataURL('image/jpeg', quality);
+      const outDataUrl = finalCanvas.toDataURL('image/jpeg', Math.min(0.98, Math.max(0.95, quality)));
+      finalCanvas.width = 1;
+      finalCanvas.height = 1;
+      tmp.width = 1;
+      tmp.height = 1;
+      return outDataUrl;
     }
 
     // Strict 2-column split detector (via question anchors or vertical white center gutter)
@@ -2203,21 +2502,26 @@
         let runStart = -1;
 
         for (let ry = 0; ry < sh; ry++) {
-          let greenCols = 0, sampled = 0;
+          let greenCols = 0, sampled = 0, maxContig = 0, curContig = 0;
           const rowOff = ry * sw * 4;
-          for (let rx = 0; rx < sw; rx += 3) {
+          for (let rx = 0; rx < sw; rx += 2) {
             sampled++;
             const idx = rowOff + rx * 4;
             const r = px[idx], g = px[idx + 1], b = px[idx + 2];
-            // Detect green line strokes (e.g. #059669, #16a34a, #22c55e, #0d9488, #10b981, RGB green dominant)
-            if (g >= 95 && (g - r) >= 22 && (g - b) >= 12) {
+            const isG = (g >= 95 && (g - r) >= 22 && (g - b) >= 12);
+            if (isG) {
               greenCols++;
+              curContig += 2;
+              if (curContig > maxContig) maxContig = curContig;
+            } else {
+              curContig = 0;
             }
           }
-          const isGreenRow = sampled > 0 && (greenCols / sampled) >= 0.35;
-          if (isGreenRow && runStart < 0) {
+          const ratio = sampled > 0 ? (greenCols / sampled) : 0;
+          const isGreenDividerRow = ratio >= 0.30 && maxContig >= Math.min(sw * 0.28, 180);
+          if (isGreenDividerRow && runStart < 0) {
             runStart = ry;
-          } else if (!isGreenRow && runStart >= 0) {
+          } else if (!isGreenDividerRow && runStart >= 0) {
             rawRuns.push({ topY: yStart + runStart, botY: yStart + ry - 1 });
             runStart = -1;
           }
@@ -2229,11 +2533,11 @@
 
       if (!rawRuns.length) return [];
 
-      // Cluster double green lines (two green strokes separated by <= 28px white gap) into a single separator boundary
+      // Merge double green lines (two green strokes separated by <= 22px gap) into one separator line
       const boundaries = [];
       let cur = { topY: rawRuns[0].topY, botY: rawRuns[0].botY };
       for (let i = 1; i < rawRuns.length; i++) {
-        if ((rawRuns[i].topY - cur.botY) <= 28) {
+        if ((rawRuns[i].topY - cur.botY) <= 22) {
           cur.botY = rawRuns[i].botY;
         } else {
           boundaries.push(cur);
@@ -2244,31 +2548,20 @@
       return boundaries;
     }
 
-    // Core cutter: crops ONLY the area strictly BETWEEN topGreenBoundary.botY and bottomGreenBoundary.topY
+    // Core cutter: cuts ONLY the single question strictly BETWEEN topBoundaryBotY and bottomBoundaryTopY
     function cutCompleteQuestionBetweenTwoGreenLines(canvas, x0, x1, topBoundaryBotY, bottomBoundaryTopY, quality = 0.96) {
       const yTop = Math.max(0, Math.ceil(topBoundaryBotY + 3));
       const yBot = Math.min(canvas.height, Math.floor(bottomBoundaryTopY - 3));
-      if ((yBot - yTop) < 32) return '';
+      if ((yBot - yTop) < 28) return '';
       return sliceQuestionCropFromCanvas(canvas, x0, yTop, x1, yBot, quality);
     }
 
     // Extract Q# inside a between-green-lines band using mapped text items
     function detectQNumInYBand(colItems, yTop, yBot, fallbackNum) {
-      const qMarkerRx = /^(?:Q(?:uestion)?\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
-      const inBand = (colItems || [])
-        .filter(it => it.topY >= (yTop - 6) && it.botY <= (yBot + 6))
-        .sort((a, b) => (Math.abs(a.topY - b.topY) > 10 ? a.topY - b.topY : a.x - b.x));
-      for (const it of inBand) {
-        const m = it.str.match(qMarkerRx);
-        if (m) {
-          const n = parseInt(m[1] || m[2], 10);
-          if (n >= 1 && n <= 300) return n;
-        }
-      }
       return fallbackNum;
     }
 
-    // Slice questions strictly BETWEEN every pair of consecutive green horizontal lines
+    // Slice every single question strictly BETWEEN consecutive green lines (1st green to 2nd green, 2nd to 3rd, etc.)
     function sliceColumnBetweenGreenLines(canvas, colItems, x0, x1, fallbackStartQ, keyPrefix) {
       const greenBounds = detectGreenSeparatorBoundaries(canvas, x0, x1, 0, canvas.height);
       if (greenBounds.length < 2) return null;
@@ -2281,7 +2574,7 @@
         const botGreen = greenBounds[i + 1];
         const bandTopY = topGreen.botY + 3;
         const bandBotY = botGreen.topY - 3;
-        if ((bandBotY - bandTopY) < 34) continue;
+        if ((bandBotY - bandTopY) < 28) continue;
 
         const dataUrl = cutCompleteQuestionBetweenTwoGreenLines(canvas, x0, x1, topGreen.botY, botGreen.topY, 0.96);
         if (dataUrl) {
@@ -2297,7 +2590,6 @@
       return Object.keys(crops).length > 0 ? crops : null;
     }
 
-    // Slice single-column questions: prioritizes Between-Two-Green-Lines cutter first, then Q# anchor fallback
     function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix, fallbackStartQ = 1) {
       // 1. Primary: Strict Between-Two-Green-Lines Cutter
       const greenCrops = sliceColumnBetweenGreenLines(canvas, colItems, x0, x1, fallbackStartQ, keyPrefix + '_GL');
@@ -2389,7 +2681,7 @@
           }
         }
 
-        const minGapH = Math.max(24, Math.round(canvas.height * 0.015));
+        const minGapH = Math.max(12, Math.round(canvas.height * 0.008));
         const bands = [];
         let inBlock = false, blockStart = 0, gapCount = 0;
 
@@ -2495,10 +2787,13 @@
           im.onerror = rej;
           im.src = dataUrl;
         });
-        const scale = img.width < 1280 ? Math.min(2.0, 1280 / Math.max(1, img.width)) : 1.0;
+        const maxCanvasHeight = 32768;
+        const singleCanvasLimit = 16384;
+        const hdScale = img.width < 1600 ? Math.min(2.2, 1600 / Math.max(1, img.width)) : 1.25;
+        const scale = Math.min(hdScale, maxCanvasHeight / Math.max(1, img.height), singleCanvasLimit / Math.max(1, img.height));
         const canvas = document.createElement('canvas');
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
+        canvas.width = Math.min(singleCanvasLimit, Math.round(img.width * scale));
+        canvas.height = Math.min(singleCanvasLimit, Math.round(img.height * scale));
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2740,15 +3035,61 @@
       if (tBadge) tBadge.textContent = trashBin.length;
       const ssBadge = document.getElementById('savedSheetsSectionBadge');
       if (ssBadge) ssBadge.textContent = sheets.length;
+      const srList = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+      const srBadge = document.getElementById('savedResultsSectionBadge');
+      if (srBadge) srBadge.textContent = srList.length;
+    }
+
+    let currentOpenView = 'upload';
+    const ACTIVE_CBT_PROGRESS_KEY = 'nura2_active_cbt_progress_v1';
+    const ACTIVE_VIEW_STATE_KEY = 'nura2_active_open_view_v1';
+
+    function persistActiveCbtProgress() {
+      try {
+        if (!Array.isArray(questions) || !questions.length) return;
+        const hasAnyCbtData = cbtState.active
+          || Object.keys(cbtState.timeSpent || {}).length > 0
+          || Object.keys(cbtState.answers || {}).length > 0
+          || Object.keys(cbtState.visited || {}).length > 0;
+        if (!hasAnyCbtData) return;
+
+        saveStorage(ACTIVE_CBT_PROGRESS_KEY, {
+          active: !!cbtState.active,
+          filteredIndices: Array.isArray(cbtState.filteredIndices) ? cbtState.filteredIndices : questions.map((_, i) => i),
+          currentPos: cbtState.currentPos || 0,
+          subjectFilter: cbtState.subjectFilter || 'All',
+          answers: { ...(cbtState.answers || {}) },
+          marked: { ...(cbtState.marked || {}) },
+          visited: { ...(cbtState.visited || {}) },
+          timeSpent: { ...(cbtState.timeSpent || {}) },
+          remainingSeconds: cbtState.remainingSeconds || 0,
+          totalSeconds: cbtState.totalSeconds || 0,
+          examTitle: document.getElementById('cbtExamTitle')?.textContent || document.getElementById('testTitleInput')?.value || 'NURA-2 NEET Practice Test',
+          updatedAt: Date.now()
+        });
+      } catch (e) {}
+    }
+
+    function loadPersistedCbtProgress() {
+      return loadStorage(ACTIVE_CBT_PROGRESS_KEY, null);
+    }
+
+    function clearPersistedCbtProgress() {
+      try { localStorage.removeItem(ACTIVE_CBT_PROGRESS_KEY); } catch (e) {}
     }
 
     function switchView(viewName) {
-      ['uploadView', 'cbtView', 'resultView', 'marksGraphView', 'weakTrackerView', 'wrongQsPageView', 'deletedBinView', 'noteBoxSectionView', 'savedSheetsSectionView', 'unmatchedQBoxSectionView'].forEach(id => {
+      if (cbtState.active) {
+        persistActiveCbtProgress();
+      }
+      currentOpenView = viewName || 'upload';
+      try { localStorage.setItem(ACTIVE_VIEW_STATE_KEY, currentOpenView); } catch (e) {}
+      ['uploadView', 'cbtView', 'resultView', 'marksGraphView', 'weakTrackerView', 'wrongQsPageView', 'deletedBinView', 'noteBoxSectionView', 'savedSheetsSectionView', 'unmatchedQBoxSectionView', 'savedResultsSectionView'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
       });
       if (viewName === 'upload') document.getElementById('uploadView').classList.remove('hidden');
-      if (viewName === 'cbt') document.getElementById('cbtView').classList.remove('hidden');
+      if (viewName === 'cbt' && Array.isArray(questions) && questions.length > 0) document.getElementById('cbtView').classList.remove('hidden');
       if (viewName === 'result') {
         document.getElementById('resultView').classList.remove('hidden');
         renderMarksBarGraphInto('resultMarksGraphMount');
@@ -2780,6 +3121,10 @@
       if (viewName === 'savedSheetsSectionView') {
         document.getElementById('savedSheetsSectionView').classList.remove('hidden');
         renderSavedSheetsTopSection();
+      }
+      if (viewName === 'savedResultsSectionView') {
+        document.getElementById('savedResultsSectionView').classList.remove('hidden');
+        renderSavedResultsSection();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -3066,7 +3411,11 @@
         if (totalTargetQs > 0) {
           renderQuestionBank();
           saveFrontPageSessionState();
-          if (lastReport) computeAndRenderResults(false);
+          if (applied > 0) {
+            computeAndRenderResults(false, true);
+          } else if (lastReport) {
+            computeAndRenderResults(false, false);
+          }
         }
         setParseStatus(
           true,
@@ -3180,14 +3529,15 @@
       const keyMapFromText = extractAnswerKeyMapFast(cleanText);
       const finalQuestions = cropKeys.map((qNum, idx) => {
         const cropObj = allCropsByQNum[qNum];
+        const displayNum = qNum || (idx + 1);
         return enrichQuestionObj({
-          id: 'q_' + Date.now() + '_' + qNum,
-          num: qNum,
-          text: `Cropped Question Q${qNum}`,
+          id: 'q_' + Date.now() + '_' + displayNum + '_' + idx,
+          num: displayNum,
+          text: `Cropped Question Q${displayNum}`,
           options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'],
           imageKey: cropObj.imageKey,
           imageDataUrl: cropObj.imageDataUrl,
-          correct: keyMapFromText[qNum] || ''
+          correct: keyMapFromText[displayNum] || ''
         }, idx);
       });
 
@@ -3240,23 +3590,42 @@
         const isKeyOnlyPage = fileLooksLikeKey || isAnswerKeyGridOrPage(pageText, mappedForKeyCheck);
 
         if (enableAutoCrop && !fileLooksLikeKey && !isKeyOnlyPage && !isHintsPage) {
-          const cropScale = 2.5;
+          // Maximum canvas height range (32768px) + safe single canvas limit (16384px) & crisp HD scale
+          const maxCanvasHeight = 32768;
+          const singleCanvasLimit = 16384;
+          const targetHdScale = pdf.numPages > 15 ? 1.85 : 2.15;
+          const maxAllowedScale = Math.min(targetHdScale, maxCanvasHeight / Math.max(1, viewport.height));
+          const cropScale = Math.max(1.5, Number(maxAllowedScale.toFixed(2)));
           const cropVp = page.getViewport({ scale: cropScale });
+          const renderW = Math.min(singleCanvasLimit, Math.ceil(cropVp.width));
+          const renderH = Math.min(singleCanvasLimit, Math.ceil(cropVp.height));
+          const effectiveScale = renderH < cropVp.height
+            ? cropScale * (renderH / cropVp.height)
+            : cropScale;
+
           const cropCanvas = document.createElement('canvas');
-          cropCanvas.width = cropVp.width;
-          cropCanvas.height = cropVp.height;
+          cropCanvas.width = renderW;
+          cropCanvas.height = renderH;
           const cropCtx = cropCanvas.getContext('2d');
           cropCtx.fillStyle = '#ffffff';
           cropCtx.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
-          await page.render({ canvasContext: cropCtx, viewport: cropVp }).promise;
+          cropCtx.imageSmoothingEnabled = true;
+          cropCtx.imageSmoothingQuality = 'high';
+          const renderVp = page.getViewport({ scale: effectiveScale });
+          await page.render({ canvasContext: cropCtx, viewport: renderVp }).promise;
 
-          const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, cropScale, p, nextFallbackQ);
+          const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, effectiveScale, p, nextFallbackQ);
           if (Object.keys(pageCrops).length) {
             await idbPutImagesBatch(pageCrops);
-            Object.assign(cropsByQNum, pageCrops);
-            const nums = Object.keys(pageCrops).map(Number);
-            nextFallbackQ = Math.max(...nums) + 1;
+            Object.entries(pageCrops).forEach(([kNum, cObj]) => {
+              const parsedN = parseInt(kNum, 10);
+              const targetKey = (!cropsByQNum[parsedN] && parsedN >= 1 && parsedN <= 250) ? parsedN : nextFallbackQ;
+              cropsByQNum[targetKey] = cObj;
+              nextFallbackQ = Math.max(nextFallbackQ + 1, targetKey + 1);
+            });
           }
+          cropCanvas.width = 1;
+          cropCanvas.height = 1;
         }
 
         if (!isExtractedPageTextUsable(pageText) && isKeyOnlyPage) {
@@ -3741,6 +4110,11 @@
     function deleteQuestionBoxUploadedChip(chipId) {
       const updated = loadQboxUploadedChips().filter(c => c.id !== chipId);
       saveQboxUploadedChips(updated);
+      renderQuestionBoxUploadedChips();
+    }
+
+    function deleteAllQuestionBoxUploadedChips() {
+      saveQboxUploadedChips([]);
       renderQuestionBoxUploadedChips();
     }
 
@@ -4293,18 +4667,26 @@
     }
 
     function goToFrontPageDirect() {
+      if (!questions.length) {
+        restoreFrontPageSessionState();
+      }
       if (questions.length) {
         saveFrontPageSessionState();
-        renderQuestionBank();
-        renderUnmatchedQBoxSection();
-      } else {
-        restoreFrontPageSessionState();
       }
       switchView('upload');
     }
-
     function startNewTestSession() {
       try { localStorage.removeItem(FRONT_PAGE_SESSION_KEY); } catch (e) {}
+      clearPersistedCbtProgress();
+      if (cbtState.timerInterval) {
+        clearInterval(cbtState.timerInterval);
+        cbtState.timerInterval = null;
+      }
+      cbtState = {
+        active: false, filteredIndices: [], currentPos: 0, subjectFilter: 'All',
+        answers: {}, marked: {}, visited: {}, timeSpent: {},
+        remainingSeconds: 0, totalSeconds: 0, timerInterval: null
+      };
       questions = [];
       activeWrongBankTestId = null;
       const titleInput = document.getElementById('testTitleInput');
@@ -4352,6 +4734,9 @@
                 '<option value="">Not Set<\/option>' +
                 ['(1)', '(2)', '(3)', '(4)', 'A', 'B', 'C', 'D'].map(opt => '<option value="' + opt + '" ' + (q.correct === opt ? 'selected' : '') + '>' + opt + '<\/option>').join('') +
               '<\/select>' +
+              '<button type="button" class="btn-soft" onclick="openQuestionBankZoom(' + idx + ')" style="padding:4px 9px;font-size:10.5px;font-weight:900;" title="Zoom question in 720p / HD">' +
+                '🔍 Zoom' +
+              '<\/button>' +
               '<label for="perQMultiShotInput_' + idx + '" class="btn btn-soft" style="padding:4px 9px;font-size:10.5px;cursor:pointer;" title="Upload complete cropped question screenshot(s)">' +
                 '📷 Upload Q Img' +
               '<\/label>' +
@@ -4473,7 +4858,15 @@
     let bulkKeyFromResults = false;
     function openBulkKeyModal(fromResults = false) {
       bulkKeyFromResults = fromResults;
-      document.getElementById('bulkKeyTextarea').value = questions.map((q, i) => q.correct ? `Q${q.num || (i + 1)} ${q.correct}` : '').filter(Boolean).join(', ');
+      if (Array.isArray(questions) && questions.length) {
+        questions.forEach(q => { q.correct = ''; });
+        renderQuestionBank();
+        saveFrontPageSessionState();
+      }
+      const ta = document.getElementById('bulkKeyTextarea');
+      if (ta) ta.value = '';
+      const kf = document.getElementById('bulkKeyFileInput');
+      if (kf) kf.value = '';
       document.getElementById('bulkKeyOcrStatus').classList.add('hidden');
       document.getElementById('bulkKeyModal').classList.remove('hidden');
     }
@@ -4544,7 +4937,11 @@
         if (k) { q.correct = k; applied++; }
       });
       renderQuestionBank();
-      if (bulkKeyFromResults || !document.getElementById('resultView').classList.contains('hidden')) computeAndRenderResults(false);
+      if (applied > 0) {
+        computeAndRenderResults(false, true);
+      } else if (bulkKeyFromResults || !document.getElementById('resultView').classList.contains('hidden')) {
+        computeAndRenderResults(false, false);
+      }
       return applied;
     }
 
@@ -4562,7 +4959,8 @@
             ...lightQ,
             num: item.q.num || (item.idx + 1),
             lastUserAns: item.userAns,
-            lastTimeSec: item.tSec
+            lastTimeSec: item.tSec || 0,
+            perQTimeSec: item.tSec || 0
           };
         });
       const bank = loadStorage(STORAGE_KEYS.WRONG_QS_BANK, []);
@@ -4615,9 +5013,10 @@
                     '<span class="pill pill-amber">Ch: ' + escapeHtml(q.chapter) + '<\/span>' +
                     '<span style="font-size:11px;font-weight:700;color:#334155;">Topic: ' + escapeHtml(q.topic) + ' · Sub-Topic: ' + escapeHtml(q.subTopic) + '<\/span>' +
                   '<\/div>' +
-                  '<div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;">' +
+                  '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:11px;font-weight:800;">' +
                     '<span style="color:var(--danger);">Your: ' + escapeHtml(formatAnswerChoiceDisplay(rawQ.lastUserAns)) + '<\/span>' +
                     '<span style="color:var(--success);">Correct: ' + escapeHtml(formatAnswerChoiceDisplay(q.correct)) + '<\/span>' +
+                    '<span class="pill pill-amber">Per-Q Time: ' + (rawQ.perQTimeSec !== undefined ? rawQ.perQTimeSec : (rawQ.lastTimeSec || 0)) + 's<\/span>' +
                     '<button type="button" class="btn-soft" onclick="reattemptSingleWrongQuestion(\'' + testEntry.id + '\', ' + qIdx + ')" style="padding:3px 8px;font-size:11px;">Solve Q' + q.num + '<\/button>' +
                     '<button type="button" class="btn-danger-soft" onclick="deleteSingleWrongQuestion(\'' + testEntry.id + '\', ' + qIdx + ')" title="Delete this question" style="padding:3px 7px;font-size:11px;">🗑<\/button>' +
                   '<\/div>' +
@@ -4719,6 +5118,7 @@
         document.getElementById('cbtQTimer').textContent = `${cbtState.timeSpent[curQIdx]}s`;
       }
       cbtState.remainingSeconds--;
+      persistActiveCbtProgress();
       if (cbtState.remainingSeconds <= 0) { submitCBTExam(); return; }
       const m = Math.floor(cbtState.remainingSeconds / 60), s = cbtState.remainingSeconds % 60;
       document.getElementById('cbtTimerDisplay').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
@@ -4782,23 +5182,23 @@
       }
     }
 
-    function selectCbtOption(opt) { cbtState.answers[cbtState.filteredIndices[cbtState.currentPos]] = opt; renderCbtQuestion(); renderCbtPalette(); }
+    function selectCbtOption(opt) { cbtState.answers[cbtState.filteredIndices[cbtState.currentPos]] = opt; persistActiveCbtProgress(); renderCbtQuestion(); renderCbtPalette(); }
     function cbtClearResponse() {
       const qIdx = cbtState.filteredIndices[cbtState.currentPos];
-      delete cbtState.answers[qIdx]; delete cbtState.marked[qIdx]; renderCbtQuestion(); renderCbtPalette();
+      delete cbtState.answers[qIdx]; delete cbtState.marked[qIdx]; persistActiveCbtProgress(); renderCbtQuestion(); renderCbtPalette();
     }
     function cbtSaveAndNext() {
       delete cbtState.marked[cbtState.filteredIndices[cbtState.currentPos]];
       if (cbtState.currentPos < cbtState.filteredIndices.length - 1) cbtState.currentPos++;
-      renderCbtQuestion(); renderCbtPalette();
+      persistActiveCbtProgress(); renderCbtQuestion(); renderCbtPalette();
     }
     function cbtMarkForReviewAndNext() {
       cbtState.marked[cbtState.filteredIndices[cbtState.currentPos]] = true;
       if (cbtState.currentPos < cbtState.filteredIndices.length - 1) cbtState.currentPos++;
-      renderCbtQuestion(); renderCbtPalette();
+      persistActiveCbtProgress(); renderCbtQuestion(); renderCbtPalette();
     }
-    function cbtPrevQuestion() { if (cbtState.currentPos > 0) { cbtState.currentPos--; renderCbtQuestion(); renderCbtPalette(); } }
-    function jumpToCbtPos(pos) { cbtState.currentPos = pos; renderCbtQuestion(); renderCbtPalette(); }
+    function cbtPrevQuestion() { if (cbtState.currentPos > 0) { cbtState.currentPos--; persistActiveCbtProgress(); renderCbtQuestion(); renderCbtPalette(); } }
+    function jumpToCbtPos(pos) { cbtState.currentPos = pos; persistActiveCbtProgress(); renderCbtQuestion(); renderCbtPalette(); }
 
     function renderCbtPalette() {
       let ans = 0, notAns = 0, notVis = 0, marked = 0;
@@ -4830,15 +5230,22 @@
     function confirmAndSubmitExam() { submitCBTExam(); }
     function submitCBTExam() {
       cbtState.active = false;
-      if (cbtState.timerInterval) clearInterval(cbtState.timerInterval);
-      switchView('result');
+      if (cbtState.timerInterval) {
+        clearInterval(cbtState.timerInterval);
+        cbtState.timerInterval = null;
+      }
+      clearPersistedCbtProgress();
       computeAndRenderResults(true);
+      saveFrontPageSessionState();
+      switchView('result');
     }
 
     let activeGraphEntryId = null;
-    function recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, timestampStr, isNewAttempt = true) {
+    function recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, timestampStr, isNewAttempt = true, totalTimeSec = 0) {
       const entries = loadStorage(STORAGE_KEYS.MARKS_GRAPH, []);
       const pct = maxMarks > 0 ? Math.round((netScore / maxMarks) * 100) : 0;
+      const spentSec = Number(totalTimeSec) || 0;
+      const spentTimeStr = `${Math.floor(spentSec / 60)}m ${spentSec % 60}s`;
       if (!isNewAttempt && activeGraphEntryId) {
         const existingIdx = entries.findIndex(e => e.id === activeGraphEntryId);
         if (existingIdx >= 0) {
@@ -4847,6 +5254,8 @@
           entries[existingIdx].maxMarks = maxMarks;
           entries[existingIdx].pct = pct;
           entries[existingIdx].accuracy = accuracy;
+          entries[existingIdx].totalTimeSec = spentSec;
+          entries[existingIdx].spentTimeStr = spentTimeStr;
           saveStorage(STORAGE_KEYS.MARKS_GRAPH, entries);
           return;
         }
@@ -4860,6 +5269,8 @@
         maxMarks,
         pct,
         accuracy,
+        totalTimeSec: spentSec,
+        spentTimeStr,
         date: timestampStr || new Date().toLocaleString()
       });
       saveStorage(STORAGE_KEYS.MARKS_GRAPH, entries.slice(-60));
@@ -4883,49 +5294,68 @@
         { grad: 'linear-gradient(180deg, #06b6d4 0%, #0e7490 100%)', pill: '#0e7490' }
       ];
 
-      const rawMax = Math.max(100, ...entries.map(e => Math.max(e.maxMarks || 0, e.netScore || 0)));
-      const step = rawMax <= 200 ? 50 : 100;
-      const yMax = Math.ceil(rawMax / step) * step;
-      const ticks = [yMax, Math.round(yMax * 0.75), Math.round(yMax * 0.5), Math.round(yMax * 0.25), 0];
+      const maxVal = Math.max(20, ...entries.map(e => Math.max(Number(e.maxMarks) || 0, Math.abs(Number(e.netScore) || 0))));
+      const step = maxVal <= 100 ? 20 : (maxVal <= 200 ? 50 : 100);
+      const yMax = Math.ceil(maxVal / step) * step;
+
+      // Y-axis starts strictly at 0 at the bottom axis line and goes up to yMax
+      const ticks = [
+        yMax,
+        Math.round(yMax * 0.75),
+        Math.round(yMax * 0.5),
+        Math.round(yMax * 0.25),
+        0
+      ];
 
       mount.innerHTML =
         '<div class="graph-outer-card">' +
           '<div class="graph-legend-bar">' +
-            '<span style="color:#0f172a;">📊 Performance Chart: <span style="color:#0f766e;">Y-Axis = Obtained Marks<\/span> · <span style="color:#1d4ed8;">X-Axis = Each Test<\/span><\/span>' +
+            '<span style="color:#0f172a;">📊 Performance Chart: <span style="color:#0f766e;">Y-Axis = Obtained Marks (Starts from 0)<\/span> · <span style="color:#1d4ed8;">X-Axis = Each Test<\/span><\/span>' +
             '<div class="graph-legend-items">' +
-              '<span><i class="legend-dot" style="background:#10b981;"><\/i>Test 1<\/span>' +
-              '<span><i class="legend-dot" style="background:#3b82f6;"><\/i>Test 2<\/span>' +
-              '<span><i class="legend-dot" style="background:#8b5cf6;"><\/i>Test 3<\/span>' +
-              '<span><i class="legend-dot" style="background:#f59e0b;"><\/i>Test 4+<\/span>' +
+              '<span><i class="legend-dot" style="background:#10b981;"><\/i>Obtained Marks (Above 0)<\/span>' +
+              '<span><i class="legend-dot" style="background:#64748b;"><\/i>Zero (0 Line)<\/span>' +
             '<\/div>' +
           '<\/div>' +
           '<div class="graph-shell">' +
             '<div class="y-axis-title-wrap"><span class="y-axis-title">Y-Axis: Obtained Marks<\/span><\/div>' +
-            '<div class="y-axis-ticks">' +
-              ticks.map(t => '<span class="y-tick-lbl">' + t + '<\/span>').join('') +
+            '<div class="y-axis-ticks" style="height:240px;">' +
+              ticks.map(t => '<span class="y-tick-lbl" style="' + (t === 0 ? 'color:#0f172a;font-weight:900;' : '') + '">' + String(t) + '<\/span>').join('') +
             '<\/div>' +
             '<div class="plot-area">' +
-              '<div class="gridlines-layer">' +
-                ticks.map(() => '<div class="gridline-row"><\/div>').join('') +
+              '<div class="gridlines-layer" style="height:240px;">' +
+                ticks.map(t => '<div class="gridline-row" style="' + (t === 0 ? 'border-top:2.5px solid #0f172a;' : '') + '"><\/div>').join('') +
               '<\/div>' +
-              '<div class="bars-layer">' +
+              '<div class="bars-layer" style="height:240px;align-items:flex-end;">' +
                 entries.map((e, idx) => {
-                  const pal = barPalettes[idx % barPalettes.length];
-                  const clampedScore = Math.max(0, e.netScore);
-                  const heightPct = Math.min(92, Math.max(4, Math.round((clampedScore / yMax) * 100)));
-                  const scorePct = e.maxMarks > 0 ? Math.round((e.netScore / e.maxMarks) * 100) : 0;
-                  return '<div class="bar-col" title="' + escapeHtml(e.title) + ': ' + e.netScore + ' / ' + e.maxMarks + ' (' + scorePct + '% · ' + e.date + ')">' +
-                    '<span class="bar-val-pill" style="background:' + pal.pill + ';">' + e.netScore + '/' + e.maxMarks + '<\/span>' +
+                  const rawScore = Number(e.netScore) || 0;
+                  const isNeg = rawScore < 0;
+                  const isZero = rawScore === 0;
+                  const pal = isNeg
+                    ? { grad: 'linear-gradient(180deg, #fb7185 0%, #e11d48 100%)', pill: '#e11d48' }
+                    : (isZero
+                      ? { grad: 'linear-gradient(180deg, #94a3b8 0%, #64748b 100%)', pill: '#475569' }
+                      : barPalettes[idx % barPalettes.length]);
+                  const scorePct = e.maxMarks > 0 ? Math.round((rawScore / e.maxMarks) * 100) : 0;
+                  const scoreLabel = String(rawScore) + '/' + e.maxMarks;
+
+                  // All bars start from the 0 bottom line and grow upward proportionally
+                  const heightPct = rawScore <= 0
+                    ? 2
+                    : Math.min(92, Math.max(8, Math.round((rawScore / yMax) * 100)));
+
+                  return '<div class="bar-col" style="justify-content:flex-end;" title="' + escapeHtml(e.title) + ': ' + scoreLabel + ' (' + scorePct + '% · ' + e.date + ')">' +
+                    '<span class="bar-val-pill" style="background:' + pal.pill + ';">' + scoreLabel + '<\/span>' +
                     '<div class="bar-rect" style="height:' + heightPct + '%;background:' + pal.grad + ';">' +
                       '<button type="button" class="bar-del-btn" onclick="deleteMarksGraphEntry(' + idx + ')" title="Delete this bar from graph">✕<\/button>' +
-                      (heightPct >= 18 ? '<span class="bar-pct-inside">' + scorePct + '%<\/span>' : '') +
+                      (heightPct >= 18 && rawScore > 0 ? '<span class="bar-pct-inside">' + scorePct + '%<\/span>' : '') +
                     '<\/div>' +
                   '<\/div>';
                 }).join('') +
               '<\/div>' +
               '<div class="x-axis-labels">' +
                 entries.map((e, idx) => {
-                  const pal = barPalettes[idx % barPalettes.length];
+                  const rawScore = Number(e.netScore) || 0;
+                  const pal = rawScore < 0 ? { pill: '#e11d48' } : (rawScore === 0 ? { pill: '#475569' } : barPalettes[idx % barPalettes.length]);
                   return '<div class="x-lbl-cell" title="' + escapeHtml(e.title) + '">' +
                     '<span class="x-lbl-tag" style="background:' + pal.pill + ';">Test ' + (idx + 1) + '<\/span>' +
                     '<span class="x-lbl-name">' + escapeHtml(e.title) + '<\/span>' +
@@ -4944,28 +5374,36 @@
       if (!entries.length) {
         document.getElementById('mgLatestMarks').textContent = '0 / 0';
         document.getElementById('mgHighestMarks').textContent = '0 / 0';
-        document.getElementById('marksGraphTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);">No tests recorded yet.<\/td><\/tr>';
+        const spentEl = document.getElementById('mgTotalSpentTime');
+        if (spentEl) spentEl.textContent = '0m 0s';
+        document.getElementById('marksGraphTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);">No tests recorded yet.<\/td><\/tr>';
         renderMarksBarGraphInto('dedicatedMarksGraphMount');
         return;
       }
       const latest = entries[entries.length - 1];
       const highest = entries.reduce((best, cur) => (cur.netScore > best.netScore ? cur : best), entries[0]);
+      const sumSpentSec = entries.reduce((acc, cur) => acc + (Number(cur.totalTimeSec) || 0), 0);
       document.getElementById('mgLatestMarks').textContent = `${latest.netScore} / ${latest.maxMarks}`;
       document.getElementById('mgHighestMarks').textContent = `${highest.netScore} / ${highest.maxMarks}`;
+      const spentEl = document.getElementById('mgTotalSpentTime');
+      if (spentEl) spentEl.textContent = `${Math.floor(sumSpentSec / 60)}m ${sumSpentSec % 60}s`;
       renderMarksBarGraphInto('dedicatedMarksGraphMount');
-      document.getElementById('marksGraphTableBody').innerHTML = entries.map((e, i) =>
-        '<tr>' +
+      document.getElementById('marksGraphTableBody').innerHTML = entries.map((e, i) => {
+        const sSec = Number(e.totalTimeSec) || 0;
+        const rowSpentStr = e.spentTimeStr || `${Math.floor(sSec / 60)}m ${sSec % 60}s`;
+        return '<tr>' +
           '<td><strong>T' + (i + 1) + '<\/strong><\/td>' +
           '<td>' + escapeHtml(e.title) + '<\/td>' +
           '<td style="font-weight:900;color:var(--primary-dark);">' + e.netScore + ' / ' + e.maxMarks + '<\/td>' +
           '<td>' + e.pct + '%<\/td>' +
           '<td>' + e.accuracy + '%<\/td>' +
+          '<td style="font-weight:800;color:#78350f;">' + escapeHtml(rowSpentStr) + '<\/td>' +
           '<td style="color:var(--muted);">' + escapeHtml(e.date) + ' <button type="button" class="btn-danger-soft" onclick="deleteMarksGraphEntry(' + i + ')" style="padding:2px 6px;font-size:10px;margin-left:6px;">🗑<\/button><\/td>' +
-        '<\/tr>'
-      ).join('');
+        '<\/tr>';
+      }).join('');
     }
 
-    function computeAndRenderResults(saveToHistory = true) {
+    function computeAndRenderResults(saveToHistory = true, saveToResultSection = false) {
       const posMark = parseFloat(document.getElementById('positiveMarkInput').value) || 4;
       const negMark = parseFloat(document.getElementById('negativeMarkInput').value) || -1;
       const testTitle = document.getElementById('testTitleInput').value.trim() || 'NURA-2 Practice Test';
@@ -5003,15 +5441,21 @@
         const cNorm = normalizeAnswerChoice(corrAns);
 
         let status = 'skipped', bucket = 'moderate', marksAwarded = 0;
-        if (!uNorm) { skipped++; sObj.skipped++; tObj.skipped++; }
-        else if (cNorm && uNorm === cNorm) {
+        if (!cNorm) {
+          // Answer key not uploaded/set yet -> do not mark as correct or incorrect
+          if (!uNorm) { skipped++; sObj.skipped++; tObj.skipped++; }
+          status = 'ungraded';
+        } else if (!uNorm) {
+          skipped++; sObj.skipped++; tObj.skipped++;
+        } else if (uNorm === cNorm) {
           correct++; sObj.correct++; tObj.correct++; marksAwarded = posMark; sObj.score += posMark; status = 'correct';
           bucket = (isMarked || tSec > 90) ? 'moderate' : 'strong';
-        } else if (cNorm && uNorm !== cNorm) {
+        } else {
           incorrect++; sObj.wrong++; tObj.wrong++; tObj.wrongQs.push(q.num || (idx + 1)); marksAwarded = negMark; sObj.score += negMark; status = 'incorrect'; bucket = 'weak';
-        } else { skipped++; sObj.skipped++; tObj.skipped++; status = 'ungraded'; }
+        }
 
-        evaluatedQuestions.push({ idx, q, userAns, corrAns, tSec, status, bucket, marksAwarded });
+        const qWithTime = { ...q, perQTimeSec: tSec };
+        evaluatedQuestions.push({ idx, q: qWithTime, userAns, corrAns, tSec, perQTimeSec: tSec, status, bucket, marksAwarded });
       });
 
       document.getElementById('missingKeyAlertBanner').classList.toggle('hidden', missingKeys === 0);
@@ -5067,9 +5511,38 @@
 
       syncWeakTopicsToTracker(topicMap, testTitle);
       saveTestWrongQuestionsToBank(testTitle, evaluatedQuestions);
-      lastReport = { id: 'rep_' + Date.now(), title: testTitle, date: tsStr, netScore, maxMarks, accuracy, evaluatedQuestions, weakTopics };
+      if (incorrect > 0) {
+        setTimeout(() => { analyzeAllWrongQuestionsTaxonomy(); }, 120);
+      }
+      const totalTimeStr = `${Math.floor(totalTime / 60)}m ${totalTime % 60}s`;
+      const avgTimeSec = questions.length ? Math.round(totalTime / questions.length) : 0;
+      lastReport = {
+        id: 'rep_' + Date.now(),
+        title: testTitle,
+        date: tsStr,
+        netScore,
+        maxMarks,
+        scorePct,
+        accuracy,
+        correct,
+        incorrect,
+        skipped,
+        posMark,
+        negMark,
+        totalTime,
+        totalTimeStr,
+        avgTimeSec,
+        subjStats,
+        evaluatedQuestions,
+        weakTopics,
+        moderateTopics,
+        strongTopics
+      };
+      if (saveToResultSection) {
+        saveCompleteTestResultBox(lastReport, true);
+      }
 
-      recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, tsStr, saveToHistory);
+      recordMarksGraphEntry(testTitle, netScore, maxMarks, accuracy, tsStr, saveToHistory, totalTime);
       if (saveToHistory) {
         const hist = loadStorage(STORAGE_KEYS.HISTORY, []);
         const lightSnapshotQs = questions.map(q => stripInlineImageForLocalStorage(q));
@@ -5150,13 +5623,311 @@
             '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;font-weight:700;">' +
               '<span>Your: <strong style="color:' + (item.status === 'correct' ? 'var(--success)' : 'var(--danger)') + ';">' + escapeHtml(formatAnswerChoiceDisplay(item.userAns)) + '<\/strong><\/span>' +
               '<span style="display:inline-flex;align-items:center;gap:3px;">Key: ' + ['(1)', '(2)', '(3)', '(4)'].map(opt => '<button type="button" onclick="overrideResultQuestionKey(' + item.idx + ', \'' + opt + '\')" style="padding:2px 6px;border-radius:6px;font-size:10px;background:' + (normalizeAnswerChoice(item.corrAns) === normalizeAnswerChoice(opt) ? 'var(--success)' : '#f1f5f9') + ';color:' + (normalizeAnswerChoice(item.corrAns) === normalizeAnswerChoice(opt) ? '#fff' : '#334155') + ';">' + opt + '<\/button>').join('') + '<\/span>' +
-              '<span>Time: <strong>' + item.tSec + 's<\/strong><\/span>' +
+              '<span class="pill pill-amber">Per-Q Time: ' + item.tSec + 's<\/span>' +
+              '<span style="color:#475569;font-size:11px;">Complete Test Time: <strong>' + (lastReport.totalTimeStr || '0m 0s') + '<\/strong><\/span>' +
             '<\/div>' +
           '<\/div>' +
           (cropUrl ? ('<div class="q-crop-frame" style="margin-top:6px;"><img src="' + cropUrl + '" alt="Q' + (item.q.num || (item.idx + 1)) + '" /><\/div>') : ('<div style="font-size:13px;font-weight:600;">' + escapeHtml(item.q.text) + '<\/div>')) +
         '<\/div>';
       }).join('');
     }
+    function saveCompleteTestResultBox(repObj, isNewSubmission = true) {
+      if (!repObj) return;
+      const list = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+      const serializableEval = (repObj.evaluatedQuestions || []).map(ev => ({
+        idx: ev.idx,
+        q: stripInlineImageForLocalStorage(ev.q),
+        userAns: ev.userAns,
+        corrAns: ev.corrAns,
+        tSec: ev.tSec,
+        status: ev.status,
+        bucket: ev.bucket,
+        marksAwarded: ev.marksAwarded
+      }));
+
+      const entry = {
+        id: repObj.id,
+        title: repObj.title,
+        date: repObj.date,
+        netScore: repObj.netScore,
+        maxMarks: repObj.maxMarks,
+        scorePct: repObj.scorePct,
+        accuracy: repObj.accuracy,
+        correct: repObj.correct,
+        incorrect: repObj.incorrect,
+        skipped: repObj.skipped,
+        posMark: repObj.posMark,
+        negMark: repObj.negMark,
+        totalTime: repObj.totalTime,
+        totalTimeStr: repObj.totalTimeStr,
+        avgTimeSec: repObj.avgTimeSec,
+        subjStats: repObj.subjStats,
+        weakTopics: repObj.weakTopics || [],
+        moderateTopics: repObj.moderateTopics || [],
+        strongTopics: repObj.strongTopics || [],
+        evaluatedQuestions: serializableEval
+      };
+
+      if (!isNewSubmission && list.length && list[0].title === entry.title) {
+        entry.id = list[0].id;
+        list[0] = entry;
+      } else {
+        list.unshift(entry);
+      }
+      saveStorage(STORAGE_KEYS.SAVED_RESULTS, list.slice(0, 30));
+      updateHeaderBadges();
+      renderSavedResultsSection();
+    }
+
+    function deleteSingleSavedResultBox(resId) {
+      const list = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+      const updated = list.filter(r => r.id !== resId);
+      saveStorage(STORAGE_KEYS.SAVED_RESULTS, updated);
+      updateHeaderBadges();
+      renderSavedResultsSection();
+    }
+
+    function clearAllSavedResultBoxes() {
+      saveStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+      updateHeaderBadges();
+      renderSavedResultsSection();
+    }
+
+    function reattemptSavedResultWeakOrModerate(resId, mode) {
+      const list = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+      const found = list.find(r => r.id === resId);
+      if (!found || !Array.isArray(found.evaluatedQuestions) || !found.evaluatedQuestions.length) return;
+      const subset = found.evaluatedQuestions
+        .filter(it => mode === 'weak' ? it.bucket === 'weak' : (it.bucket === 'weak' || it.bucket === 'moderate'))
+        .map(it => it.q);
+      if (!subset.length) {
+        showQuickToast(mode === 'weak' ? 'Is test mein koi Weak question nahi hai.' : 'Is test mein koi Weak/Moderate question nahi hai.', true);
+        return;
+      }
+      questions = subset.map((q, idx) => enrichQuestionObj(q, idx));
+      const titleInp = document.getElementById('testTitleInput');
+      if (titleInp) titleInp.value = `${found.title} (${mode === 'weak' ? 'Weak Only' : 'Weak + Moderate'})`;
+      if (found.posMark !== undefined) document.getElementById('positiveMarkInput').value = found.posMark;
+      if (found.negMark !== undefined) document.getElementById('negativeMarkInput').value = found.negMark;
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      startCBTExam(false);
+    }
+
+    function reattemptFullResultTest(resId) {
+      let targetRep = null;
+      if (resId === 'current' && lastReport && Array.isArray(lastReport.evaluatedQuestions) && lastReport.evaluatedQuestions.length) {
+        targetRep = {
+          title: lastReport.title,
+          posMark: lastReport.posMark,
+          negMark: lastReport.negMark,
+          questionsSnapshot: lastReport.evaluatedQuestions.map(ev => ev.q)
+        };
+      } else {
+        const list = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+        const found = list.find(r => r.id === resId);
+        if (found && Array.isArray(found.evaluatedQuestions) && found.evaluatedQuestions.length) {
+          targetRep = {
+            title: found.title,
+            posMark: found.posMark,
+            negMark: found.negMark,
+            questionsSnapshot: found.evaluatedQuestions.map(ev => ev.q)
+          };
+        }
+      }
+      if (!targetRep || !targetRep.questionsSnapshot || !targetRep.questionsSnapshot.length) return;
+      questions = targetRep.questionsSnapshot.map((q, idx) => enrichQuestionObj(q, idx));
+      const titleInp = document.getElementById('testTitleInput');
+      if (titleInp && targetRep.title) titleInp.value = targetRep.title;
+      if (targetRep.posMark !== undefined) document.getElementById('positiveMarkInput').value = targetRep.posMark;
+      if (targetRep.negMark !== undefined) document.getElementById('negativeMarkInput').value = targetRep.negMark;
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      startCBTExam(false);
+    }
+
+    function filterSingleSavedResultBox(resId, bucketFilter) {
+      const box = document.getElementById('savedResBox_' + resId);
+      if (!box) return;
+      box.querySelectorAll('.sr-filter-btn').forEach(btn => {
+        btn.className = 'sr-filter-btn ' + (btn.dataset.srFilter === bucketFilter ? 'btn-dark' : 'btn-outline');
+      });
+      box.querySelectorAll('.sr-q-item').forEach(row => {
+        const b = row.dataset.bucket || 'all';
+        row.style.display = (bucketFilter === 'all' || b === bucketFilter) ? 'block' : 'none';
+      });
+    }
+
+    function renderSavedResultsSection() {
+      const container = document.getElementById('savedResultsBoxesContainer');
+      const badge = document.getElementById('savedResultsSectionBadge');
+      const list = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+      if (badge) badge.textContent = list.length;
+      if (!container) return;
+
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center;padding:34px 16px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;">' +
+          '<div style="font-size:14px;font-weight:800;color:#475569;">No Submitted Test Results Yet<\/div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-top:4px;">Jab bhi aap koi test submit karenge, uska complete as-it-is result yahan alag deletable box mein show hoga.<\/div>' +
+          '<\/div>';
+        return;
+      }
+
+      container.innerHTML = list.map((rep, rIdx) => {
+        const netLabel = (rep.netScore > 0 ? '+' + rep.netScore : String(rep.netScore)) + ' / ' + rep.maxMarks;
+        const posPts = (rep.correct || 0) * (rep.posMark || 4);
+        const negPts = (rep.incorrect || 0) * (rep.negMark || -1);
+        const compTime = rep.totalTimeStr || `${Math.floor((rep.totalTime || 0) / 60)}m ${(rep.totalTime || 0) % 60}s`;
+        const avgTime = rep.avgTimeSec !== undefined ? rep.avgTimeSec : 0;
+
+        const subjRowsHtml = Object.entries(rep.subjStats || {})
+          .filter(([, st]) => st && st.total > 0)
+          .map(([sub, st]) => {
+            const att = st.correct + st.wrong;
+            const acc = att > 0 ? Math.round((st.correct / att) * 100) : 0;
+            const sScore = st.score > 0 ? '+' + st.score : String(st.score);
+            return '<tr>' +
+              '<td style="font-weight:900;">' + escapeHtml(sub) + '<\/td>' +
+              '<td>' + st.total + '<\/td>' +
+              '<td style="color:var(--success);">' + st.correct + '<\/td>' +
+              '<td style="color:var(--danger);">' + st.wrong + '<\/td>' +
+              '<td style="color:var(--muted);">' + st.skipped + '<\/td>' +
+              '<td style="font-weight:900;color:var(--primary-dark);">' + sScore + ' / ' + (st.total * (rep.posMark || 4)) + '<\/td>' +
+              '<td>' + acc + '%<\/td>' +
+              '<td style="color:var(--muted);">' + Math.floor(st.time / 60) + 'm ' + (st.time % 60) + 's<\/td>' +
+            '<\/tr>';
+          }).join('');
+
+        const weakHtml = (rep.weakTopics && rep.weakTopics.length) ? rep.weakTopics.map(t =>
+          '<div style="padding:10px;border-radius:10px;background:var(--danger-soft);border:1px solid var(--danger-border);font-size:11.5px;line-height:1.5;">' +
+            '<div style="display:flex;justify-content:space-between;font-weight:900;color:#881337;"><span>' + escapeHtml(t.subTopic) + '<\/span><span>' + t.accuracy + '% Acc<\/span><\/div>' +
+            '<div style="font-size:11px;color:#9f1239;margin-top:2px;"><strong>Chapter:<\/strong> ' + escapeHtml(t.chapter) + ' · <strong>Topic:<\/strong> ' + escapeHtml(t.topic) + '<\/div>' +
+            '<div style="font-size:11px;color:#be123c;margin-top:2px;">' + escapeHtml(t.subject) + ' · Wrong: ' + (t.wrongQs || []).map(n => 'Q' + n).join(', ') + '<\/div>' +
+          '<\/div>'
+        ).join('') : '<div style="font-size:11.5px;color:var(--muted);font-style:italic;">No weak topics in this test.<\/div>';
+
+        const modHtml = (rep.moderateTopics && rep.moderateTopics.length) ? rep.moderateTopics.map(t =>
+          '<div style="padding:9px;border-radius:10px;background:var(--warn-soft);border:1px solid var(--warn-border);font-size:11.5px;">' +
+            '<div style="display:flex;justify-content:space-between;font-weight:900;color:#78350f;"><span>' + escapeHtml(t.subTopic) + '<\/span><span>' + t.accuracy + '% Acc<\/span><\/div>' +
+            '<div style="font-size:10.5px;color:#92400e;margin-top:2px;">' + escapeHtml(t.subject) + ' · Ch: ' + escapeHtml(t.chapter) + ' · Avg ' + t.avgTime + 's<\/div>' +
+          '<\/div>'
+        ).join('') : '<div style="font-size:11.5px;color:var(--muted);font-style:italic;">No moderate topics in this test.<\/div>';
+
+        const strongHtml = (rep.strongTopics && rep.strongTopics.length) ? rep.strongTopics.map(t =>
+          '<div style="padding:9px;border-radius:10px;background:var(--success-soft);border:1px solid var(--success-border);font-size:11.5px;">' +
+            '<div style="display:flex;justify-content:space-between;font-weight:900;color:#064e3b;"><span>' + escapeHtml(t.subTopic) + '<\/span><span>' + t.accuracy + '% Acc<\/span><\/div>' +
+            '<div style="font-size:10.5px;color:#047857;margin-top:2px;">' + escapeHtml(t.subject) + ' · Ch: ' + escapeHtml(t.chapter) + ' (' + t.avgTime + 's/Q)<\/div>' +
+          '<\/div>'
+        ).join('') : '<div style="font-size:11.5px;color:var(--muted);font-style:italic;">No strong topics flagged yet.<\/div>';
+
+        const qReviewHtml = (rep.evaluatedQuestions || []).map((item, qPos) => {
+          const q = enrichQuestionObj(item.q, qPos);
+          const pillCls = item.bucket === 'weak' ? 'pill-rose' : (item.bucket === 'strong' ? 'pill-green' : 'pill-amber');
+          const cropUrl = getQuestionImageUrl(q);
+          return '<div class="sr-q-item" data-bucket="' + item.bucket + '" style="border:1px solid var(--border);border-radius:12px;padding:11px;background:#ffffff;margin-bottom:8px;">' +
+            '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">' +
+              '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+                '<span style="background:#0f172a;color:#fff;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:900;">Q' + (q.num || (item.idx + 1)) + '<\/span>' +
+                '<span style="font-size:11.5px;font-weight:800;color:var(--primary-dark);">' + escapeHtml(q.subject) + ' · Ch: ' + escapeHtml(q.chapter || '') + ' · Topic: ' + escapeHtml(q.topic) + ' · Sub-Topic: ' + escapeHtml(q.subTopic || '') + '<\/span>' +
+                '<span class="pill ' + pillCls + '" style="text-transform:uppercase;">' + item.bucket + '<\/span>' +
+              '<\/div>' +
+              '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:11.5px;font-weight:700;">' +
+                '<span>Your: <strong style="color:' + (item.status === 'correct' ? 'var(--success)' : 'var(--danger)') + ';">' + escapeHtml(formatAnswerChoiceDisplay(item.userAns)) + '<\/strong><\/span>' +
+                '<span>Key: <strong style="color:var(--success);">' + escapeHtml(formatAnswerChoiceDisplay(item.corrAns)) + '<\/strong><\/span>' +
+                '<span class="pill pill-amber">Per-Q Time: ' + (item.tSec || 0) + 's<\/span>' +
+                '<span style="color:#475569;font-size:11px;">Complete Time: <strong>' + escapeHtml(compTime) + '<\/strong><\/span>' +
+              '<\/div>' +
+            '<\/div>' +
+            (cropUrl
+              ? '<div class="q-crop-frame" style="margin-top:6px;"><img src="' + cropUrl + '" alt="Q' + (q.num || (item.idx + 1)) + '" /><\/div>'
+              : '<div style="font-size:12.5px;font-weight:600;">' + escapeHtml(q.text || '') + '<\/div>') +
+          '<\/div>';
+        }).join('');
+
+        return '<div id="savedResBox_' + rep.id + '" style="border:2px solid #0d9488;border-radius:18px;padding:18px;background:#ffffff;box-shadow:0 6px 20px rgba(13,148,136,0.10);display:flex;flex-direction:column;gap:14px;">' +
+          '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1.5px solid #e2e8f0;">' +
+            '<div>' +
+              '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+                '<span style="background:#0d9488;color:#fff;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:900;">Result #' + (list.length - rIdx) + '<\/span>' +
+                '<span class="pill pill-teal">Complete Performance Report<\/span>' +
+              '<\/div>' +
+              '<h3 style="margin:5px 0 2px;font-size:18px;font-weight:900;color:#0f172a;">' + escapeHtml(rep.title) + '<\/h3>' +
+              '<div style="font-size:11.5px;color:var(--muted);">Submitted: ' + escapeHtml(rep.date) + ' · <strong>Complete Time Taken: ' + escapeHtml(compTime) + '<\/strong> (Avg ' + avgTime + 's / Q)<\/div>' +
+            '<\/div>' +
+            '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">' +
+              '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">' +
+                '<button type="button" class="btn-danger" onclick="reattemptSavedResultWeakOrModerate(\'' + rep.id + '\', \'weak\')" style="padding:6px 11px;font-size:11.5px;font-weight:900;border-radius:999px;">Re-Attempt Weak Only<\/button>' +
+                '<button type="button" class="btn-warn" onclick="reattemptSavedResultWeakOrModerate(\'' + rep.id + '\', \'weak_mod\')" style="padding:6px 11px;font-size:11.5px;font-weight:900;border-radius:999px;">Re-Attempt Weak + Moderate<\/button>' +
+              '<\/div>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
+                '<button type="button" onclick="reattemptFullResultTest(\'' + rep.id + '\')" style="background:linear-gradient(135deg,#059669 0%,#0d9488 100%);color:#ffffff;border:1.5px solid #047857;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:900;box-shadow:0 4px 12px rgba(5,150,105,0.28);cursor:pointer;">▶ Re-Attempt Test<\/button>' +
+                '<button type="button" class="btn-warn" onclick="switchView(\'wrongQsPage\')" style="padding:7px 12px;font-size:12px;font-weight:900;border-radius:10px;">View Wrong Questions<\/button>' +
+                '<button type="button" class="btn-danger-soft" onclick="switchView(\'weakTracker\')" style="padding:7px 12px;font-size:12px;font-weight:900;border-radius:10px;">Weak &amp; Master Topic<\/button>' +
+                '<button type="button" class="btn-danger-soft" onclick="deleteSingleSavedResultBox(\'' + rep.id + '\')" style="padding:7px 12px;font-size:12px;font-weight:900;">🗑 Delete This Result<\/button>' +
+              '<\/div>' +
+            '<\/div>' +
+          '<\/div>' +
+
+          '<div class="grid-4">' +
+            '<div style="background:var(--primary-soft);border:1px solid #99f6e4;border-radius:12px;padding:11px;">' +
+              '<div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--primary-dark);">Net Score<\/div>' +
+              '<div style="font-size:20px;font-weight:900;color:' + (rep.netScore < 0 ? 'var(--danger)' : '#115e59') + ';margin-top:2px;">' + netLabel + '<\/div>' +
+              '<div style="font-size:11px;font-weight:700;color:var(--primary);">' + rep.scorePct + '% Net Score<\/div>' +
+            '<\/div>' +
+            '<div style="background:var(--success-soft);border:1px solid var(--success-border);border-radius:12px;padding:11px;">' +
+              '<div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--success);">Accuracy<\/div>' +
+              '<div style="font-size:20px;font-weight:900;color:#064e3b;margin-top:2px;">' + rep.accuracy + '%<\/div>' +
+              '<div style="font-size:11px;font-weight:700;color:var(--success);">+' + posPts + ' Pos | ' + negPts + ' Neg<\/div>' +
+            '<\/div>' +
+            '<div style="background:var(--warn-soft);border:1px solid var(--warn-border);border-radius:12px;padding:11px;">' +
+              '<div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--warn);">Complete Time &amp; Per-Q Avg<\/div>' +
+              '<div style="font-size:20px;font-weight:900;color:#78350f;margin-top:2px;">' + escapeHtml(compTime) + '<\/div>' +
+              '<div style="font-size:11px;font-weight:700;color:var(--warn);">Per-Q Avg: ' + avgTime + 's / Q<\/div>' +
+            '<\/div>' +
+            '<div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:11px;">' +
+              '<div style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted);">Attempt Summary<\/div>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;">' +
+                '<span class="pill pill-green">' + (rep.correct || 0) + ' ✓<\/span>' +
+                '<span class="pill pill-rose">' + (rep.incorrect || 0) + ' ✗<\/span>' +
+                '<span style="background:#e2e8f0;color:#334155;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:800;">' + (rep.skipped || 0) + ' Skip<\/span>' +
+              '<\/div>' +
+            '<\/div>' +
+          '<\/div>' +
+
+          '<div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;padding:8px;">' +
+            '<table><thead><tr><th>Subject<\/th><th>Total Qs<\/th><th>Correct<\/th><th>Wrong<\/th><th>Skipped<\/th><th>Net Score<\/th><th>Accuracy<\/th><th>Time<\/th><\/tr><\/thead>' +
+            '<tbody>' + subjRowsHtml + '<\/tbody><\/table>' +
+          '<\/div>' +
+
+          '<div class="grid-3">' +
+            '<div style="border:1.5px solid var(--danger-border);border-radius:12px;padding:11px;background:#fff;">' +
+              '<div style="font-size:13px;font-weight:900;color:#881337;margin-bottom:6px;">Weak Topics (' + (rep.weakTopics ? rep.weakTopics.length : 0) + ')<\/div>' +
+              '<div style="display:flex;flex-direction:column;gap:7px;">' + weakHtml + '<\/div>' +
+            '<\/div>' +
+            '<div style="border:1.5px solid var(--warn-border);border-radius:12px;padding:11px;background:#fff;">' +
+              '<div style="font-size:13px;font-weight:900;color:#78350f;margin-bottom:6px;">Moderate Topics (' + (rep.moderateTopics ? rep.moderateTopics.length : 0) + ')<\/div>' +
+              '<div style="display:flex;flex-direction:column;gap:7px;">' + modHtml + '<\/div>' +
+            '<\/div>' +
+            '<div style="border:1.5px solid var(--success-border);border-radius:12px;padding:11px;background:#fff;">' +
+              '<div style="font-size:13px;font-weight:900;color:#064e3b;margin-bottom:6px;">Strong Topics (' + (rep.strongTopics ? rep.strongTopics.length : 0) + ')<\/div>' +
+              '<div style="display:flex;flex-direction:column;gap:7px;">' + strongHtml + '<\/div>' +
+            '<\/div>' +
+          '<\/div>' +
+
+          '<details open style="border:1px solid #cbd5e1;border-radius:12px;padding:12px;background:#f8fafc;">' +
+            '<summary style="cursor:pointer;font-size:13px;font-weight:900;color:#0f172a;user-select:none;">Question-by-Question Review &amp; Per-Question Time Spent (' + (rep.evaluatedQuestions ? rep.evaluatedQuestions.length : 0) + ' Qs)<\/summary>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;">' +
+              '<button type="button" data-sr-filter="all" onclick="filterSingleSavedResultBox(\'' + rep.id + '\', \'all\')" class="sr-filter-btn btn-dark">All<\/button>' +
+              '<button type="button" data-sr-filter="weak" onclick="filterSingleSavedResultBox(\'' + rep.id + '\', \'weak\')" class="sr-filter-btn btn-danger-soft">Weak (Wrong)<\/button>' +
+              '<button type="button" data-sr-filter="moderate" onclick="filterSingleSavedResultBox(\'' + rep.id + '\', \'moderate\')" class="sr-filter-btn btn-outline">Moderate<\/button>' +
+              '<button type="button" data-sr-filter="strong" onclick="filterSingleSavedResultBox(\'' + rep.id + '\', \'strong\')" class="sr-filter-btn btn-outline">Strong<\/button>' +
+            '<\/div>' +
+            '<div style="max-height:540px;overflow-y:auto;padding-right:4px;">' + qReviewHtml + '<\/div>' +
+          '<\/details>' +
+        '<\/div>';
+      }).join('');
+    }
+
     function reattemptFilteredQuestions(mode) {
       if (!lastReport) return;
       const subset = lastReport.evaluatedQuestions.filter(it => mode === 'weak' ? it.bucket === 'weak' : (it.bucket === 'weak' || it.bucket === 'moderate')).map(it => it.q);
@@ -5172,27 +5943,46 @@
 
     function syncWeakTopicsToTracker(topicMap, testTitle) {
       const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const safeTestTitle = String(testTitle || 'Practice Test').trim();
       Object.values(topicMap).forEach(t => {
         const att = t.correct + t.wrong, acc = att > 0 ? Math.round((t.correct / att) * 100) : 0;
         if (t.wrong > 0 || (att > 0 && acc < 55)) {
-          const chapVal = t.chapter || testTitle;
+          const chapVal = t.chapter || safeTestTitle;
           const topVal = t.topic || 'Core Concept';
           const subTopVal = t.subTopic || 'General Sub-Topic';
+          const tax = classifyQuestionTaxonomy(`${chapVal} ${topVal} ${subTopVal}`, (t.wrongQs && t.wrongQs[0]) || 1, t.subject);
+          const realSub = tax.subject;
+          const qNumsList = Array.isArray(t.wrongQs) ? [...new Set(t.wrongQs)] : [];
+          const qRefs = qNumsList.map(n => `Q${n}`);
+
           const existing = tracker.find(item =>
-            item.subject === t.subject &&
+            (item.lastTest || '').trim().toLowerCase() === safeTestTitle.toLowerCase() &&
+            item.subject === realSub &&
             (item.chapter || '').toLowerCase() === chapVal.toLowerCase() &&
             (item.topic || '').toLowerCase() === topVal.toLowerCase() &&
             (item.subTopic || subTopVal).toLowerCase() === subTopVal.toLowerCase()
           );
           if (existing) {
-            existing.wrongCount = (existing.wrongCount || 0) + Math.max(1, t.wrong);
+            const mergedRefs = [...new Set([...(Array.isArray(existing.wrongQRefs) ? existing.wrongQRefs : []), ...qRefs])];
+            existing.wrongQRefs = mergedRefs;
+            existing.wrongCount = Math.max(mergedRefs.length, Math.max(1, t.wrong));
             existing.subTopic = subTopVal;
-            existing.mastered = false; existing.lastTest = testTitle; existing.updatedAt = new Date().toLocaleDateString();
+            existing.mastered = false;
+            existing.lastTest = safeTestTitle;
+            existing.updatedAt = new Date().toLocaleDateString();
           } else {
             tracker.unshift({
               id: 'wt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-              subject: t.subject, chapter: chapVal, topic: topVal, subTopic: subTopVal,
-              wrongCount: Math.max(1, t.wrong), mastered: false, note: '', lastTest: testTitle, updatedAt: new Date().toLocaleDateString()
+              subject: realSub,
+              chapter: chapVal,
+              topic: topVal,
+              subTopic: subTopVal,
+              wrongCount: Math.max(qRefs.length, Math.max(1, t.wrong)),
+              wrongQRefs: qRefs,
+              mastered: false,
+              note: '',
+              lastTest: safeTestTitle,
+              updatedAt: new Date().toLocaleDateString()
             });
           }
         }
@@ -5208,8 +5998,59 @@
       renderMasterWeakTracker();
     }
 
+    function toggleWholeTestWeakTopicsMastered(encodedTestName, targetChecked) {
+      const testName = decodeURIComponent(encodedTestName || '');
+      const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      tracker.forEach(t => {
+        if ((t.lastTest || 'Manual Entry').trim() === testName) {
+          t.mastered = !!targetChecked;
+        }
+      });
+      saveStorage(STORAGE_KEYS.WEAK_TRACKER, tracker);
+      updateHeaderBadges();
+      renderMasterWeakTracker();
+    }
+
+    function deleteWholeTestWeakTopicsBox(encodedTestName) {
+      const testName = decodeURIComponent(encodedTestName || '');
+      const cur = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      const removedItems = cur.filter(t => (t.lastTest || 'Manual Entry').trim() === testName);
+      if (removedItems.length) {
+        pushDeletedSection(
+          'weak',
+          `Weak Topics Box: ${testName} (${removedItems.length} Topics)`,
+          `All weak chapters & topics from "${testName}" deleted.`,
+          { mode: 'batch', items: removedItems }
+        );
+      }
+      saveStorage(STORAGE_KEYS.WEAK_TRACKER, cur.filter(t => (t.lastTest || 'Manual Entry').trim() !== testName));
+      updateHeaderBadges();
+      renderMasterWeakTracker();
+    }
+
     function renderMasterWeakTracker() {
       const tracker = loadStorage(STORAGE_KEYS.WEAK_TRACKER, []);
+      // Auto-heal subject name on existing items using content/chapter/stem classification
+      let healedAny = false;
+      tracker.forEach(item => {
+        const tax = classifyQuestionTaxonomy(`${item.chapter || ''} ${item.topic || ''} ${item.subTopic || ''} ${item.note || ''}`, 1, '');
+        if (tax && tax.subject && item.subject !== tax.subject && !/Practice Chapter$/i.test(tax.chapter)) {
+          item.subject = tax.subject;
+          item.chapter = tax.chapter;
+          item.topic = tax.topic;
+          item.subTopic = tax.subTopic;
+          healedAny = true;
+        }
+        if (item.note) {
+          item.note = '';
+          healedAny = true;
+        }
+      });
+      if (healedAny) {
+        saveStorage(STORAGE_KEYS.WEAK_TRACKER, tracker);
+        updateHeaderBadges();
+      }
+
       const total = tracker.length, mastered = tracker.filter(t => t.mastered).length;
       document.getElementById('wtTotalCount').textContent = total;
       document.getElementById('wtActiveCount').textContent = total - mastered;
@@ -5227,28 +6068,81 @@
         container.innerHTML = '<div style="text-align:center;padding:30px 16px;border-radius:12px;border:1px dashed var(--border);background:#f8fafc;"><div style="font-size:14px;font-weight:800;color:#475569;">No Weak Chapters / Topics in This View<\/div><\/div>';
         return;
       }
-      container.innerHTML = filtered.map(rawItem => {
-        const tax = classifyQuestionTaxonomy(`${rawItem.chapter || ''} ${rawItem.topic || ''} ${rawItem.subTopic || ''}`, 1, rawItem.subject);
-        const chap = rawItem.chapter || tax.chapter;
-        const top = rawItem.topic || tax.topic;
-        const subTop = rawItem.subTopic || tax.subTopic;
-        return '<div style="border-radius:12px;border:1px solid ' + (rawItem.mastered ? 'var(--success-border)' : 'var(--danger-border)') + ';background:' + (rawItem.mastered ? 'var(--success-soft)' : '#ffffff') + ';padding:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">' +
-          '<div style="display:flex;align-items:flex-start;gap:12px;flex:1;min-width:230px;">' +
-            '<input type="checkbox" ' + (rawItem.mastered ? 'checked' : '') + ' onchange="toggleWeakTopicMastered(\'' + rawItem.id + '\')" style="margin-top:3px;width:20px;height:20px;accent-color:#059669;cursor:pointer;" />' +
-            '<div style="flex:1;line-height:1.55;">' +
-              '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
-                '<span class="pill ' + (rawItem.mastered ? 'pill-green' : 'pill-rose') + '">' + rawItem.subject + '<\/span>' +
-                '<span style="font-size:14px;font-weight:900;' + (rawItem.mastered ? 'text-decoration:line-through;color:#065f46;' : 'color:#0f172a;') + '">' + escapeHtml(subTop) + '<\/span>' +
-                (rawItem.mastered ? '<span class="pill pill-green" style="background:#059669;color:#fff;">✓ Strong<\/span>' : '<span style="font-size:11px;font-weight:800;color:var(--danger);">' + (rawItem.wrongCount || 1) + ' Wrong Qs<\/span>') +
+
+      // Group strictly by Respective Test (`lastTest`) so each test has its own separate box!
+      const testBoxesMap = {};
+      filtered.forEach(rawItem => {
+        const testName = (rawItem.lastTest || 'Manual Entry').trim();
+        const tax = classifyQuestionTaxonomy(`${rawItem.chapter || ''} ${rawItem.topic || ''} ${rawItem.subTopic || ''} ${rawItem.note || ''}`, 1, rawItem.subject);
+        const subj = ['Physics', 'Chemistry', 'Botany', 'Zoology'].includes(rawItem.subject) ? rawItem.subject : tax.subject;
+        const chap = (rawItem.chapter && !/Practice Chapter$/i.test(rawItem.chapter)) ? rawItem.chapter : tax.chapter;
+        const top = (rawItem.topic && !/Core Topic$/i.test(rawItem.topic)) ? rawItem.topic : tax.topic;
+        const subTop = (rawItem.subTopic && !/^Concept & Numerical Application$/i.test(rawItem.subTopic)) ? rawItem.subTopic : tax.subTopic;
+
+        if (!testBoxesMap[testName]) {
+          testBoxesMap[testName] = { testName, items: [] };
+        }
+        testBoxesMap[testName].items.push({ ...rawItem, subject: subj, chapter: chap, topic: top, subTopic: subTop });
+      });
+
+      const subjectOrder = ['Physics', 'Chemistry', 'Botany', 'Zoology'];
+
+      container.innerHTML = Object.values(testBoxesMap).map((tBox, tIdx) => {
+        const encTest = encodeURIComponent(tBox.testName);
+        const allMasteredInTest = tBox.items.length > 0 && tBox.items.every(x => !!x.mastered);
+        const totalWrongInTest = tBox.items.reduce((acc, it) => acc + (it.wrongCount || 1), 0);
+
+        const sortedItems = [...tBox.items].sort((a, b) => {
+          const sDiff = subjectOrder.indexOf(a.subject) - subjectOrder.indexOf(b.subject);
+          return sDiff !== 0 ? sDiff : a.chapter.localeCompare(b.chapter);
+        });
+
+        const rowsHtml = sortedItems.map(it => {
+          const subjPillCls = it.subject === 'Physics' ? 'pill-teal' : (it.subject === 'Chemistry' ? 'pill-amber' : (it.subject === 'Botany' ? 'pill-green' : 'pill-rose'));
+          const cleanRefs = Array.isArray(it.wrongQRefs)
+            ? it.wrongQRefs.map(r => String(r).replace(/\s*\([^)]*\)\s*$/, '').trim()).filter(Boolean)
+            : [];
+          const qBadgesHtml = cleanRefs.length
+            ? cleanRefs.map(qr => '<span style="background:#e11d48;color:#fff;padding:1px 7px;border-radius:6px;font-size:11px;font-weight:900;">' + escapeHtml(qr) + '<\/span>').join(' ')
+            : '';
+
+          return '<div style="border-radius:12px;border:1.5px solid ' + (it.mastered ? 'var(--success-border)' : 'var(--danger-border)') + ';background:' + (it.mastered ? 'var(--success-soft)' : '#ffffff') + ';padding:11px 13px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">' +
+            '<div style="display:flex;align-items:flex-start;gap:11px;flex:1;min-width:240px;">' +
+              '<input type="checkbox" ' + (it.mastered ? 'checked' : '') + ' onchange="toggleWeakTopicMastered(\'' + it.id + '\')" title="Tick when topic becomes Strong" style="margin-top:3px;width:19px;height:19px;accent-color:#059669;cursor:pointer;" />' +
+              '<div style="flex:1;line-height:1.5;">' +
+                '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">' +
+                  '<span class="pill ' + subjPillCls + '" style="font-size:11px;padding:2px 9px;font-weight:900;">' + escapeHtml(it.subject) + '<\/span>' +
+                  qBadgesHtml +
+                  '<strong style="font-size:13.5px;color:#0f172a;">Chapter: ' + escapeHtml(it.chapter) + '<\/strong>' +
+                  (it.mastered
+                    ? '<span class="pill pill-green" style="background:#059669;color:#fff;">✓ Mastered / Strong<\/span>'
+                    : '<span class="pill pill-rose">' + (it.wrongCount || 1) + ' Wrong Qs<\/span>') +
+                '<\/div>' +
+                '<div style="font-size:12px;font-weight:800;color:#0f766e;margin-top:4px;">Topic: ' + escapeHtml(it.topic) + '<\/div>' +
+                '<div style="font-size:12.5px;font-weight:900;margin-top:2px;' + (it.mastered ? 'text-decoration:line-through;color:#065f46;' : 'color:#881337;') + '">' +
+                  'Specific Sub-Topic: ' + escapeHtml(it.subTopic) +
+                '<\/div>' +
+                
               '<\/div>' +
-              '<div style="font-size:12px;color:#334155;margin-top:4px;"><strong>Chapter:<\/strong> ' + escapeHtml(chap) + ' · <strong>Topic:<\/strong> ' + escapeHtml(top) + ' · <strong>Sub-Topic:<\/strong> ' + escapeHtml(subTop) + '<\/div>' +
-              '<div style="font-size:11px;color:var(--muted);margin-top:2px;">Test: ' + escapeHtml(rawItem.lastTest || 'Manual') + ' · Updated ' + (rawItem.updatedAt || '') + (rawItem.note ? ' · Note: ' + escapeHtml(rawItem.note) : '') + '<\/div>' +
             '<\/div>' +
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+              '<button type="button" class="btn-outline" onclick="openEditWeakTopicModal(\'' + it.id + '\')" style="padding:5px 10px;">Edit<\/button>' +
+              '<button type="button" class="btn-danger-soft" onclick="deleteWeakTopicItem(\'' + it.id + '\')" title="Delete this topic" style="padding:5px 10px;">🗑 Delete<\/button>' +
+            '<\/div>' +
+          '<\/div>';
+        }).join('');
+
+        return '<div style="border:2px solid ' + (allMasteredInTest ? '#059669' : '#0d9488') + ';border-radius:16px;padding:15px;background:' + (allMasteredInTest ? '#ecfdf566' : '#f8fafc') + ';display:flex;flex-direction:column;gap:11px;box-shadow:0 4px 12px rgba(15,23,42,0.05);">' +
+          '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:9px;border-bottom:1.5px solid #cbd5e1;">' +
+            '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:9px;">' +
+              '<input type="checkbox" ' + (allMasteredInTest ? 'checked' : '') + ' onchange="toggleWholeTestWeakTopicsMastered(\'' + encTest + '\', this.checked)" title="Tick entire test box as Mastered" style="width:20px;height:20px;accent-color:#059669;cursor:pointer;" />' +
+              '<span style="background:#0f172a;color:#fff;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:900;">Test #' + (tIdx + 1) + '<\/span>' +
+              '<strong style="font-size:15px;color:#0f172a;' + (allMasteredInTest ? 'text-decoration:line-through;color:#065f46;' : '') + '">' + escapeHtml(tBox.testName) + '<\/strong>' +
+              '<span class="pill pill-rose">' + tBox.items.length + ' Topics · ' + totalWrongInTest + ' Wrong Qs<\/span>' +
+            '<\/div>' +
+            '<button type="button" class="btn-danger-soft" onclick="deleteWholeTestWeakTopicsBox(\'' + encTest + '\')" style="padding:5px 11px;font-size:11.5px;font-weight:900;">🗑 Delete Test Box<\/button>' +
           '<\/div>' +
-          '<div style="display:flex;gap:6px;">' +
-            '<button type="button" class="btn-outline" onclick="openEditWeakTopicModal(\'' + rawItem.id + '\')" style="padding:5px 10px;">Edit<\/button>' +
-            '<button type="button" class="btn-danger-soft" onclick="deleteWeakTopicItem(\'' + rawItem.id + '\')" style="padding:5px 10px;">✕<\/button>' +
-          '<\/div>' +
+          '<div style="display:flex;flex-direction:column;gap:8px;">' + rowsHtml + '<\/div>' +
         '<\/div>';
       }).join('');
     }
@@ -5475,8 +6369,12 @@
           const imgArr = Array.isArray(enriched.imageDataUrls) && enriched.imageDataUrls.length
             ? enriched.imageDataUrls
             : (imgUrl ? [imgUrl] : []);
+          const pTime = (q && q.perQTimeSec !== undefined)
+            ? q.perQTimeSec
+            : ((cbtState.timeSpent && cbtState.timeSpent[idx] !== undefined) ? cbtState.timeSpent[idx] : 0);
           return {
             ...enriched,
+            perQTimeSec: pTime,
             imageDataUrl: imgUrl,
             imageDataUrls: imgArr
           };
@@ -5514,6 +6412,7 @@
           marksGraph: loadStorage(STORAGE_KEYS.MARKS_GRAPH, []),
           weakTracker: loadStorage(STORAGE_KEYS.WEAK_TRACKER, []),
           wrongQsBank: wrongBankWithImages,
+          savedResults: loadStorage(STORAGE_KEYS.SAVED_RESULTS, []),
           deletedBin: loadStorage(STORAGE_KEYS.DELETED_BIN, []),
           noteBox: {
             noteText: loadAuditBoxNote(),
@@ -5831,6 +6730,7 @@
         saveStorage(STORAGE_KEYS.WRONG_QS_BANK, restoredWrong);
       }
 
+      if (Array.isArray(data.savedResults)) saveStorage(STORAGE_KEYS.SAVED_RESULTS, data.savedResults);
       if (Array.isArray(data.deletedBin)) saveStorage(STORAGE_KEYS.DELETED_BIN, data.deletedBin);
       if (Array.isArray(data.qboxChips)) saveStorage(STORAGE_KEYS.QBOX_CHIPS, data.qboxChips);
       if (Array.isArray(data.unmatchedCroppedGroups)) saveStorage(STORAGE_KEYS.UNMATCHED_CROP_GROUPS || 'nura2_each_test_unmatched_cropped_v1', data.unmatchedCroppedGroups);
@@ -5856,6 +6756,7 @@
       applyCustomAppNameToUI();
       updateHeaderBadges();
       renderSavedSheetsTopSection();
+      renderSavedResultsSection();
       renderQuestionBank();
       renderMarksBarGraphInto('resultMarksGraphMount');
       renderMarksBarGraphInto('drawerMarksGraphMount');
@@ -6047,12 +6948,15 @@
         const currentQsSnap = lastReport.evaluatedQuestions.map(ev => ev.q);
         const currentAnsSnap = {};
         lastReport.evaluatedQuestions.forEach(ev => { if (ev.userAns) currentAnsSnap[ev.idx] = ev.userAns; });
+        const currentTimeSnap = {};
+        lastReport.evaluatedQuestions.forEach(ev => { currentTimeSnap[ev.idx] = ev.tSec || 0; });
         solvedPapers.push({
           title: `${lastReport.title} (Latest Attempt)`,
           date: lastReport.date || new Date().toLocaleString(),
           scoreText: `${lastReport.netScore}/${lastReport.maxMarks}`,
           questionsSnapshot: currentQsSnap,
-          answersSnapshot: currentAnsSnap
+          answersSnapshot: currentAnsSnap,
+          timeSpentSnapshot: currentTimeSnap
         });
       }
       (historyTests || []).forEach((h) => {
@@ -6062,7 +6966,8 @@
             date: h.date || '',
             scoreText: h.score || '',
             questionsSnapshot: h.questionsSnapshot,
-            answersSnapshot: h.answersSnapshot || {}
+            answersSnapshot: h.answersSnapshot || {},
+            timeSpentSnapshot: h.timeSpentSnapshot || {}
           });
         }
       });
@@ -6099,10 +7004,16 @@
 
           const pQs = paper.questionsSnapshot || [];
           const pAns = paper.answersSnapshot || {};
+          const pTimes = paper.timeSpentSnapshot || {};
 
           pQs.forEach((rawQ, qIdx) => {
             const q = enrichQuestionObj(rawQ, qIdx);
             const qNum = q.num || (qIdx + 1);
+            const qSpentSec = (pTimes[qIdx] !== undefined)
+              ? pTimes[qIdx]
+              : ((pTimes[qNum] !== undefined)
+                ? pTimes[qNum]
+                : ((rawQ && rawQ.perQTimeSec !== undefined) ? rawQ.perQTimeSec : (cbtState.timeSpent[qIdx] || 0)));
             const uNorm = normalizeAnswerChoice(pAns[qIdx] !== undefined ? pAns[qIdx] : (pAns[qNum] || ''));
             const cNorm = normalizeAnswerChoice(q.correct || '');
 
@@ -6144,7 +7055,7 @@
 
               addRect(sPage, margin, sY - cardH, pageW - margin * 2, cardH, [1, 1, 1], badgeBorder, 0.9);
               addRect(sPage, margin + 4, sY - 17, pageW - margin * 2 - 8, 14, badgeFill, null, 0.4);
-              addText(sPage, margin + 8, sY - 13, `Q${qNum} [${q.subject} · ${q.subTopic}]  -->  ${stateTag}`, 7.8, true, badgeTextRgb);
+              addText(sPage, margin + 8, sY - 13, `Q${qNum} [${q.subject} · ${q.subTopic} · Time: ${qSpentSec}s]  -->  ${stateTag}`, 7.5, true, badgeTextRgb);
               addImage(sPage, pdfImg, margin + 8, sY - 21 - drawH, drawW, drawH);
               sY -= (cardH + 6);
               return;
@@ -6292,20 +7203,31 @@
       setTimeout(() => URL.revokeObjectURL(url), 4000);
     }
 
-    function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+        function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    window.addEventListener('beforeunload', () => {
+      try {
+        if (cbtState.active) persistActiveCbtProgress();
+        if (questions.length) saveFrontPageSessionState();
+        if (currentOpenView) localStorage.setItem(ACTIVE_VIEW_STATE_KEY, currentOpenView);
+      } catch (e) {}
+    });
 
     document.addEventListener('DOMContentLoaded', async () => {
+      try { localStorage.setItem(ACTIVE_VIEW_STATE_KEY, 'upload'); } catch (e) {}
+      clearPersistedCbtProgress();
+      cbtState.active = false;
       applyCustomAppNameToUI();
       await hydrateAllSavedQuestionImages();
       setupFileDropzone();
       updateHeaderBadges();
       renderSavedSheetsTopSection();
+      renderSavedResultsSection();
       renderQuestionBank();
       restoreFrontPageSessionState();
       renderMarksBarGraphInto('resultMarksGraphMount');
+      switchView('upload');
     });
-  
-
     function extractAnswerKeyMapFast(text) {
       const keyMap = {};
       const raw = sanitizeExtractedMathText(String(text || ''));
@@ -6531,8 +7453,7 @@
         statusEl.textContent = `Fast uploading ${files.length} answer key file(s)...`;
       }
 
-      const existingMap = parseAnswerKeyPairsFromText(textareaEl ? textareaEl.value : '');
-      const combinedMap = { ...existingMap };
+      const combinedMap = {};
 
       for (let i = 0; i < files.length; i++) {
         const f = files[i];
@@ -6553,8 +7474,10 @@
       if (statusEl) {
         statusEl.textContent = `Done in a flash: ${sortedEntries.length} keys parsed, ${appliedCount}/${questions.length} questions updated!`;
       }
-      if (bulkKeyFromResults || (document.getElementById('resultView') && !document.getElementById('resultView').classList.contains('hidden'))) {
-        computeAndRenderResults(false);
+      if (appliedCount > 0 && Array.isArray(questions) && questions.length > 0) {
+        computeAndRenderResults(false, true);
+      } else if (bulkKeyFromResults || (document.getElementById('resultView') && !document.getElementById('resultView').classList.contains('hidden'))) {
+        computeAndRenderResults(false, false);
       }
     }
 
@@ -6657,9 +7580,234 @@
       }
     }
 
-    function exportFullReportPdf() {
+    function buildNativeReportPdfBytes(targetResultId = null) {
+      const appName = (localStorage.getItem(STORAGE_KEYS.APP_NAME) || 'NURA-2 · NEET CBT Simulator').trim();
+      const savedResults = loadStorage(STORAGE_KEYS.SAVED_RESULTS, []);
+
+      let selectedRep = null;
+      if (targetResultId && targetResultId !== 'current') {
+        selectedRep = savedResults.find(r => r.id === targetResultId) || null;
+      } else if (lastReport && Array.isArray(lastReport.evaluatedQuestions) && lastReport.evaluatedQuestions.length) {
+        selectedRep = lastReport;
+      } else if (savedResults.length) {
+        selectedRep = savedResults[0];
+      }
+
+      const pageW = 595.28, pageH = 841.89, margin = 32;
+      const pages = [{ cmds: [], xObjs: {} }];
+      const curPage = () => pages[pages.length - 1];
+      const newPage = () => { pages.push({ cmds: [], xObjs: {} }); return curPage(); };
+      const pdfImages = [];
+
+      const registerPdfJpeg = (dataUrl) => {
+        if (!dataUrl || !dataUrl.startsWith('data:image/jpeg')) return null;
+        const bytes = dataUrlToBinaryBytes(dataUrl);
+        const dims = parseJpegDimensions(bytes);
+        const idx = pdfImages.length + 1;
+        const name = `/Im${idx}`;
+        pdfImages.push({ name, bytes, width: dims.width, height: dims.height, objId: 0 });
+        return pdfImages[pdfImages.length - 1];
+      };
+
+      const addText = (pg, x, y, text, size = 9, bold = false, rgb = [0.06, 0.09, 0.16]) => {
+        const font = bold ? '/F2' : '/F1';
+        pg.cmds.push(`BT ${font} ${size} Tf ${rgb[0].toFixed(2)} ${rgb[1].toFixed(2)} ${rgb[2].toFixed(2)} rg 1 0 0 1 ${x.toFixed(1)} ${y.toFixed(1)} Tm (${escapePdfText(text)}) Tj ET`);
+      };
+      const addRect = (pg, x, y, w, h, fillRgb = null, strokeRgb = null, lw = 0.7) => {
+        let cmd = `${lw} w `;
+        if (strokeRgb) cmd += `${strokeRgb[0].toFixed(2)} ${strokeRgb[1].toFixed(2)} ${strokeRgb[2].toFixed(2)} RG `;
+        if (fillRgb) cmd += `${fillRgb[0].toFixed(2)} ${fillRgb[1].toFixed(2)} ${fillRgb[2].toFixed(2)} rg `;
+        cmd += `${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)} `;
+        cmd += fillRgb && strokeRgb ? 'B' : (fillRgb ? 'f' : 'S');
+        pg.cmds.push(cmd);
+      };
+      const addImage = (pg, imgObj, x, yBot, w, h) => {
+        pg.xObjs[imgObj.name] = imgObj;
+        pg.cmds.push(`q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${yBot.toFixed(2)} cm ${imgObj.name} Do Q`);
+      };
+
+      const repTitle = (selectedRep && selectedRep.title) || (document.getElementById('resTestTitle')?.textContent) || 'Practice Test Report';
+      const repDate = (selectedRep && selectedRep.date) || (document.getElementById('resTestTimestamp')?.textContent) || new Date().toLocaleString();
+      const repNet = selectedRep ? `${selectedRep.netScore} / ${selectedRep.maxMarks}` : (document.getElementById('resNetScore')?.textContent || '0 / 0');
+      const repAcc = selectedRep ? `${selectedRep.accuracy}%` : (document.getElementById('resAccuracy')?.textContent || '0%');
+      const repTime = selectedRep ? (selectedRep.totalTimeStr || `${Math.floor((selectedRep.totalTime || 0) / 60)}m ${(selectedRep.totalTime || 0) % 60}s`) : (document.getElementById('resTotalTime')?.textContent || '0m 0s');
+      const repC = selectedRep ? (selectedRep.correct || 0) : 0;
+      const repW = selectedRep ? (selectedRep.incorrect || 0) : 0;
+      const repS = selectedRep ? (selectedRep.skipped || 0) : 0;
+
+      let pg = curPage();
+      addRect(pg, margin, pageH - 78, pageW - margin * 2, 48, [0.05, 0.58, 0.53]);
+      addText(pg, margin + 12, pageH - 50, `${appName} — ${repTitle}`, 12.5, true, [1, 1, 1]);
+      addText(pg, margin + 12, pageH - 66, `Date: ${repDate}  |  Score: ${repNet}  |  Acc: ${repAcc}  |  Time: ${repTime}  |  ${repC} Correct · ${repW} Wrong · ${repS} Skip`, 8.2, false, [0.85, 0.99, 0.96]);
+
+      let y = pageH - 96;
+
+      addRect(pg, margin + 2, y - 13, 10, 10, [0.82, 0.98, 0.89], [0.02, 0.59, 0.41], 0.7);
+      addText(pg, margin + 16, y - 11, 'CORRECT (Green)', 7.6, true, [0.02, 0.47, 0.34]);
+      addRect(pg, margin + 125, y - 13, 10, 10, [1.0, 0.88, 0.90], [0.88, 0.11, 0.28], 0.7);
+      addText(pg, margin + 139, y - 11, 'WRONG (Red)', 7.6, true, [0.65, 0.05, 0.18]);
+      addRect(pg, margin + 235, y - 13, 10, 10, [1.0, 0.95, 0.78], [0.85, 0.47, 0.02], 0.7);
+      addText(pg, margin + 249, y - 11, 'SKIP (Amber)', 7.6, true, [0.60, 0.28, 0.02]);
+      addText(pg, margin + 340, y - 11, 'Per-Q Time Spent Shown on Every Question', 7.6, true, [0.06, 0.46, 0.43]);
+      y -= 24;
+
+      const evalList = (selectedRep && Array.isArray(selectedRep.evaluatedQuestions)) ? selectedRep.evaluatedQuestions : [];
+      evalList.forEach((ev, qIdx) => {
+        const q = enrichQuestionObj(ev.q, qIdx);
+        const qNum = q.num || (qIdx + 1);
+        const qTimeSec = ev.tSec !== undefined ? ev.tSec : (ev.perQTimeSec || 0);
+        const uNorm = normalizeAnswerChoice(ev.userAns || '');
+        const cNorm = normalizeAnswerChoice(ev.corrAns || '');
+
+        let statusLabel = 'SKIP';
+        let fillRgb = [1.0, 0.95, 0.78];
+        let borderRgb = [0.85, 0.47, 0.02];
+        let textRgb = [0.60, 0.28, 0.02];
+
+        if (ev.status === 'correct' || (uNorm && cNorm && uNorm === cNorm)) {
+          statusLabel = `CORRECT (${formatAnswerChoiceDisplay(uNorm)})`;
+          fillRgb = [0.82, 0.98, 0.89];
+          borderRgb = [0.02, 0.59, 0.41];
+          textRgb = [0.02, 0.47, 0.34];
+        } else if (ev.status === 'incorrect' || (uNorm && cNorm && uNorm !== cNorm)) {
+          statusLabel = `WRONG (Your: ${formatAnswerChoiceDisplay(uNorm)} · Key: ${formatAnswerChoiceDisplay(cNorm)})`;
+          fillRgb = [1.0, 0.88, 0.90];
+          borderRgb = [0.88, 0.11, 0.28];
+          textRgb = [0.65, 0.05, 0.18];
+        } else {
+          statusLabel = `SKIP (Key: ${cNorm ? formatAnswerChoiceDisplay(cNorm) : '-'})`;
+          fillRgb = [1.0, 0.95, 0.78];
+          borderRgb = [0.85, 0.47, 0.02];
+          textRgb = [0.60, 0.28, 0.02];
+        }
+
+        const qCropUrl = getQuestionImageUrl(q);
+        const pdfImg = qCropUrl ? registerPdfJpeg(qCropUrl) : null;
+        const innerW = pageW - margin * 2 - 12;
+
+        if (pdfImg) {
+          const drawW = Math.min(innerW, 430);
+          const drawH = Math.min(185, Math.max(38, drawW * (pdfImg.height / Math.max(1, pdfImg.width))));
+          const cardH = drawH + 34;
+
+          if (y - cardH < margin + 14) {
+            pg = newPage();
+            y = pageH - margin - 14;
+          }
+
+          addRect(pg, margin, y - cardH, pageW - margin * 2, cardH, [1, 1, 1], borderRgb, 0.9);
+          addRect(pg, margin + 4, y - 17, pageW - margin * 2 - 8, 14, fillRgb, null, 0.4);
+          addText(pg, margin + 8, y - 13, `Q${qNum} [${q.subject} · ${q.subTopic} · Time: ${qTimeSec}s]  -->  ${statusLabel}`, 7.5, true, textRgb);
+          addImage(pg, pdfImg, margin + 8, y - 21 - drawH, drawW, drawH);
+          y -= (cardH + 6);
+          return;
+        }
+
+        const stemLines = wrapPdfText(`Q${qNum} (${q.subject}): ${q.text}`, 82);
+        const optLabels = ['(1)', '(2)', '(3)', '(4)'];
+        const optRows = optLabels.map((lbl, oIdx) => {
+          const optNumStr = String(oIdx + 1);
+          const isCorr = cNorm === optNumStr;
+          const isWrongSel = uNorm === optNumStr && (!cNorm || uNorm !== cNorm);
+          const isSkipKey = !uNorm && isCorr;
+          let rFill = null, rStroke = [0.88, 0.90, 0.93], rTxtRgb = [0.12, 0.16, 0.24], suffix = '';
+          if (isCorr) { rFill = [0.82, 0.98, 0.89]; rStroke = [0.02, 0.59, 0.41]; rTxtRgb = [0.02, 0.47, 0.34]; suffix = ' [CORRECT]'; }
+          if (isWrongSel) { rFill = [1.0, 0.88, 0.90]; rStroke = [0.88, 0.11, 0.28]; rTxtRgb = [0.65, 0.05, 0.18]; suffix = ' [WRONG]'; }
+          if (isSkipKey) { rFill = [1.0, 0.95, 0.78]; rStroke = [0.85, 0.47, 0.02]; rTxtRgb = [0.60, 0.28, 0.02]; suffix = ' [SKIP · KEY]'; }
+          return { wrappedOpt: wrapPdfText(`${lbl} ${q.options[oIdx] || ''}${suffix}`, 76), rFill, rStroke, rTxtRgb };
+        });
+
+        const optsTotalH = optRows.reduce((acc, r) => acc + r.wrappedOpt.length * 10.5 + 4, 0);
+        const cardH = 20 + stemLines.length * 11 + optsTotalH + 8;
+
+        if (y - cardH < margin + 14) {
+          pg = newPage();
+          y = pageH - margin - 14;
+        }
+
+        addRect(pg, margin, y - cardH, pageW - margin * 2, cardH, [1, 1, 1], borderRgb, 0.9);
+        addRect(pg, margin + 4, y - 17, pageW - margin * 2 - 8, 14, fillRgb, null, 0.4);
+        addText(pg, margin + 8, y - 13, `Q${qNum} [${q.subject} · ${q.subTopic} · Time: ${qTimeSec}s]  -->  ${statusLabel}`, 7.5, true, textRgb);
+
+        let curQY = y - 27;
+        stemLines.forEach(sl => {
+          addText(pg, margin + 8, curQY, sl, 8.2, true, [0.06, 0.09, 0.16]);
+          curQY -= 11;
+        });
+        curQY -= 2;
+
+        optRows.forEach(r => {
+          const rh = r.wrappedOpt.length * 10.5 + 2;
+          if (r.rFill) addRect(pg, margin + 8, curQY - rh + 7, innerW - 4, rh, r.rFill, r.rStroke, 0.7);
+          r.wrappedOpt.forEach((wl, wIdx) => {
+            addText(pg, margin + 12, curQY - wIdx * 10.5, wl, 7.8, !!r.rFill, r.rTxtRgb);
+          });
+          curQY -= (rh + 2);
+        });
+
+        y -= (cardH + 6);
+      });
+
+      const enc = new TextEncoder();
+      const chunks = [];
+      let byteLen = 0;
+      const pushStr = (s) => { const b = enc.encode(s); chunks.push(b); byteLen += b.length; };
+      const pushBytes = (b) => { chunks.push(b); byteLen += b.length; };
+
+      const offsets = [0];
+      let nextObjId = 1;
+      const allocId = () => nextObjId++;
+
+      const catalogId = allocId();
+      const pagesId = allocId();
+      const f1Id = allocId();
+      const f2Id = allocId();
+      pdfImages.forEach(im => { im.objId = allocId(); });
+      const pageMeta = pages.map(() => ({ contentId: allocId(), pageId: allocId() }));
+
+      pushStr('%PDF-1.4\n%âãÏÓ\n');
+
+      const writeObj = (id, headerStr, streamBytes = null) => {
+        offsets[id] = byteLen;
+        pushStr(`${id} 0 obj\n${headerStr}\n`);
+        if (streamBytes) {
+          pushStr('stream\n');
+          pushBytes(streamBytes);
+          pushStr('\nendstream\n');
+        }
+        pushStr('endobj\n');
+      };
+
+      writeObj(catalogId, `<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+      writeObj(pagesId, `<< /Type /Pages /Kids [${pageMeta.map(m => `${m.pageId} 0 R`).join(' ')}] /Count ${pageMeta.length} >>`);
+      writeObj(f1Id, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+      writeObj(f2Id, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>');
+
+      pdfImages.forEach(im => {
+        writeObj(im.objId, `<< /Type /XObject /Subtype /Image /Width ${im.width} /Height ${im.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.bytes.length} >>`, im.bytes);
+      });
+
+      pages.forEach((pItem, idx) => {
+        const meta = pageMeta[idx];
+        const streamBytes = enc.encode(pItem.cmds.join('\n'));
+        writeObj(meta.contentId, `<< /Length ${streamBytes.length} >>`, streamBytes);
+        const xObjEntries = Object.values(pItem.xObjs).map(im => `${im.name} ${im.objId} 0 R`).join(' ');
+        const xObjDict = xObjEntries ? `/XObject << ${xObjEntries} >>` : '';
+        writeObj(meta.pageId, `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pageW.toFixed(2)} ${pageH.toFixed(2)}] /Resources << /Font << /F1 ${f1Id} 0 R /F2 ${f2Id} 0 R >> ${xObjDict} >> /Contents ${meta.contentId} 0 R >>`);
+      });
+
+      const xrefPos = byteLen;
+      pushStr(`xref\n0 ${nextObjId}\n0000000000 65535 f \n`);
+      for (let i = 1; i < nextObjId; i++) {
+        pushStr(`${String(offsets[i]).padStart(10, '0')} 00000 n \n`);
+      }
+      pushStr(`trailer\n<< /Size ${nextObjId} /Root ${catalogId} 0 R >>\nstartxref\n${xrefPos}\n%%EOF`);
+      return new Blob(chunks, { type: 'application/pdf' });
+    }
+
+    function exportFullReportPdf(targetResultId = null) {
       try {
-        const blob = buildNativeReportPdfBytes();
+        const blob = buildNativeReportPdfBytes(targetResultId);
         const fileName = `NURA2_Report_${new Date().toISOString().slice(0, 10)}.pdf`;
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -6680,5 +7828,114 @@
     }
 
 </script>
+
+  <div id="questionZoomModal" class="modal-backdrop hidden" style="z-index:80;">
+    <div class="modal-card" style="max-width:960px;width:96%;max-height:92vh;display:flex;flex-direction:column;gap:12px;padding:16px;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <strong id="zoomModalTitle" style="font-size:15px;color:#0f172a;">Question Zoom</strong>
+          <span id="zoomQualityBadge" class="pill pill-teal">720p</span>
+          <span id="zoomLevelLabel" style="font-size:12px;font-weight:900;color:#0f766e;">100%</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+          <button type="button" class="btn-soft" onclick="setQuestionZoomPreset('720p')" style="padding:5px 10px;font-size:11px;font-weight:900;">720p</button>
+          <button type="button" class="btn-primary" onclick="setQuestionZoomPreset('hd')" style="padding:5px 10px;font-size:11px;font-weight:900;">HD</button>
+          <button type="button" class="btn-outline" onclick="adjustQuestionZoomStep(-0.25)" style="padding:5px 9px;font-size:12px;font-weight:900;">-</button>
+          <button type="button" class="btn-outline" onclick="adjustQuestionZoomStep(0.25)" style="padding:5px 9px;font-size:12px;font-weight:900;">+</button>
+          <button type="button" class="btn-outline" onclick="setQuestionZoomPreset('reset')" style="padding:5px 9px;font-size:11px;">Reset</button>
+          <button type="button" class="btn-danger-soft" onclick="closeQuestionZoomModal()" style="padding:5px 9px;font-size:12px;font-weight:900;">✕</button>
+        </div>
+      </div>
+      <div id="questionZoomViewport" style="flex:1;overflow:auto;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:12px;padding:14px;min-height:320px;">
+        <div id="questionZoomInner" style="transform-origin:top left;transition:transform 0.15s ease;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      let currentZoomScale = 1.0;
+      let currentZoomMode = '720p';
+
+      function applyZoomTransform() {
+        const inner = document.getElementById('questionZoomInner');
+        const lbl = document.getElementById('zoomLevelLabel');
+        const badge = document.getElementById('zoomQualityBadge');
+        if (inner) {
+          inner.style.transform = `scale(${currentZoomScale.toFixed(2)})`;
+          inner.style.width = `${(100 / Math.max(0.5, currentZoomScale)).toFixed(2)}%`;
+        }
+        if (lbl) lbl.textContent = `${Math.round(currentZoomScale * 100)}%`;
+        if (badge) badge.textContent = currentZoomMode === 'hd' ? 'HD' : '720p';
+      }
+
+      window.setQuestionZoomPreset = function(preset) {
+        if (preset === '720p') {
+          currentZoomMode = '720p';
+          currentZoomScale = 1.25;
+        } else if (preset === 'hd') {
+          currentZoomMode = 'hd';
+          currentZoomScale = 1.75;
+        } else {
+          currentZoomMode = '720p';
+          currentZoomScale = 1.0;
+        }
+        applyZoomTransform();
+      };
+
+      window.adjustQuestionZoomStep = function(delta) {
+        currentZoomScale = Math.min(3.0, Math.max(0.75, Number((currentZoomScale + delta).toFixed(2))));
+        currentZoomMode = currentZoomScale >= 1.5 ? 'hd' : '720p';
+        applyZoomTransform();
+      };
+
+      window.closeQuestionZoomModal = function() {
+        const m = document.getElementById('questionZoomModal');
+        if (m) m.classList.add('hidden');
+      };
+
+      function openZoomForQuestionIndex(qIdx) {
+        const q = Array.isArray(questions) ? questions[qIdx] : null;
+        if (!q) return;
+        const modal = document.getElementById('questionZoomModal');
+        const titleEl = document.getElementById('zoomModalTitle');
+        const inner = document.getElementById('questionZoomInner');
+        if (!modal || !inner) return;
+
+        const qNum = q.num || (qIdx + 1);
+        if (titleEl) {
+          titleEl.textContent = `Q${qNum} · ${q.subject || 'Subject'} (${q.chapter || 'Chapter'})`;
+        }
+
+        const cropUrl = typeof getQuestionImageUrl === 'function' ? getQuestionImageUrl(q) : '';
+        if (cropUrl) {
+          inner.innerHTML = `<div style="text-align:center;"><img src="${cropUrl}" alt="Q${qNum}" style="max-width:100%;width:100%;height:auto;display:block;margin:0 auto;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;" /></div>`;
+        } else {
+          const opts = Array.isArray(q.options) ? q.options : [];
+          inner.innerHTML = `
+            <div style="font-size:17px;font-weight:800;color:#0f172a;line-height:1.55;white-space:pre-line;margin-bottom:14px;">${escapeHtml(q.text || '')}</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:700;color:#1e293b;">
+              ${['(1)', '(2)', '(3)', '(4)'].map((lbl, i) => `<div style="padding:8px 12px;border-radius:10px;border:1px solid #cbd5e1;background:#f8fafc;"><strong>${lbl}</strong> ${escapeHtml(opts[i] || '')}</div>`).join('')}
+            </div>
+          `;
+        }
+
+        currentZoomMode = 'hd';
+        currentZoomScale = 1.5;
+        applyZoomTransform();
+        modal.classList.remove('hidden');
+      }
+
+      window.openQuestionBankZoom = function(qIdx) {
+        openZoomForQuestionIndex(qIdx);
+      };
+
+      window.openCurrentCbtQuestionZoom = function() {
+        if (!cbtState || !Array.isArray(cbtState.filteredIndices)) return;
+        const qIdx = cbtState.filteredIndices[cbtState.currentPos];
+        if (qIdx !== undefined) openZoomForQuestionIndex(qIdx);
+      };
+    })();
+  </script>
 </body>
 </html>
