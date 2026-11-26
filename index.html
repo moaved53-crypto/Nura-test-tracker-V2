@@ -4845,9 +4845,11 @@
     }
     function updateOptionField(idx, oIdx, val) { if (questions[idx]) questions[idx].options[oIdx] = val; }
     function readjustQuestionSerialNumbers() {
-      if (!Array.isArray(questions)) return;
+      if (!Array.isArray(questions) || !questions.length) return;
+      const firstValidNum = questions.map(q => parseInt(q && q.num, 10)).find(n => Number.isInteger(n) && n >= 1);
+      const baseNum = firstValidNum || 1;
       questions.forEach((q, i) => {
-        q.num = i + 1;
+        q.num = baseNum + i;
       });
     }
 
