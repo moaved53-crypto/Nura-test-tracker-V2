@@ -879,6 +879,41 @@
       transform: translateY(-1px);
     }
 
+
+    .q-crop-frame.hd-zoomed {
+      background: #f0fdfa;
+      border-color: #0d9488;
+      box-shadow: 0 6px 18px rgba(13, 148, 136, 0.14);
+      overflow-x: auto;
+    }
+    .q-crop-frame.hd-zoomed img {
+      max-width: none !important;
+      width: 165% !important;
+      min-width: 100%;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: high-quality;
+      filter: contrast(1.06) saturate(1.04);
+    }
+    .hd-zoom-btn {
+      background: linear-gradient(135deg, #0f172a 0%, #0d9488 100%);
+      color: #ffffff;
+      border: 1px solid #0f766e;
+      border-radius: 8px;
+      padding: 3px 9px;
+      font-size: 10.5px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .hd-zoom-btn.active {
+      background: linear-gradient(135deg, #059669 0%, #2563eb 100%);
+      border-color: #1d4ed8;
+    }
+    .q-crop-frame img, #cbtQuestionImage {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+      filter: contrast(1.16) brightness(1.03) saturate(1.06);
+      -webkit-font-smoothing: antialiased;
+    }
   </style>
 </head>
 <body>
@@ -959,14 +994,14 @@
           </div>
         </div>
 
-        <div id="dropZone" class="dropzone" style="padding:28px 18px;background:linear-gradient(135deg,#f0fdfa 0%,#eff6ff 50%,#fffbeb 100%);border:2px dashed #0d9488;border-radius:18px;">
-          <button type="button" id="triggerUploadBtn" onclick="openDeviceFilePickerDirect()" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:16px 28px;border-radius:16px;background:linear-gradient(135deg,#0d9488 0%,#2563eb 100%);color:#ffffff;box-shadow:0 8px 20px rgba(13,148,136,0.28);border:none;transition:transform 0.15s ease;">
+        <div id="dropZone" class="dropzone" style="padding:28px 18px;background:linear-gradient(135deg,#f0fdfa 0%,#eff6ff 50%,#fffbeb 100%);border:2px dashed #0d9488;border-radius:18px;position:relative;">
+          <label id="triggerUploadBtn" for="fileInput" onclick="return true;" style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:16px 28px;border-radius:16px;background:linear-gradient(135deg,#0d9488 0%,#2563eb 100%);color:#ffffff;box-shadow:0 8px 20px rgba(13,148,136,0.28);border:none;transition:transform 0.15s ease;user-select:none;">
             <span style="width:48px;height:48px;border-radius:999px;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;">⇪</span>
             <span style="font-size:16px;font-weight:900;letter-spacing:0.03em;">Upload</span>
-          </button>
+          </label>
           <div id="selectedFileNameBadge" class="hidden" style="margin-top:10px;font-size:12px;font-weight:800;color:#0f766e;"></div>
 
-          <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" onchange="if(window.__onFileInputChanged){window.__onFileInputChanged(this,true);}" style="position:fixed;top:-120px;left:-120px;width:1px;height:1px;opacity:0.001;" />
+          <input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.txt,.csv,.json,application/pdf,image/*" style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0.001;" />
 
           <!-- Internally active controls hidden externally so UI stays clean & attractive -->
           <div class="hidden" aria-hidden="true">
@@ -1109,14 +1144,16 @@
               <span id="cbtQTopicBadge" style="background:#f1f5f9;color:#475569;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:700;">Topic</span>
               <span id="cbtQSubTopicBadge" class="pill pill-rose">Sub-Topic</span>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;">
-              <button type="button" class="btn-soft" onclick="openCurrentCbtQuestionZoom()" style="padding:4px 9px;font-size:11px;font-weight:900;">🔍 Zoom</button>
+            <div style="display:flex;gap:10px;font-size:12px;font-weight:700;">
               <span>Q Time: <strong id="cbtQTimer" style="font-family:monospace;">0s</strong></span>
               <span id="cbtMarkingBadge" style="color:#059669;">+4 / -1</span>
             </div>
           </div>
 
           <div id="cbtQuestionImageWrap" class="q-crop-frame hidden" style="margin-top:14px;">
+            <div style="display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-bottom:6px;">
+              <button type="button" id="cbtHdZoomBtn" class="hd-zoom-btn" onclick="toggleCbtQuestionHdZoom()">🔍 HD Zoom</button>
+            </div>
             <img id="cbtQuestionImage" src="" alt="Question Image" />
           </div>
           <div id="cbtQuestionText" style="margin-top:14px;font-size:15px;font-weight:600;white-space:pre-line;"></div>
@@ -2391,11 +2428,9 @@
       } catch (e) {}
       if (cropW < 40 || cropH < 24) return '';
 
-      // Guaranteed 720p+ & HD crisp output (1280px–1920px width) so all 200 questions are sharp & clearly visible
+      // Upscale to >= 1280px width so small math symbols, chemical structures & diagrams stay 720p+ sharp
       const targetMinW = 1280;
-      const targetHdW = 1920;
-      const desiredW = cropW < targetMinW ? targetMinW : Math.min(targetHdW, Math.round(cropW * 1.4));
-      const upScale = Math.min(2.6, Math.max(1.0, desiredW / Math.max(1, cropW)));
+      const upScale = cropW < targetMinW ? Math.min(2.2, targetMinW / cropW) : 1.0;
       const outW = Math.round(cropW * upScale);
       const outH = Math.round(cropH * upScale);
       const finalCanvas = document.createElement('canvas');
@@ -2407,12 +2442,7 @@
       fctx.imageSmoothingEnabled = true;
       fctx.imageSmoothingQuality = 'high';
       fctx.drawImage(tmp, cropX, cropY, cropW, cropH, 0, 0, outW, outH);
-      const outDataUrl = finalCanvas.toDataURL('image/jpeg', Math.min(0.98, Math.max(0.95, quality)));
-      finalCanvas.width = 1;
-      finalCanvas.height = 1;
-      tmp.width = 1;
-      tmp.height = 1;
-      return outDataUrl;
+      return finalCanvas.toDataURL('image/jpeg', quality);
     }
 
     // Strict 2-column split detector (via question anchors or vertical white center gutter)
@@ -2486,7 +2516,7 @@
       return hardCeilNextY;
     }
 
-    // Detect all horizontal green separator lines (including double green lines) across a column/page
+    // High-sensitivity green line detector: detects even faint/light/thin green lines across a column/page
     function detectGreenSeparatorBoundaries(canvas, x0, x1, searchTopY = 0, searchBotY = canvas.height) {
       const rawRuns = [];
       try {
@@ -2495,33 +2525,30 @@
         const yStart = Math.max(0, Math.floor(searchTopY));
         const yEnd = Math.min(canvas.height, Math.floor(searchBotY));
         const sh = yEnd - yStart;
-        if (sh < 6) return [];
+        if (sh < 4) return [];
 
         const ctx = canvas.getContext('2d');
         const px = ctx.getImageData(sx, yStart, sw, sh).data;
         let runStart = -1;
 
         for (let ry = 0; ry < sh; ry++) {
-          let greenCols = 0, sampled = 0, maxContig = 0, curContig = 0;
+          let greenCols = 0, sampled = 0;
           const rowOff = ry * sw * 4;
-          for (let rx = 0; rx < sw; rx += 2) {
+          for (let rx = 0; rx < sw; rx += 1) {
             sampled++;
             const idx = rowOff + rx * 4;
             const r = px[idx], g = px[idx + 1], b = px[idx + 2];
-            const isG = (g >= 95 && (g - r) >= 22 && (g - b) >= 12);
-            if (isG) {
+            // High sensitivity to faint, light pastel, teal-green & dark green strokes
+            const isFaintGreen = g >= 62 && (g - r) >= 7 && (g - b) >= 3;
+            const isLightPastelGreen = g >= 135 && (g - r) >= 6 && (g - b) >= 4 && r <= 238 && b <= 238;
+            if (isFaintGreen || isLightPastelGreen) {
               greenCols++;
-              curContig += 2;
-              if (curContig > maxContig) maxContig = curContig;
-            } else {
-              curContig = 0;
             }
           }
-          const ratio = sampled > 0 ? (greenCols / sampled) : 0;
-          const isGreenDividerRow = ratio >= 0.30 && maxContig >= Math.min(sw * 0.28, 180);
-          if (isGreenDividerRow && runStart < 0) {
+          const isGreenRow = sampled > 0 && (greenCols / sampled) >= 0.14;
+          if (isGreenRow && runStart < 0) {
             runStart = ry;
-          } else if (!isGreenDividerRow && runStart >= 0) {
+          } else if (!isGreenRow && runStart >= 0) {
             rawRuns.push({ topY: yStart + runStart, botY: yStart + ry - 1 });
             runStart = -1;
           }
@@ -2533,12 +2560,12 @@
 
       if (!rawRuns.length) return [];
 
-      // Merge double green lines (two green strokes separated by <= 22px gap) into one separator line
+      // Cluster broken/faint/double green lines separated by <= 36px gap into a single separator boundary
       const boundaries = [];
       let cur = { topY: rawRuns[0].topY, botY: rawRuns[0].botY };
       for (let i = 1; i < rawRuns.length; i++) {
-        if ((rawRuns[i].topY - cur.botY) <= 22) {
-          cur.botY = rawRuns[i].botY;
+        if ((rawRuns[i].topY - cur.botY) <= 36) {
+          cur.botY = Math.max(cur.botY, rawRuns[i].botY);
         } else {
           boundaries.push(cur);
           cur = { topY: rawRuns[i].topY, botY: rawRuns[i].botY };
@@ -2548,20 +2575,31 @@
       return boundaries;
     }
 
-    // Core cutter: cuts ONLY the single question strictly BETWEEN topBoundaryBotY and bottomBoundaryTopY
+    // Core cutter: crops ONLY the area strictly BETWEEN topGreenBoundary.botY and bottomGreenBoundary.topY
     function cutCompleteQuestionBetweenTwoGreenLines(canvas, x0, x1, topBoundaryBotY, bottomBoundaryTopY, quality = 0.96) {
       const yTop = Math.max(0, Math.ceil(topBoundaryBotY + 3));
       const yBot = Math.min(canvas.height, Math.floor(bottomBoundaryTopY - 3));
-      if ((yBot - yTop) < 28) return '';
+      if ((yBot - yTop) < 32) return '';
       return sliceQuestionCropFromCanvas(canvas, x0, yTop, x1, yBot, quality);
     }
 
     // Extract Q# inside a between-green-lines band using mapped text items
     function detectQNumInYBand(colItems, yTop, yBot, fallbackNum) {
+      const qMarkerRx = /^(?:Q(?:uestion)?\.?\s*(\d{1,3})|(\d{1,3})[\.\)\-])(?:\s|$)/i;
+      const inBand = (colItems || [])
+        .filter(it => it.topY >= (yTop - 6) && it.botY <= (yBot + 6))
+        .sort((a, b) => (Math.abs(a.topY - b.topY) > 10 ? a.topY - b.topY : a.x - b.x));
+      for (const it of inBand) {
+        const m = it.str.match(qMarkerRx);
+        if (m) {
+          const n = parseInt(m[1] || m[2], 10);
+          if (n >= 1 && n <= 300) return n;
+        }
+      }
       return fallbackNum;
     }
 
-    // Slice every single question strictly BETWEEN consecutive green lines (1st green to 2nd green, 2nd to 3rd, etc.)
+    // Slice questions strictly BETWEEN every pair of consecutive green horizontal lines
     function sliceColumnBetweenGreenLines(canvas, colItems, x0, x1, fallbackStartQ, keyPrefix) {
       const greenBounds = detectGreenSeparatorBoundaries(canvas, x0, x1, 0, canvas.height);
       if (greenBounds.length < 2) return null;
@@ -2574,7 +2612,7 @@
         const botGreen = greenBounds[i + 1];
         const bandTopY = topGreen.botY + 3;
         const bandBotY = botGreen.topY - 3;
-        if ((bandBotY - bandTopY) < 28) continue;
+        if ((bandBotY - bandTopY) < 34) continue;
 
         const dataUrl = cutCompleteQuestionBetweenTwoGreenLines(canvas, x0, x1, topGreen.botY, botGreen.topY, 0.96);
         if (dataUrl) {
@@ -2590,6 +2628,7 @@
       return Object.keys(crops).length > 0 ? crops : null;
     }
 
+    // Slice single-column questions: prioritizes Between-Two-Green-Lines cutter first, then Q# anchor fallback
     function sliceSingleColumnQuestions(canvas, colItems, x0, x1, headerCutoffY, footerCutoffY, keyPrefix, fallbackStartQ = 1) {
       // 1. Primary: Strict Between-Two-Green-Lines Cutter
       const greenCrops = sliceColumnBetweenGreenLines(canvas, colItems, x0, x1, fallbackStartQ, keyPrefix + '_GL');
@@ -2681,7 +2720,7 @@
           }
         }
 
-        const minGapH = Math.max(12, Math.round(canvas.height * 0.008));
+        const minGapH = Math.max(24, Math.round(canvas.height * 0.015));
         const bands = [];
         let inBlock = false, blockStart = 0, gapCount = 0;
 
@@ -2787,13 +2826,10 @@
           im.onerror = rej;
           im.src = dataUrl;
         });
-        const maxCanvasHeight = 32768;
-        const singleCanvasLimit = 16384;
-        const hdScale = img.width < 1600 ? Math.min(2.2, 1600 / Math.max(1, img.width)) : 1.25;
-        const scale = Math.min(hdScale, maxCanvasHeight / Math.max(1, img.height), singleCanvasLimit / Math.max(1, img.height));
+        const scale = img.width < 1280 ? Math.min(2.0, 1280 / Math.max(1, img.width)) : 1.0;
         const canvas = document.createElement('canvas');
-        canvas.width = Math.min(singleCanvasLimit, Math.round(img.width * scale));
-        canvas.height = Math.min(singleCanvasLimit, Math.round(img.height * scale));
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -3170,64 +3206,64 @@
       if (!inp) return;
       try { inp.value = ''; } catch (e) {}
       setParseStatus(true, 'Opening File Chooser...', 'Select practice sheet (PDF/Image/JSON) or Answer Key.', false, 5, 'Fast Crop');
-      try {
-        if (typeof inp.showPicker === 'function') {
-          inp.showPicker();
-          return;
-        }
-      } catch (e) {}
       inp.click();
     }
 
     function setupFileDropzone() {
       const dropZone = document.getElementById('dropZone');
       const fileInput = document.getElementById('fileInput');
-      let isUploading = false;
+      let uploadInFlightPromise = null;
 
       const runUploadPipeline = async (rawFiles) => {
-        const files = Array.from(rawFiles || []);
-        if (!files.length) {
-          setParseStatus(true, 'No File Selected', 'Tap Upload button to select a practice sheet or answer key.', true);
-          return;
-        }
-        if (isUploading) return;
-        isUploading = true;
-
-        const firstFile = files[0];
-        const sizeLabel = files.length > 1
-          ? `${files.length} files`
-          : formatBytes(firstFile.size);
-
-        const titleInput = document.getElementById('testTitleInput');
-        if (titleInput && !titleInput.value.trim()) {
-          titleInput.value = firstFile.name.replace(/\.[^/.]+$/, '');
-        }
-        const badge = document.getElementById('selectedFileNameBadge');
-        if (badge) {
-          badge.textContent = files.length > 1 ? `${files.length} files selected` : firstFile.name;
-          badge.classList.remove('hidden');
+        const files = Array.from(rawFiles || []).filter(f => f && typeof f === 'object');
+        if (!files.length) return;
+        if (uploadInFlightPromise) {
+          try { await uploadInFlightPromise; } catch (e) {}
         }
 
-        setParseStatus(true, `Cropping Complete Questions: ${firstFile.name}`, 'Cutting each complete question (stem + diagram + 4 options) at 720p+ clarity...', false, 15, sizeLabel);
+        const execTask = (async () => {
+          const firstFile = files[0];
+          const sizeLabel = files.length > 1
+            ? `${files.length} files`
+            : formatBytes(firstFile.size || 0);
+
+          const titleInput = document.getElementById('testTitleInput');
+          if (titleInput && !titleInput.value.trim()) {
+            titleInput.value = (firstFile.name || 'Practice Sheet').replace(/\.[^/.]+$/, '');
+          }
+          const badge = document.getElementById('selectedFileNameBadge');
+          if (badge) {
+            badge.textContent = files.length > 1 ? `${files.length} files selected` : (firstFile.name || 'Selected File');
+            badge.classList.remove('hidden');
+          }
+
+          setParseStatus(true, `Cropping Complete Questions: ${firstFile.name || 'File'}`, 'Cutting each complete question (stem + diagram + 4 options) at 720p+ clarity...', false, 15, sizeLabel);
+          try {
+            await handleUploadedFiles(files);
+          } catch (err) {
+            setParseStatus(true, 'Upload Failed', err?.message || 'Please try selecting the file again.', true, null, sizeLabel);
+          } finally {
+            try { if (fileInput) fileInput.value = ''; } catch (e) {}
+          }
+        })();
+
+        uploadInFlightPromise = execTask;
         try {
-          await handleUploadedFiles(files);
-        } catch (err) {
-          setParseStatus(true, 'Upload Failed', err?.message || 'Please try selecting the file again.', true, null, sizeLabel);
+          await execTask;
         } finally {
-          isUploading = false;
-          try { if (fileInput) fileInput.value = ''; } catch (e) {}
+          if (uploadInFlightPromise === execTask) uploadInFlightPromise = null;
         }
       };
 
       window.__onFileInputChanged = (el) => {
         const selected = el?.files ? Array.from(el.files) : [];
-        runUploadPipeline(selected);
+        if (selected.length) runUploadPipeline(selected);
       };
 
       if (fileInput) {
         fileInput.addEventListener('change', (e) => {
           const selected = Array.from(e.target?.files || fileInput.files || []);
-          runUploadPipeline(selected);
+          if (selected.length) runUploadPipeline(selected);
         });
       }
 
@@ -3529,15 +3565,14 @@
       const keyMapFromText = extractAnswerKeyMapFast(cleanText);
       const finalQuestions = cropKeys.map((qNum, idx) => {
         const cropObj = allCropsByQNum[qNum];
-        const displayNum = qNum || (idx + 1);
         return enrichQuestionObj({
-          id: 'q_' + Date.now() + '_' + displayNum + '_' + idx,
-          num: displayNum,
-          text: `Cropped Question Q${displayNum}`,
+          id: 'q_' + Date.now() + '_' + qNum,
+          num: qNum,
+          text: `Cropped Question Q${qNum}`,
           options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'],
           imageKey: cropObj.imageKey,
           imageDataUrl: cropObj.imageDataUrl,
-          correct: keyMapFromText[displayNum] || ''
+          correct: keyMapFromText[qNum] || ''
         }, idx);
       });
 
@@ -3590,42 +3625,55 @@
         const isKeyOnlyPage = fileLooksLikeKey || isAnswerKeyGridOrPage(pageText, mappedForKeyCheck);
 
         if (enableAutoCrop && !fileLooksLikeKey && !isKeyOnlyPage && !isHintsPage) {
-          // Maximum canvas height range (32768px) + safe single canvas limit (16384px) & crisp HD scale
-          const maxCanvasHeight = 32768;
-          const singleCanvasLimit = 16384;
-          const targetHdScale = pdf.numPages > 15 ? 1.85 : 2.15;
-          const maxAllowedScale = Math.min(targetHdScale, maxCanvasHeight / Math.max(1, viewport.height));
-          const cropScale = Math.max(1.5, Number(maxAllowedScale.toFixed(2)));
-          const cropVp = page.getViewport({ scale: cropScale });
-          const renderW = Math.min(singleCanvasLimit, Math.ceil(cropVp.width));
-          const renderH = Math.min(singleCanvasLimit, Math.ceil(cropVp.height));
-          const effectiveScale = renderH < cropVp.height
-            ? cropScale * (renderH / cropVp.height)
-            : cropScale;
+          // Duplicate paper / Q1 restart detector: agar Q1 pehle cut chuka hai aur page par dubara Q1 ya same paper aaye to cutter wahin stop ho jaye
+          const alreadyCutCount = Object.keys(cropsByQNum).length;
+          const hasQ1Already = !!cropsByQNum[1];
+          const pageHasQ1Anchor = /(?:^|\n)\s*(?:Q(?:uestion)?\.?\s*1|1[\.\)\-])(?:\s|$)/i.test(pageText) ||
+            mappedForKeyCheck.some(it => /^(?:Q(?:uestion)?\.?\s*1|1[\.\)\-])$/i.test(it.str.trim()) && it.x < viewport.width * 0.45);
+          if (alreadyCutCount > 0 && hasQ1Already && pageHasQ1Anchor) {
+            break;
+          }
 
+          // Browser safe canvas limit (30,000px) taaki 100+ questions wale single long page cut na hon
+          const MAX_SAFE_CANVAS_HEIGHT = 30000;
+          const MAX_SAFE_CANVAS_AREA = 65000000; // ~65 megapixels safe limit
+          let cropScale = 2.5;
+
+          if (viewport.height * cropScale > MAX_SAFE_CANVAS_HEIGHT) {
+            cropScale = Math.max(0.85, MAX_SAFE_CANVAS_HEIGHT / viewport.height);
+          }
+          if ((viewport.width * cropScale) * (viewport.height * cropScale) > MAX_SAFE_CANVAS_AREA) {
+            cropScale = Math.max(0.85, Math.sqrt(MAX_SAFE_CANVAS_AREA / (viewport.width * viewport.height)));
+          }
+
+          const cropVp = page.getViewport({ scale: cropScale });
           const cropCanvas = document.createElement('canvas');
-          cropCanvas.width = renderW;
-          cropCanvas.height = renderH;
+          cropCanvas.width = Math.floor(cropVp.width);
+          cropCanvas.height = Math.floor(cropVp.height);
           const cropCtx = cropCanvas.getContext('2d');
           cropCtx.fillStyle = '#ffffff';
           cropCtx.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
-          cropCtx.imageSmoothingEnabled = true;
-          cropCtx.imageSmoothingQuality = 'high';
-          const renderVp = page.getViewport({ scale: effectiveScale });
-          await page.render({ canvasContext: cropCtx, viewport: renderVp }).promise;
+          await page.render({ canvasContext: cropCtx, viewport: cropVp }).promise;
 
-          const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, effectiveScale, p, nextFallbackQ);
-          if (Object.keys(pageCrops).length) {
-            await idbPutImagesBatch(pageCrops);
-            Object.entries(pageCrops).forEach(([kNum, cObj]) => {
-              const parsedN = parseInt(kNum, 10);
-              const targetKey = (!cropsByQNum[parsedN] && parsedN >= 1 && parsedN <= 250) ? parsedN : nextFallbackQ;
-              cropsByQNum[targetKey] = cObj;
-              nextFallbackQ = Math.max(nextFallbackQ + 1, targetKey + 1);
+          const pageCrops = cropQuestionsFromRenderedPageCanvas(cropCanvas, textContent.items, viewport.width, viewport.height, cropScale, p, nextFallbackQ);
+          const pageNums = Object.keys(pageCrops).map(Number);
+          if (pageNums.length) {
+            // Agar naye page ke questions pehle hi cut chuke hain (duplicate question paper / Q1 restart), to cutter wahin stop kar dein
+            const dupCount = pageNums.filter(n => !!cropsByQNum[n]).length;
+            if (alreadyCutCount > 0 && (cropsByQNum[1] && pageCrops[1] || dupCount >= Math.max(2, Math.ceil(pageNums.length * 0.5)))) {
+              break;
+            }
+            const freshCrops = {};
+            pageNums.forEach(n => {
+              if (!cropsByQNum[n]) freshCrops[n] = pageCrops[n];
             });
+            if (Object.keys(freshCrops).length) {
+              await idbPutImagesBatch(freshCrops);
+              Object.assign(cropsByQNum, freshCrops);
+              const nums = Object.keys(cropsByQNum).map(Number);
+              nextFallbackQ = Math.max(...nums) + 1;
+            }
           }
-          cropCanvas.width = 1;
-          cropCanvas.height = 1;
         }
 
         if (!isExtractedPageTextUsable(pageText) && isKeyOnlyPage) {
@@ -4702,6 +4750,27 @@
       switchView('upload');
     }
 
+    const hdZoomState = {
+      bankByIdx: {},
+      cbtActive: false
+    };
+
+    function toggleBankQuestionHdZoom(idx) {
+      hdZoomState.bankByIdx[idx] = !hdZoomState.bankByIdx[idx];
+      renderQuestionBank();
+    }
+
+    function toggleCbtQuestionHdZoom() {
+      hdZoomState.cbtActive = !hdZoomState.cbtActive;
+      const frame = document.getElementById('cbtQuestionImageWrap');
+      const btn = document.getElementById('cbtHdZoomBtn');
+      if (frame) frame.classList.toggle('hd-zoomed', hdZoomState.cbtActive);
+      if (btn) {
+        btn.classList.toggle('active', hdZoomState.cbtActive);
+        btn.textContent = hdZoomState.cbtActive ? '🔍 HD Zoom: ON' : '🔍 HD Zoom';
+      }
+    }
+
     function renderQuestionBank() {
       const list = document.getElementById('questionBankList');
       document.getElementById('questionCountBadge').textContent = `${questions.length} Questions`;
@@ -4734,21 +4803,19 @@
                 '<option value="">Not Set<\/option>' +
                 ['(1)', '(2)', '(3)', '(4)', 'A', 'B', 'C', 'D'].map(opt => '<option value="' + opt + '" ' + (q.correct === opt ? 'selected' : '') + '>' + opt + '<\/option>').join('') +
               '<\/select>' +
-              '<button type="button" class="btn-soft" onclick="openQuestionBankZoom(' + idx + ')" style="padding:4px 9px;font-size:10.5px;font-weight:900;" title="Zoom question in 720p / HD">' +
-                '🔍 Zoom' +
-              '<\/button>' +
               '<label for="perQMultiShotInput_' + idx + '" class="btn btn-soft" style="padding:4px 9px;font-size:10.5px;cursor:pointer;" title="Upload complete cropped question screenshot(s)">' +
                 '📷 Upload Q Img' +
               '<\/label>' +
               '<input id="perQMultiShotInput_' + idx + '" type="file" multiple accept="image/*" onchange="handlePerQuestionMultiScreenshotUpload(' + idx + ', this)" style="position:fixed;left:-9999px;width:1px;height:1px;opacity:0;" />' +
-
+              '<button type="button" class="btn-outline" onclick="insertQuestionAfter(' + idx + ')" style="padding:4px 9px;font-size:10.5px;font-weight:900;" title="Add a new question right after this question">+ Add<\/button>' +
+              '<button type="button" class="btn-danger-soft" onclick="deleteQuestion(' + idx + ')" style="padding:4px 9px;font-size:10.5px;font-weight:900;" title="Delete this question & adjust serial numbers">🗑 Delete<\/button>' +
             '<\/div>' +
           '<\/div>' +
           (cropUrl ? (
-            '<div class="q-crop-frame">' +
+            '<div class="q-crop-frame' + (hdZoomState.bankByIdx[idx] ? ' hd-zoomed' : '') + '">' +
               '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
                 '<span class="pill pill-green">Single-Question Visual Cut (Includes 4 Options)<\/span>' +
-
+                '<button type="button" class="hd-zoom-btn' + (hdZoomState.bankByIdx[idx] ? ' active' : '') + '" onclick="toggleBankQuestionHdZoom(' + idx + ')">' + (hdZoomState.bankByIdx[idx] ? '🔍 HD Zoom: ON' : '🔍 HD Zoom') + '<\/button>' +
               '<\/div>' +
               '<img src="' + cropUrl + '" alt="Q' + (q.num || (idx + 1)) + '" />' +
             '<\/div>'
@@ -4777,7 +4844,15 @@
       }
     }
     function updateOptionField(idx, oIdx, val) { if (questions[idx]) questions[idx].options[oIdx] = val; }
+    function readjustQuestionSerialNumbers() {
+      if (!Array.isArray(questions)) return;
+      questions.forEach((q, i) => {
+        q.num = i + 1;
+      });
+    }
+
     function deleteQuestion(idx) {
+      if (!Array.isArray(questions) || idx < 0 || idx >= questions.length) return;
       const removed = questions[idx];
       if (removed) {
         pushDeletedSection(
@@ -4788,7 +4863,10 @@
         );
       }
       questions.splice(idx, 1);
+      readjustQuestionSerialNumbers();
       renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection();
     }
     function clearAllQuestions() {
       if (questions.length) {
@@ -4814,7 +4892,32 @@
         text: 'Enter question text here...',
         options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'], correct: ''
       }, questions.length));
+      readjustQuestionSerialNumbers();
       renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection();
+    }
+
+    function insertQuestionAfter(idx) {
+      if (!Array.isArray(questions)) return;
+      const refQ = questions[idx] || {};
+      const insPos = Math.max(0, Math.min(questions.length, idx + 1));
+      const newQ = enrichQuestionObj({
+        id: 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+        num: insPos + 1,
+        subject: refQ.subject || 'Physics',
+        chapter: refQ.chapter || 'Basic Maths & Calculus (Mathematical Tools)',
+        topic: refQ.topic || 'Calculus, Trigonometry & Graphs',
+        subTopic: refQ.subTopic || 'Core Concept Application',
+        text: 'Enter question text here...',
+        options: ['Choice (1)', 'Choice (2)', 'Choice (3)', 'Choice (4)'],
+        correct: ''
+      }, insPos);
+      questions.splice(insPos, 0, newQ);
+      readjustQuestionSerialNumbers();
+      renderQuestionBank();
+      saveFrontPageSessionState();
+      renderUnmatchedQBoxSection();
     }
 
     function updateExamConfigSummary() {
@@ -5137,12 +5240,82 @@
       renderCbtPalette();
     }
 
+    function deleteQuestionInCbt(qIdx) {
+      if (!Array.isArray(questions) || qIdx < 0 || qIdx >= questions.length) return;
+      deleteQuestion(qIdx);
+      if (!questions.length) {
+        cbtState.active = false;
+        if (cbtState.timerInterval) { clearInterval(cbtState.timerInterval); cbtState.timerInterval = null; }
+        clearPersistedCbtProgress();
+        switchView('upload');
+        return;
+      }
+      const sub = cbtState.subjectFilter || 'All';
+      cbtState.filteredIndices = questions
+        .map((itemQ, i) => ({ itemQ, i }))
+        .filter(entry => sub === 'All' || entry.itemQ.subject === sub)
+        .map(entry => entry.i);
+      if (!cbtState.filteredIndices.length) {
+        cbtState.subjectFilter = 'All';
+        cbtState.filteredIndices = questions.map((_, i) => i);
+      }
+      if (cbtState.currentPos >= cbtState.filteredIndices.length) {
+        cbtState.currentPos = Math.max(0, cbtState.filteredIndices.length - 1);
+      }
+      const activeIdx = cbtState.filteredIndices[cbtState.currentPos];
+      if (activeIdx !== undefined) cbtState.visited[activeIdx] = true;
+      persistActiveCbtProgress();
+      renderCbtQuestion();
+      renderCbtPalette();
+    }
+
     function renderCbtQuestion() {
       const qIdx = cbtState.filteredIndices[cbtState.currentPos];
       const q = questions[qIdx];
       if (!q) return;
       cbtState.visited[qIdx] = true;
       document.getElementById('cbtQNumberBadge').textContent = `Question ${q.num || (qIdx + 1)} of ${questions.length}`;
+      const badgeEl = document.getElementById('cbtQNumberBadge');
+      if (badgeEl && badgeEl.parentElement) {
+        let uploadLbl = document.getElementById('cbtUploadQImgLbl');
+        let uploadInp = document.getElementById('cbtUploadQImgInp');
+        if (!uploadInp) {
+          uploadInp = document.createElement('input');
+          uploadInp.id = 'cbtUploadQImgInp';
+          uploadInp.type = 'file';
+          uploadInp.multiple = true;
+          uploadInp.accept = 'image/*';
+          uploadInp.style.cssText = 'position:fixed;left:-9999px;width:1px;height:1px;opacity:0;';
+          badgeEl.parentElement.appendChild(uploadInp);
+        }
+        if (!uploadLbl) {
+          uploadLbl = document.createElement('label');
+          uploadLbl.id = 'cbtUploadQImgLbl';
+          uploadLbl.htmlFor = 'cbtUploadQImgInp';
+          uploadLbl.className = 'btn btn-soft';
+          uploadLbl.style.cssText = 'padding:3px 9px;font-size:11px;font-weight:900;cursor:pointer;';
+          uploadLbl.title = 'Upload correct question screenshot if crop looks wrong';
+          uploadLbl.textContent = '📷 Upload Q Img';
+          badgeEl.parentElement.appendChild(uploadLbl);
+        }
+        uploadInp.onchange = async () => {
+          await handlePerQuestionMultiScreenshotUpload(qIdx, uploadInp);
+          if (cbtState.active) renderCbtQuestion();
+        };
+
+        let delBtn = document.getElementById('cbtDeleteCurrentQBtn');
+        if (!delBtn) {
+          delBtn = document.createElement('button');
+          delBtn.id = 'cbtDeleteCurrentQBtn';
+          delBtn.type = 'button';
+          delBtn.className = 'btn-danger-soft';
+          delBtn.style.cssText = 'padding:3px 9px;font-size:11px;font-weight:900;';
+          delBtn.title = 'Delete this question & adjust serial numbers';
+          delBtn.textContent = '🗑 Delete Q';
+          badgeEl.parentElement.appendChild(delBtn);
+        }
+        delBtn.onclick = () => deleteQuestionInCbt(qIdx);
+      }
       document.getElementById('cbtQSubjectBadge').textContent = q.subject;
       document.getElementById('cbtQChapterBadge').textContent = q.chapter || 'Chapter';
       document.getElementById('cbtQTopicBadge').textContent = q.topic || 'Topic';
@@ -5158,6 +5331,12 @@
 
       if (qImgUrl && imgWrap && imgEl) {
         imgEl.src = qImgUrl;
+        imgWrap.classList.toggle('hd-zoomed', !!hdZoomState.cbtActive);
+        const zBtn = document.getElementById('cbtHdZoomBtn');
+        if (zBtn) {
+          zBtn.classList.toggle('active', !!hdZoomState.cbtActive);
+          zBtn.textContent = hdZoomState.cbtActive ? '🔍 HD Zoom: ON' : '🔍 HD Zoom';
+        }
         imgWrap.classList.remove('hidden');
         textEl.classList.add('hidden');
         optsContainer.innerHTML =
@@ -7828,114 +8007,5 @@
     }
 
 </script>
-
-  <div id="questionZoomModal" class="modal-backdrop hidden" style="z-index:80;">
-    <div class="modal-card" style="max-width:960px;width:96%;max-height:92vh;display:flex;flex-direction:column;gap:12px;padding:16px;">
-      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <strong id="zoomModalTitle" style="font-size:15px;color:#0f172a;">Question Zoom</strong>
-          <span id="zoomQualityBadge" class="pill pill-teal">720p</span>
-          <span id="zoomLevelLabel" style="font-size:12px;font-weight:900;color:#0f766e;">100%</span>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
-          <button type="button" class="btn-soft" onclick="setQuestionZoomPreset('720p')" style="padding:5px 10px;font-size:11px;font-weight:900;">720p</button>
-          <button type="button" class="btn-primary" onclick="setQuestionZoomPreset('hd')" style="padding:5px 10px;font-size:11px;font-weight:900;">HD</button>
-          <button type="button" class="btn-outline" onclick="adjustQuestionZoomStep(-0.25)" style="padding:5px 9px;font-size:12px;font-weight:900;">-</button>
-          <button type="button" class="btn-outline" onclick="adjustQuestionZoomStep(0.25)" style="padding:5px 9px;font-size:12px;font-weight:900;">+</button>
-          <button type="button" class="btn-outline" onclick="setQuestionZoomPreset('reset')" style="padding:5px 9px;font-size:11px;">Reset</button>
-          <button type="button" class="btn-danger-soft" onclick="closeQuestionZoomModal()" style="padding:5px 9px;font-size:12px;font-weight:900;">✕</button>
-        </div>
-      </div>
-      <div id="questionZoomViewport" style="flex:1;overflow:auto;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:12px;padding:14px;min-height:320px;">
-        <div id="questionZoomInner" style="transform-origin:top left;transition:transform 0.15s ease;"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function() {
-      let currentZoomScale = 1.0;
-      let currentZoomMode = '720p';
-
-      function applyZoomTransform() {
-        const inner = document.getElementById('questionZoomInner');
-        const lbl = document.getElementById('zoomLevelLabel');
-        const badge = document.getElementById('zoomQualityBadge');
-        if (inner) {
-          inner.style.transform = `scale(${currentZoomScale.toFixed(2)})`;
-          inner.style.width = `${(100 / Math.max(0.5, currentZoomScale)).toFixed(2)}%`;
-        }
-        if (lbl) lbl.textContent = `${Math.round(currentZoomScale * 100)}%`;
-        if (badge) badge.textContent = currentZoomMode === 'hd' ? 'HD' : '720p';
-      }
-
-      window.setQuestionZoomPreset = function(preset) {
-        if (preset === '720p') {
-          currentZoomMode = '720p';
-          currentZoomScale = 1.25;
-        } else if (preset === 'hd') {
-          currentZoomMode = 'hd';
-          currentZoomScale = 1.75;
-        } else {
-          currentZoomMode = '720p';
-          currentZoomScale = 1.0;
-        }
-        applyZoomTransform();
-      };
-
-      window.adjustQuestionZoomStep = function(delta) {
-        currentZoomScale = Math.min(3.0, Math.max(0.75, Number((currentZoomScale + delta).toFixed(2))));
-        currentZoomMode = currentZoomScale >= 1.5 ? 'hd' : '720p';
-        applyZoomTransform();
-      };
-
-      window.closeQuestionZoomModal = function() {
-        const m = document.getElementById('questionZoomModal');
-        if (m) m.classList.add('hidden');
-      };
-
-      function openZoomForQuestionIndex(qIdx) {
-        const q = Array.isArray(questions) ? questions[qIdx] : null;
-        if (!q) return;
-        const modal = document.getElementById('questionZoomModal');
-        const titleEl = document.getElementById('zoomModalTitle');
-        const inner = document.getElementById('questionZoomInner');
-        if (!modal || !inner) return;
-
-        const qNum = q.num || (qIdx + 1);
-        if (titleEl) {
-          titleEl.textContent = `Q${qNum} · ${q.subject || 'Subject'} (${q.chapter || 'Chapter'})`;
-        }
-
-        const cropUrl = typeof getQuestionImageUrl === 'function' ? getQuestionImageUrl(q) : '';
-        if (cropUrl) {
-          inner.innerHTML = `<div style="text-align:center;"><img src="${cropUrl}" alt="Q${qNum}" style="max-width:100%;width:100%;height:auto;display:block;margin:0 auto;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;" /></div>`;
-        } else {
-          const opts = Array.isArray(q.options) ? q.options : [];
-          inner.innerHTML = `
-            <div style="font-size:17px;font-weight:800;color:#0f172a;line-height:1.55;white-space:pre-line;margin-bottom:14px;">${escapeHtml(q.text || '')}</div>
-            <div style="display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:700;color:#1e293b;">
-              ${['(1)', '(2)', '(3)', '(4)'].map((lbl, i) => `<div style="padding:8px 12px;border-radius:10px;border:1px solid #cbd5e1;background:#f8fafc;"><strong>${lbl}</strong> ${escapeHtml(opts[i] || '')}</div>`).join('')}
-            </div>
-          `;
-        }
-
-        currentZoomMode = 'hd';
-        currentZoomScale = 1.5;
-        applyZoomTransform();
-        modal.classList.remove('hidden');
-      }
-
-      window.openQuestionBankZoom = function(qIdx) {
-        openZoomForQuestionIndex(qIdx);
-      };
-
-      window.openCurrentCbtQuestionZoom = function() {
-        if (!cbtState || !Array.isArray(cbtState.filteredIndices)) return;
-        const qIdx = cbtState.filteredIndices[cbtState.currentPos];
-        if (qIdx !== undefined) openZoomForQuestionIndex(qIdx);
-      };
-    })();
-  </script>
 </body>
 </html>
